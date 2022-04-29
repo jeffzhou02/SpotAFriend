@@ -4,6 +4,7 @@
 - yarn start
 
 ## Downloads:
+- Yarn
 - Expo Go App on mobile device
 
 Good luck!
