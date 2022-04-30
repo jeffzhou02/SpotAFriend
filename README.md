@@ -7,4 +7,6 @@
 - Yarn
 - Expo Go App on mobile device
 
-Good luck!
+Good luck! Brian Ni
+
+
