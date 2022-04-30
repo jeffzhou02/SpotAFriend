@@ -1,6 +1,7 @@
 # SpotAFriend README
 
 Jenny Wang
+Jeffrey Zhou
 
 ## To run the code:
 
@@ -12,4 +13,6 @@ Jenny Wang
 - Yarn
 - Expo Go App on mobile device
 
-Good luck!
+Good luck! Brian Ni
+
+
