@@ -3,6 +3,7 @@
 Jenny Wang
 Nathan Zhang
 Jeffrey Zhou
+Daniel Yang
 
 ## To run the code:
 
