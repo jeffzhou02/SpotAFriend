@@ -1,6 +1,7 @@
 # SpotAFriend README
 
 Jenny Wang
+Nathan Zhang
 Jeffrey Zhou
 
 ## To run the code:
