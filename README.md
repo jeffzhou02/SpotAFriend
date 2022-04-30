@@ -8,3 +8,5 @@
 - Expo Go App on mobile device
 
 Good luck!
+
+Brian Ni
