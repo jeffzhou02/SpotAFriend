@@ -1,4 +1,5 @@
 # SpotAFriend README
+Daniel Yang
 ## To run the code:
 - yarn install
 - yarn start
