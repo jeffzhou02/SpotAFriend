@@ -1,5 +1,6 @@
 # SpotAFriend README
 
+Brian Ni
 Jenny Wang
 Nathan Zhang
 Jeffrey Zhou
@@ -15,6 +16,8 @@ Daniel Yang
 - Yarn
 - Expo Go App on mobile device
 
-Good luck! Brian Ni
+## Required Versions:
+- React Native 0.68
+```yarn add react-native@0.68```
 
 
