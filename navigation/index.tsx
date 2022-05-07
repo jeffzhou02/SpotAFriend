@@ -69,8 +69,9 @@ function BottomTabNavigator() {
         component={HomeScreen}
         options={({ navigation }: RootTabScreenProps<'Home'>) => ({
           title: 'Home',
+          tabBarShowLabel: false,
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         })}
       />
       <BottomTab.Screen
@@ -79,7 +80,8 @@ function BottomTabNavigator() {
         options={{
           title: 'Filter',
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="filter" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -88,7 +90,8 @@ function BottomTabNavigator() {
         options={{
           title: 'Camera',
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="camera" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -97,7 +100,8 @@ function BottomTabNavigator() {
         options={{
           title: 'Groups',
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="group" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -106,7 +110,8 @@ function BottomTabNavigator() {
         options={{
           title: 'Profile',
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -120,5 +125,5 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={25} style={{ marginBottom: -3 }} {...props} />;
 }
