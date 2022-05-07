@@ -5,23 +5,14 @@ import { RootTabScreenProps } from '../types';
 
 import { default as theme } from '../theme.json';
 
-<<<<<<< HEAD
-export default function LandingScreen({ navigation }: RootTabScreenProps<'Landing'>) {
-=======
 export default function LandingScreen({navigation}) {
->>>>>>> 22b4f19 (added login button navigation)
   return (
     <View style={styles.container}>
       <Splash></Splash>
       <View style={styles.bottomHalf}>
         <View style={styles.row}>
-<<<<<<< HEAD
-          <View style={{padding: 5, paddingRight: 20, backgroundColor: 'transparent',}}><SignUpButton></SignUpButton></View>
-          <View style={{padding: 5, paddingLeft: 20, backgroundColor: 'transparent',}}><LogInButton></LogInButton></View>
-=======
           <View style={{padding: 5, paddingRight: 20, backgroundColor: 'transparent',}}><SignUpButton handler={() => {return;}}/></View>
           <View style={{padding: 5, paddingLeft: 20, backgroundColor: 'transparent',}}><LogInButton handler={() => {navigation.navigate('Root', {screen: 'Home'})}}/></View>
->>>>>>> 22b4f19 (added login button navigation)
         </View>
       </View>
     </View>
@@ -46,54 +37,27 @@ function Splash() {
   );
 }
 
-<<<<<<< HEAD
-function SignUpButton() {
-  return (
-    <TouchableOpacity 
-      style={styles.signUpButtonStyle}
-      onPress={() => SignUpHandler}
-=======
 function SignUpButton(props) {
   return (
     <TouchableOpacity 
       style={styles.signUpButtonStyle}
       onPress={props.handler}
->>>>>>> 22b4f19 (added login button navigation)
     >
       <Text>Sign Up</Text>
     </TouchableOpacity>
   );
 }
 
-<<<<<<< HEAD
-function SignUpHandler() {
-  return;
-}
-
-function LogInButton() {
-  return (
-    <TouchableOpacity 
-      style={styles.loginButtonStyle}
-      onPress={() => LogInHandler}>
-=======
 function LogInButton(props) {
   return (
     <TouchableOpacity 
       style={styles.loginButtonStyle}
       onPress={props.handler}>
->>>>>>> 22b4f19 (added login button navigation)
       <Text>Log In</Text>
     </TouchableOpacity>
   );
 }
 
-<<<<<<< HEAD
-function LogInHandler() {
-  return;
-}
-
-=======
->>>>>>> 22b4f19 (added login button navigation)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
