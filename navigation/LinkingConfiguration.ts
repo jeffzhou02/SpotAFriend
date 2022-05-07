@@ -15,6 +15,12 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
+          /*delete later*/
+          Landing: {
+            screens: {
+              LandingScreen: 'Landing',
+            }
+          },
           Home: {
             screens: {
               HomeScreen: 'Home',

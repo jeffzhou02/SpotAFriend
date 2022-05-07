@@ -21,6 +21,8 @@ import LinkingConfiguration from './LinkingConfiguration';
 import GroupScreen from '../screens/GroupScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
+import LandingScreen from '../screens/LandingScreen';
+
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
@@ -72,6 +74,15 @@ function BottomTabNavigator() {
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         })}
+      />
+      <BottomTab.Screen /*delete later*/
+        name="Landing"
+        component={LandingScreen}
+        options={{
+          title: 'Landing',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
       />
       <BottomTab.Screen
         name="Filter"
