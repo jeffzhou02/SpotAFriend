@@ -11,8 +11,8 @@ export default function LandingScreen({navigation}) {
       <Splash></Splash>
       <View style={styles.bottomHalf}>
         <View style={styles.row}>
-          <View style={{padding: 5, paddingRight: 20, backgroundColor: 'transparent',}}><SignUpButton handler={() => {return;}}/></View>
-          <View style={{padding: 5, paddingLeft: 20, backgroundColor: 'transparent',}}><LogInButton handler={() => {navigation.navigate('Root', {screen: 'Home'})}}/></View>
+          <View style={{flex: 1, padding: 5, paddingRight: 20, backgroundColor: 'transparent',}}><SignUpButton handler={() => {return;}}/></View>
+          <View style={{flex: 1, padding: 5, paddingLeft: 20, backgroundColor: 'transparent',}}><LogInButton handler={() => {navigation.navigate('Root', {screen: 'Home'})}}/></View>
         </View>
       </View>
     </View>
@@ -43,7 +43,7 @@ function SignUpButton(props) {
       style={styles.signUpButtonStyle}
       onPress={props.handler}
     >
-      <Text>Sign Up</Text>
+      <Text style={{color: "#FFFFFF"}}>Sign Up</Text>
     </TouchableOpacity>
   );
 }
@@ -53,7 +53,7 @@ function LogInButton(props) {
     <TouchableOpacity 
       style={styles.loginButtonStyle}
       onPress={props.handler}>
-      <Text>Log In</Text>
+      <Text style={{color: "#689689"}}>Log In</Text>
     </TouchableOpacity>
   );
 }
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
   },
   bottomHalf: {
     height: '50%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   row: {
+    width: "70%",
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -82,13 +84,17 @@ const styles = StyleSheet.create({
   },
   signUpButtonStyle: {
     padding: 20,
+    alignItems: 'center',
     backgroundColor: theme['color-button-fill-blue'],
     borderRadius: 50,
   },
   loginButtonStyle: {
-    padding: 20,
+    padding: 18,
+    alignItems: 'center',
     backgroundColor: theme['color-button-fill-white'],
     borderRadius: 50,
+    borderWidth: 2,
+    borderColor: theme['color-button-fill-blue'],
   },
   title: {
     fontSize: 20,
