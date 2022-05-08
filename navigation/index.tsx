@@ -22,6 +22,8 @@ import GroupScreen from '../screens/GroupScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 import LandingScreen from '../screens/LandingScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -42,7 +44,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="LandingScreen" component={LandingScreen} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
@@ -76,15 +77,6 @@ function BottomTabNavigator() {
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         })}
-      />
-      <BottomTab.Screen /*delete later*/
-        name="Landing"
-        component={LandingScreen}
-        options={{
-          title: 'Landing',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
       />
       <BottomTab.Screen
         name="Filter"
