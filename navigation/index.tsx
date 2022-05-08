@@ -77,15 +77,6 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         })}
       />
-      <BottomTab.Screen /*delete later*/
-        name="Landing"
-        component={LandingScreen}
-        options={{
-          title: 'Landing',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
       <BottomTab.Screen
         name="Filter"
         component={FilterScreen}
