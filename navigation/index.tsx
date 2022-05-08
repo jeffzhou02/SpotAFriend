@@ -21,6 +21,10 @@ import LinkingConfiguration from './LinkingConfiguration';
 import GroupScreen from '../screens/GroupScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
+import LandingScreen from '../screens/LandingScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
+
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
