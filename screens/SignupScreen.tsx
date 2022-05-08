@@ -3,8 +3,9 @@ import { StyleSheet, TextInput, TouchableOpacity, Image, ImageBackground } from 
 import { Text, View } from '../components/Themed';
 
 import { default as theme } from '../theme.json';
+import { RootStackScreenProps } from "../types";
 
-export default function SignupScreen() {
+export default function SignupScreen({navigation}: RootStackScreenProps<'Root'>) {
     return (
         <View>
             <View style={styles.ImageContainer}>
@@ -17,8 +18,8 @@ export default function SignupScreen() {
                 <ConfirmPasswordInput />
             </View>
             <View style={styles.ButtonContainer}>
-                <SignupButton />
-                <BackButton />
+                <SignupButton {...navigation}/>
+                <BackButton {...navigation}/>
             </View>
         </View>
     );
@@ -95,21 +96,21 @@ function ConfirmPasswordInput() {
     );
 }
 
-function SignupButton() {
+function SignupButton(props: { navigate: (arg0: string, arg1: { screen: string; }) => void; }) {
     return (
         <TouchableOpacity
             style={styles.SignupButtonStyling}
-            onPress={() => SignupHandler}>
+            onPress={() => SignupHandler(props)}>
             <Text style={styles.SignupButtonTextStyling}>sign up</Text>
         </TouchableOpacity>
     );
 }
 
-function BackButton() {
+function BackButton(props: { navigate: (arg0: string) => void; }) {
     return (
         <TouchableOpacity
             style={styles.BackButtonStyling}
-            onPress={() => BackHandler}>
+            onPress={() => BackHandler(props)}>
             <Text style={styles.BackButtonTextStyling}>back</Text>
         </TouchableOpacity>
     );
@@ -131,11 +132,13 @@ function setConfirmPassword() {
     return;
 }
 
-function SignupHandler() {
+function SignupHandler(props: { navigate: (arg0: string, arg1: { screen: string; }) => void; }) {
+    props.navigate("Root", { screen: "Home" });
     return;
 }
 
-function BackHandler() {
+function BackHandler(props: { navigate: (arg0: string) => void; }) {
+    props.navigate("Landing");
     return;
 }
 
