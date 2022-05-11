@@ -1,9 +1,9 @@
 import { StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
 
 import { default as theme } from '../theme.json';
+import { RootTabScreenProps } from '../types';
 
 export default function LandingScreen({navigation}: RootTabScreenProps<'Landing'>) {
   return (
