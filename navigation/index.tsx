@@ -46,7 +46,9 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}} />
-      <Stack.Screen name="EditInfo" component={EditInfo} options={{headerShown: false}}/>
+      <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
+      <Stack.Screen name="Signup" component={SignupScreen} options={{headerShown: false}} />
+      <Stack.Screen name="EditInfo" component={EditInfo} options={{headerShown: false}} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
