@@ -14,20 +14,18 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 
-import Colors from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
-import CameraScreen from "../screens/CameraScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
-import HomeScreen from "../screens/HomeScreen";
-import FilterScreen from "../screens/FilterScreen";
-import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
-} from "../types";
-import LinkingConfiguration from "./LinkingConfiguration";
-import GroupScreen from "../screens/GroupScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+
+import Colors from '../constants/Colors';
+import useColorScheme from '../hooks/useColorScheme';
+import CameraScreen from '../screens/CameraScreen';
+import NotFoundScreen from '../screens/NotFoundScreen';
+import HomeScreen from '../screens/HomeScreen';
+import FilterScreen from '../screens/FilterScreen';
+import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import LinkingConfiguration from './LinkingConfiguration';
+import GroupScreen from '../screens/GroupScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import EditInfo from '../screens/EditInfo';
 
 import LandingScreen from "../screens/LandingScreen";
 import LoginScreen from "../screens/LoginScreen";
@@ -57,17 +55,13 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
+      <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
+      <Stack.Screen name="Signup" component={SignupScreen} options={{headerShown: false}} />
+      <Stack.Screen name="EditInfo" component={EditInfo} options={{headerShown: false}} />
+      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={CameraScreen} />
       </Stack.Group>
     </Stack.Navigator>
