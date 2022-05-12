@@ -15,19 +15,40 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          /*delete later*/
+          Landing: {
             screens: {
-              TabOneScreen: 'one',
+              LandingScreen: 'Landing',
+            }
+          },
+          Home: {
+            screens: {
+              HomeScreen: 'Home',
             },
           },
-          TabTwo: {
+          Filter: {
             screens: {
-              TabTwoScreen: 'two',
+              FilterScreen: 'Filter',
+            },
+          },
+          Camera: {
+            screens: {
+              GroupScreen: 'Camera',
+            },
+          },
+          Group: {
+            screens: {
+              GroupScreen: 'Group',
+            },
+          },
+          Profile: {
+            screens: {
+              ProfileScreen: 'Profile',
             },
           },
         },
       },
-      Modal: 'modal',
+      Modal: 'camera',
       NotFound: '*',
     },
   },

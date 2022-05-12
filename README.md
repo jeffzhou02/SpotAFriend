@@ -1,6 +1,10 @@
 # SpotAFriend README
 
+Brian Ni
 Jenny Wang
+Nathan Zhang
+Jeffrey Zhou
+Daniel Yang
 
 ## To run the code:
 
@@ -12,4 +16,7 @@ Jenny Wang
 - Yarn
 - Expo Go App on mobile device
 
-Good luck!
+## Required Versions:
+
+- React Native 0.68
+  `yarn add react-native@0.68`
