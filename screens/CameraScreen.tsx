@@ -62,7 +62,7 @@ export default function App() {
         />
         <TouchableOpacity
           //JENNY CSS HERE PLS
-          onPress={__takePicture}
+          onPress={__retakePicture}
           style={{
             width: 70,
             height: 70,
