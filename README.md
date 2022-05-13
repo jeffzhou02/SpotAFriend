@@ -17,7 +17,6 @@ Daniel Yang
 - Expo Go App on mobile device
 
 ## Required Versions:
+
 - React Native 0.68
-```yarn add react-native@0.68```
-
-
+  `yarn add react-native@0.68`
