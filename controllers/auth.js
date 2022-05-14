@@ -1,8 +1,11 @@
-import bcrypt from 'bcryptjs';
+// import bcrypt from 'bcryptjs';
+const bcrypt = require('bcryptjs');
 
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
-import User from '../models/user.js';
+// import User from '../models/user.js';
+const User = require('../models/user.js');
 
 const signup = (req, res, next) => {
     // checks if email already exists
@@ -20,8 +23,9 @@ const signup = (req, res, next) => {
                 } else if (passwordHash) {
                     return User.create(({
                         email: req.body.email,
-                        name: req.body.name,
+                        username: req.body.username,
                         password: passwordHash,
+                        confirmpassword: passwordHash,
                     }))
                     .then(() => {
                         res.status(200).json({message: "user created"});
@@ -44,6 +48,7 @@ const signup = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
+    console.log("calling login function");
     // checks if email exists
     User.findOne({ where : {
         email: req.body.email, 
@@ -89,4 +94,5 @@ const isAuth = (req, res, next) => {
     };
 };
 
-export { signup, login, isAuth };
+module.exports = { signup, login, isAuth };
+// export { signup, login, isAuth };

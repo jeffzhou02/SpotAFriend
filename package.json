@@ -21,6 +21,7 @@
     "@react-navigation/native-stack": "^6.1.0",
     "@ui-kitten/components": "^5.1.2",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "expo": "~44.0.0",
     "expo-asset": "~8.4.4",
     "expo-cli": "5.4.3",

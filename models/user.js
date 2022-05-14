@@ -1,25 +1,41 @@
-import { Sequelize } from 'sequelize';
+// import { Sequelize } from 'sequelize';
+const Sequelize = require('sequelize');
 
-import sequelize from '../utils/database.js';
+// import sequelize from '../utils/database.js';
+const sequelize = require('../utils/database.js');
 
 const User = sequelize.define('users', {
-   id: {
+   user_id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
    },
-   email: {
+   username: {
       type: Sequelize.STRING,
       allowNull: false,
    },
-   name: {
+   email: {
       type: Sequelize.STRING,
+      allowNull: false,
    },
    password: {
       type: Sequelize.STRING,
       allowNull: false,
    },
+   confirmpassword: {
+      type: Sequelize.STRING,
+      allowNull: false,
+   },
+   createdAt: {
+      field: 'created_at',
+      type: Sequelize.DATE,
+   },
+   updatedAt: {
+      field: 'updated_at',
+      type: Sequelize.DATE,
+   },
 });
 
-export default User;
+module.exports = User;
+// export default User;

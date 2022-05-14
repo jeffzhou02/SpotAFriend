@@ -1,10 +1,14 @@
-import express from 'express';
+const express = require('express');
 
-import sequelize from './utils/database.js';
+const cors = require('cors');
 
-import router from './routes/routes.js';
+const sequelize = require('../utils/database.js');
+
+const router = require('../routes/routes.js');
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 
