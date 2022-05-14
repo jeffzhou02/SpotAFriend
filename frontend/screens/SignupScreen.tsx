@@ -5,7 +5,7 @@ import { Text, View } from '../components/Themed';
 import { default as theme } from '../theme.json';
 import { RootStackScreenProps } from "../types";
 
-const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+const API_URL = ( Platform.OS === 'ios' || Platform.OS === 'web' ) ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
 
 
 export default function SignupScreen({navigation}: RootStackScreenProps<'Root'>) {
