@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   _Text,
   ImageBackground,
+  Button,
 } from "react-native";
 import { Camera } from "expo-camera";
 
@@ -31,9 +32,9 @@ export default function App() {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
   const __takePicture = async () => {
     console.log("qwekgjqwlgjass");
-    console.log(camera);
 
     if (!camera) return;
     const photo = await camera.takePictureAsync();
@@ -42,8 +43,8 @@ export default function App() {
     setPreviewVisible(true);
     setCapturedImage(photo);
   };
+
   const CameraPreview = ({ photo }: any) => {
-    console.log("sdsfds", photo);
     return (
       <View
         style={{
@@ -59,50 +60,77 @@ export default function App() {
             flex: 1,
           }}
         />
+        <TouchableOpacity
+          //JENNY CSS HERE PLS
+          onPress={__retakePicture}
+          style={{
+            width: 70,
+            height: 70,
+            bottom: 0,
+            borderRadius: 50,
+            backgroundColor: "#fff",
+          }}
+        />
       </View>
     );
+  };
+  const __retakePicture = () => {
+    setCapturedImage(null);
+    setPreviewVisible(false);
   };
 
   return (
     <View style={styles.container}>
-      <Camera
-        style={styles.camera}
-        type={type}
-        ref={(r) => {
-          camera = r;
-        }}
-      >
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            flexDirection: "row",
-            flex: 1,
-            width: "100%",
-            padding: 20,
-            justifyContent: "space-between",
+      {previewVisible && capturedImage ? (
+        <CameraPreview photo={capturedImage} retakePicture={__retakePicture} />
+      ) : (
+        <Camera
+          style={{ flex: 1 }}
+          ref={(r) => {
+            camera = r;
           }}
         >
           <View
             style={{
-              alignSelf: "center",
               flex: 1,
-              alignItems: "center",
+              width: "100%",
+              backgroundColor: "transparent",
+              flexDirection: "row",
             }}
           >
-            <TouchableOpacity
-              onPress={__takePicture}
+            <View
               style={{
-                width: 70,
-                height: 70,
+                position: "absolute",
                 bottom: 0,
-                borderRadius: 50,
-                backgroundColor: "#fff",
+                flexDirection: "row",
+                flex: 1,
+                width: "100%",
+                padding: 20,
+                justifyContent: "space-between",
               }}
-            />
+            >
+              <View
+                style={{
+                  alignSelf: "center",
+                  flex: 1,
+                  alignItems: "center",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={__takePicture}
+                  style={{
+                    width: 70,
+                    height: 70,
+                    bottom: 0,
+                    borderRadius: 50,
+                    backgroundColor: "#fff",
+                  }}
+                />
+              </View>
+            </View>
           </View>
-        </View>
-      </Camera>
+        </Camera>
+      )}
     </View>
   );
 }
