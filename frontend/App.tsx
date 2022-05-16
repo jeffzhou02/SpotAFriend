@@ -16,12 +16,12 @@ export default function App() {
     return null;
   } else {
     return (
-      <ApplicationProvider {...eva} theme={eva.light}>
+      // <ApplicationProvider {...eva} theme={eva.light}>
         <SafeAreaProvider>
           <Navigation colorScheme={colorScheme} />
           <StatusBar />
         </SafeAreaProvider>
-      </ApplicationProvider>
+      // </ApplicationProvider>
     );
   }
 }

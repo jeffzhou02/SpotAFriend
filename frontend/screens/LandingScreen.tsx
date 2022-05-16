@@ -3,15 +3,16 @@ import { StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-nati
 import { Text, View } from '../components/Themed';
 
 import { default as theme } from '../theme.json';
+import { RootTabScreenProps } from '../types';
 
-export default function LandingScreen({navigation}) {
+export default function LandingScreen({navigation}: RootTabScreenProps<'Landing'>) {
   return (
     <View style={styles.container}>
       <Splash></Splash>
       <View style={styles.bottomHalf}>
         <View style={styles.row}>
-          <View style={{flex: 1, padding: 5, paddingRight: 20, backgroundColor: 'transparent',}}><SignUpButton handler={() => {navigation.navigate('Signup')}}/></View>
-          <View style={{flex: 1, padding: 5, paddingLeft: 20, backgroundColor: 'transparent',}}><LogInButton handler={() => {navigation.navigate('Root', {screen: 'Home'})}}/></View>
+          <View style={{flex: 1, padding: 5, paddingRight: 20, backgroundColor: 'transparent',}}><SignUpButton handler={() => {navigation.navigate("Signup")}}/></View>
+          <View style={{flex: 1, padding: 5, paddingLeft: 20, backgroundColor: 'transparent',}}><LogInButton handler={() => {navigation.navigate("Login")}}/></View>
         </View>
       </View>
     </View>
