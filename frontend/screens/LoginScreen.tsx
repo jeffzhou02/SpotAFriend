@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, Image, ImageBackground } from "react-native";
 import { Text, View } from '../components/Themed';
+import Navigation from "../navigation";
 
 import { default as theme } from '../theme.json';
+import { RootStackScreenProps } from "../types";
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}: RootStackScreenProps<'Root'>) {
   return (
     <View>
       <View style={styles.ImageContainer}>
@@ -15,8 +17,8 @@ export default function LoginScreen() {
         <PasswordInput />
       </View>
       <View style={styles.ButtonContainer}>
-        <LoginButton />
-        <BackButton />
+        <LoginButton {...navigation}/>
+        <BackButton {...navigation}/>
       </View>
     </View>
   );
@@ -64,21 +66,21 @@ function PasswordInput() {
   );
 }
 
-function LoginButton() {
+function LoginButton(props) {
   return (
     <TouchableOpacity
       style={styles.LoginButtonStyling}
-      onPress={() => LoginHandler}>
+      onPress={() => LoginHandler(props)}>
       <Text style={styles.LoginButtonTextStyling}>log in</Text>
     </TouchableOpacity>
   );
 }
 
-function BackButton() {
+function BackButton(props) {
   return (
     <TouchableOpacity
       style={styles.BackButtonStyling}
-      onPress={() => BackHandler}>
+      onPress={() => BackHandler(props)}>
       <Text style={styles.BackButtonTextStyling}>back</Text>
     </TouchableOpacity>
   );
@@ -92,11 +94,13 @@ function setPassword() {
   return;
 }
 
-function LoginHandler() {
+function LoginHandler(props) {
+  props.navigate("Root", { screen: "Home" });
   return;
 }
 
-function BackHandler() {
+function BackHandler(props) {
+  props.navigate("Landing");
   return;
 }
 
