@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, } from "react";
+import Select from 'react-select'
 import {
   StyleSheet,
   TextInput,
@@ -19,8 +20,9 @@ export default function PostScreen({
       <View style={styles.ImageContainer}>
         <Picture />
       </View>
-      <View style={styles.InputContainer}>
-        <CaptionInput />
+      <View>
+      </View>
+      <View>
       </View>
       <View style={styles.ButtonContainer}>
         <PostButton {...navigation} />
@@ -30,35 +32,43 @@ export default function PostScreen({
   );
 }
 
+function getPicture(){
+  return "../assets/images/icon.png";
+}
 function Picture() {
   return (
     <Image
       style={{
-        resizeMode: "contain",
+        resizeMode: "contain", // change size later
         height: 100,
         width: 200,
         marginTop: 50,
       }}
-      source={require("../assets/images/icon.png")}
+      source={require(getPicture())}
     />
   );
 }
 
-function CaptionInput() {
-  const [caption, setCaption] = useState("");
-  return (
-    <View style={styles.InputStyling}>
-      <TextInput
-        style={styles.TextInput}
-        placeholder="Caption"
-        placeholderTextColor="#689689"
-        onChangeText={(caption) => setCaption(caption)}
-      />
-    </View>
-  );
+function getGroups(){
+  let fruits = [
+    { label: "Apple", value: "🍎" }, // make a legit way to get groups
+    { label: "Banana", value: "🍌" },
+    { label: "Orange", value: "🍊" }
+  ]
+  return fruits;
 }
 
-function PostButton(props) {
+function GroupSelection(){ // hopefully this works
+  let groups = getGroups();
+  <Select
+    name="Group"
+    options={getGroups()}
+    className="basic-single"
+    classNamePrefix="select"
+  />
+}
+
+function PostButton(props: any) {
   return (
     <TouchableOpacity
       style={styles.PostButtonStyling}
@@ -69,7 +79,7 @@ function PostButton(props) {
   );
 }
 
-function CancelButton(props) {
+function CancelButton(props: any) {
   return (
     <TouchableOpacity
       style={styles.CancelButtonStyling}
@@ -80,12 +90,12 @@ function CancelButton(props) {
   );
 }
 
-function PostHandler(props) {
+function PostHandler(props: any) {
   props.navigate("Root", { screen: "Home" });
   return;
 }
 
-function CancelHandler(props) {
+function CancelHandler(props: any) {
   props.navigate("Landing");
   return;
 }
@@ -98,7 +108,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  InputContainer: {
+  TagContainer: {
+    backgroundColor: theme["color-background"],
+    width: "100%",
+    height: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  GroupContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
     height: "50%",
@@ -110,24 +127,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     height: "30%",
-  },
-  InputStyling: {
-    backgroundColor: theme["color-button-fill-white"],
-    borderRadius: 40,
-    width: "70%",
-    height: 50,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  TextInput: {
-    height: 45,
-    flex: 1,
-    padding: 10,
-    color: theme["color-button-fill-blue"],
-    borderColor: theme["color-button-fill-blue"],
-    borderWidth: 2,
-    borderRadius: 20,
-    width: "100%",
   },
   PostButtonStyling: {
     marginBottom: 20,
