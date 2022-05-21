@@ -4,13 +4,13 @@
  * https://reactnavigation.org/docs/configuring-links
  */
 
-import { LinkingOptions } from '@react-navigation/native';
-import * as Linking from 'expo-linking';
+import { LinkingOptions } from "@react-navigation/native";
+import * as Linking from "expo-linking";
 
-import { RootStackParamList } from '../types';
+import { RootStackParamList } from "../types";
 
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: [Linking.makeUrl('/')],
+  prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
       Root: {
@@ -18,43 +18,48 @@ const linking: LinkingOptions<RootStackParamList> = {
           /*delete later*/
           Landing: {
             screens: {
-              LandingScreen: 'Landing',
-            }
+              LandingScreen: "Landing",
+            },
+          },
+          Settings: {
+            screens: {
+              SettingsScreen: "Settings",
+            },
           },
           Signup: {
             screens: {
-              SignupScreen: 'Signup',
-            }
+              SignupScreen: "Signup",
+            },
           },
           Home: {
             screens: {
-              HomeScreen: 'Home',
+              HomeScreen: "Home",
             },
           },
           Filter: {
             screens: {
-              FilterScreen: 'Filter',
+              FilterScreen: "Filter",
             },
           },
           Camera: {
             screens: {
-              GroupScreen: 'Camera',
+              GroupScreen: "Camera",
             },
           },
           Group: {
             screens: {
-              GroupScreen: 'Group',
+              GroupScreen: "Group",
             },
           },
           Profile: {
             screens: {
-              ProfileScreen: 'Profile',
+              ProfileScreen: "Profile",
             },
           },
         },
       },
-      Modal: 'camera',
-      NotFound: '*',
+      Modal: "camera",
+      NotFound: "*",
     },
   },
 };

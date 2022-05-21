@@ -12,24 +12,28 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName, Pressable, StyleSheet } from "react-native";
 
-
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import CameraScreen from '../screens/CameraScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import HomeScreen from '../screens/HomeScreen';
-import FilterScreen from '../screens/FilterScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
-import GroupScreen from '../screens/GroupScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import EditInfo from '../screens/EditInfo';
+import Colors from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
+import CameraScreen from "../screens/CameraScreen";
+import NotFoundScreen from "../screens/NotFoundScreen";
+import HomeScreen from "../screens/HomeScreen";
+import FilterScreen from "../screens/FilterScreen";
+import {
+  RootStackParamList,
+  RootTabParamList,
+  RootTabScreenProps,
+} from "../types";
+import LinkingConfiguration from "./LinkingConfiguration";
+import GroupScreen from "../screens/GroupScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import EditInfo from "../screens/EditInfo";
 
 import LandingScreen from "../screens/LandingScreen";
 import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
+import SettingsScreen from "../screens/SettingsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -55,13 +59,42 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Landing" component={LandingScreen} options={{headerShown: false}} />
-      <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
-      <Stack.Screen name="Signup" component={SignupScreen} options={{headerShown: false}} />
-      <Stack.Screen name="EditInfo" component={EditInfo} options={{headerShown: false}} />
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+      <Stack.Screen
+        name="Landing"
+        component={LandingScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EditInfo"
+        component={EditInfo}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Oops!" }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={CameraScreen} />
       </Stack.Group>
     </Stack.Navigator>
@@ -147,3 +180,9 @@ function TabBarIcon(props: {
 }) {
   return <FontAwesome size={25} style={{ marginBottom: -3 }} {...props} />;
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#E3DAC9",
+  },
+});
