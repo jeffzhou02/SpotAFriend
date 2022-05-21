@@ -34,11 +34,11 @@ export default function App() {
   }
 
   const __takePicture = async () => {
-    console.log("qwekgjqwlgjass");
+    console.log("fuck");
 
     if (!camera) return;
     const photo = await camera.takePictureAsync();
-    console.log("awegjkask");
+    console.log("whore");
     console.log(photo);
     setPreviewVisible(true);
     setCapturedImage(photo);
@@ -46,31 +46,12 @@ export default function App() {
 
   const CameraPreview = ({ photo }: any) => {
     return (
-      <View
-        style={{
-          backgroundColor: "transparent",
-          flex: 1,
-          width: "100%",
-          height: "100%",
-        }}
-      >
+      <View style={styles.preview}>
         <ImageBackground
           source={{ uri: photo && photo.uri }}
-          style={{
-            flex: 1,
-          }}
+          style={styles.container}
         />
-        <TouchableOpacity
-          //JENNY CSS HERE PLS
-          onPress={__retakePicture}
-          style={{
-            width: 70,
-            height: 70,
-            bottom: 0,
-            borderRadius: 50,
-            backgroundColor: "#fff",
-          }}
-        />
+        <TouchableOpacity onPress={__retakePicture} style={styles.takepic} />
       </View>
     );
   };
@@ -90,41 +71,13 @@ export default function App() {
             camera = r;
           }}
         >
-          <View
-            style={{
-              flex: 1,
-              width: "100%",
-              backgroundColor: "transparent",
-              flexDirection: "row",
-            }}
-          >
-            <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-                flexDirection: "row",
-                flex: 1,
-                width: "100%",
-                padding: 20,
-                justifyContent: "space-between",
-              }}
-            >
-              <View
-                style={{
-                  alignSelf: "center",
-                  flex: 1,
-                  alignItems: "center",
-                }}
-              >
+          <View style={styles.pictureContainer}>
+            <View style={styles.picborder}></View>
+            <View style={styles.lowersection}>
+              <View>
                 <TouchableOpacity
                   onPress={__takePicture}
-                  style={{
-                    width: 70,
-                    height: 70,
-                    bottom: 0,
-                    borderRadius: 50,
-                    backgroundColor: "#fff",
-                  }}
+                  style={styles.takepic}
                 />
               </View>
             </View>
@@ -139,8 +92,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  camera: {
-    flex: 1,
+  preview: {
+    backgroundColor: "transparent",
+    width: "100%",
+    height: "100%",
   },
   buttonContainer: {
     flex: 1,
@@ -153,8 +108,35 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     alignItems: "center",
   },
-  text: {
-    fontSize: 18,
-    color: "white",
+  takepic: {
+    width: 90,
+    height: 40,
+    bottom: 0,
+    borderRadius: 50,
+    backgroundColor: "#00AFB5",
   },
+  pictureContainer: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    borderLeftWidth: 30,
+    borderRightWidth: 30,
+    borderTopWidth: 40,
+    borderColor: "#F4D58D",
+  },
+  lowersection: {
+    position: "absolute",
+    bottom: 0,
+    alignItems: "center",
+    flexDirection: "row",
+    flex: 1,
+    width: "100%",
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: "#F4D58D",
+    justifyContent: "center",
+    borderColor: "#F4D58D",
+  },
+  picborder: {},
 });

@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity, Image, ImageBackground } from "react-native";
-import { Text, View } from '../components/Themed';
+import {
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+} from "react-native";
+import { Text, View } from "../components/Themed";
 import Navigation from "../navigation";
 
-import { default as theme } from '../theme.json';
+import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
 
-export default function LoginScreen({navigation}: RootStackScreenProps<'Root'>) {
+export default function LoginScreen({
+  navigation,
+}: RootStackScreenProps<"Root">) {
   return (
     <View>
       <View style={styles.ImageContainer}>
@@ -17,8 +25,8 @@ export default function LoginScreen({navigation}: RootStackScreenProps<'Root'>) 
         <PasswordInput />
       </View>
       <View style={styles.ButtonContainer}>
-        <LoginButton {...navigation}/>
-        <BackButton {...navigation}/>
+        <LoginButton {...navigation} />
+        <BackButton {...navigation} />
       </View>
     </View>
   );
@@ -31,8 +39,9 @@ function Logo() {
         resizeMode: "contain",
         height: 100,
         width: 200,
+        marginTop: 50,
       }}
-      source={require('../assets/images/icon.png')}
+      source={require("../assets/images/icon.png")}
     />
   );
 }
@@ -70,7 +79,8 @@ function LoginButton(props) {
   return (
     <TouchableOpacity
       style={styles.LoginButtonStyling}
-      onPress={() => LoginHandler(props)}>
+      onPress={() => LoginHandler(props)}
+    >
       <Text style={styles.LoginButtonTextStyling}>log in</Text>
     </TouchableOpacity>
   );
@@ -80,7 +90,8 @@ function BackButton(props) {
   return (
     <TouchableOpacity
       style={styles.BackButtonStyling}
-      onPress={() => BackHandler(props)}>
+      onPress={() => BackHandler(props)}
+    >
       <Text style={styles.BackButtonTextStyling}>back</Text>
     </TouchableOpacity>
   );
@@ -104,30 +115,29 @@ function BackHandler(props) {
   return;
 }
 
-
 const styles = StyleSheet.create({
   ImageContainer: {
-    backgroundColor: theme['color-background'],
-    width: '100%',
-    height: '20%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: theme["color-background"],
+    width: "100%",
+    height: "20%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   InputContainer: {
-    backgroundColor: theme['color-background'],
-    width: '100%',
-    height: '50%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: theme["color-background"],
+    width: "100%",
+    height: "50%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   ButtonContainer: {
-    backgroundColor: theme['color-background'],
-    width: '100%',
-    alignItems: 'center',
-    height: '30%',
+    backgroundColor: theme["color-background"],
+    width: "100%",
+    alignItems: "center",
+    height: "30%",
   },
   InputStyling: {
-    backgroundColor: theme['color-button-fill-white'],
+    backgroundColor: theme["color-button-fill-white"],
     borderRadius: 40,
     width: "70%",
     height: 50,
@@ -138,8 +148,8 @@ const styles = StyleSheet.create({
     height: 45,
     flex: 1,
     padding: 10,
-    color: theme['color-button-fill-blue'],
-    borderColor: theme['color-button-fill-blue'],
+    color: theme["color-button-fill-blue"],
+    borderColor: theme["color-button-fill-blue"],
     borderWidth: 2,
     borderRadius: 20,
     width: "100%",
@@ -148,14 +158,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 20,
     width: "30%",
-    backgroundColor: theme['color-button-fill-blue'],
+    backgroundColor: theme["color-button-fill-blue"],
     borderRadius: 50,
   },
   BackButtonStyling: {
     padding: 20,
     width: "30%",
-    backgroundColor: theme['color-button-fill-white'],
-    borderColor: theme['color-button-fill-blue'],
+    backgroundColor: theme["color-button-fill-white"],
+    borderColor: theme["color-button-fill-blue"],
     borderWidth: 2,
     borderRadius: 50,
   },
@@ -164,6 +174,6 @@ const styles = StyleSheet.create({
   },
   BackButtonTextStyling: {
     textAlign: "center",
-    color: theme['color-button-fill-blue']
+    color: theme["color-button-fill-blue"],
   },
 });
