@@ -9,8 +9,11 @@ import {
   Button,
 } from "react-native";
 import { Camera } from "expo-camera";
+import { RootStackScreenProps } from "../types";
 
-export default function App() {
+export default function App({
+  navigation,
+}: RootStackScreenProps<"Modal">) {
   let camera: Camera;
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -50,7 +53,7 @@ export default function App() {
   };
 
   const __uploadPicture = () => {
-    console.log("upload");
+    navigation.navigate("Post");
   };
 
   const CameraPreview = ({ photo }: any) => {

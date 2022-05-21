@@ -22,6 +22,7 @@ export type RootStackParamList = {
   Settings: undefined;
   Signup: undefined;
   EditInfo: undefined;
+  Post: undefined;
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
@@ -37,8 +38,6 @@ export type RootTabParamList = {
   Camera: undefined;
   Group: undefined;
   Profile: undefined;
-  Landing: undefined;
-  Signup: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
