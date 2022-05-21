@@ -1,12 +1,34 @@
-const Sequelize = require('sequelize'); // import { Sequelize } from 'sequelize';
+const mysql = require('mysql2');
 
-const sequelize = new Sequelize('loginDB', 'root', 'CS35LSpotafriend', {
-    dialect: 'mysql',
-    host: 'localhost',
-    // host: '/cloudsql/spotafriend:us-west2:spotafriend',
-    // dialectOptions: {
-    //     socketPath: '/cloudsql/spotafriend:us-west2:spotafriend'
-    // } 
+// Create connection to database
+let connection = mysql.createConnection({
+    host: '34.67.189.9',              // public IP of instance
+    user: 'root',              // name of created user 
+    database: 'loginDB',      // name of created database (i.e. 'loginDB')
+    password: 'CS35LSpotafriend'           // password of created user
 });
 
-module.exports = sequelize;
+// Connect to database
+connection.connect((error) => {
+    if (error) {
+        console.error('Error connecting to DB: ' + error.stack);
+        return;
+    }
+    console.log('Connected as thread id: ' + connection.threadId);
+
+    // Create Users table in the database
+    let createTable = 
+    `CREATE TABLE IF NOT EXISTS Users(
+        id int auto_increment primary key,
+        username varchar(255) not null,
+        email varchar(225) not null,
+        password varchar(255) not null,
+        confirmpassword varchar(255) not null
+    );`
+    connection.query(createTable, (error) => {
+        if (error) throw error
+        console.log("Users table created successfully!");
+    })
+})
+
+module.exports = connection;
