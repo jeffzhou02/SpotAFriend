@@ -8,11 +8,11 @@ import {
 import { Text, View } from "../components/Themed";
 
 import { default as theme } from "../theme.json";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 
 export default function LandingScreen({
   navigation,
-}: RootTabScreenProps<"Landing">) {
+}: RootStackScreenProps<"Root">) {
   return (
     <View style={styles.container}>
       <Splash></Splash>

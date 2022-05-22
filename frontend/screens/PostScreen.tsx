@@ -35,6 +35,7 @@ export default function PostScreen({
 function getPicture(){
   return "../assets/images/icon.png";
 }
+
 function Picture() {
   return (
     <Image
@@ -44,7 +45,7 @@ function Picture() {
         width: 200,
         marginTop: 50,
       }}
-      source={require(getPicture())}
+      source={require("../assets/images/icon.png")}
     />
   );
 }
