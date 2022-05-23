@@ -20,7 +20,6 @@ const API_URL =
     : "http://10.0.2.2:3000";
 
 
-const [message, setMessage] = useState("");
 
 export default function SignupScreen({
   navigation,
@@ -136,7 +135,7 @@ function onLoggedIn(token: any) {
         const jsonRes = await res.json();
         if (res.status === 200) {
           console.log(jsonRes);
-          setMessage(jsonRes.message);
+          //setMessage(jsonRes.message);
         }
       } catch (err) {
         console.log(err);
@@ -188,11 +187,11 @@ async function SignupHandler(props: any) {
       if (res.status !== 200) {
         // setIsError(true);
         console.log(jsonRes.message);
-        setMessage(jsonRes.message);
+        //setMessage(jsonRes.message);
       } else {
         onLoggedIn(jsonRes.token);
         // setIsError(false);
-        setMessage(jsonRes.message);
+        //setMessage(jsonRes.message);
       }
     } catch (err) {
       console.log(err);

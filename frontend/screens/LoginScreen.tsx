@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Platform, 
   ImageBackground,
 } from "react-native";
 import { Text, View } from "../components/Themed";
@@ -11,6 +12,11 @@ import Navigation from "../navigation";
 
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
+
+const API_URL =
+  Platform.OS === "ios" || Platform.OS === "web"
+    ? "http://improvedspotafriend.wl.r.appspot.com"
+    : "http://10.0.2.2:3000";
 
 export default function LoginScreen({
   navigation,

@@ -30,20 +30,35 @@ app.route('/private').get((req, res) => {
     );
 });
 
+app.route('/login').get((req, res) => {
+    connection.query("SELECT * FROM `Users` WHERE username=?", [req.body.username], (error, results, fields) => {
+        if (error) {
+            return res.status(500).json({ success: false, message: "Error querying database finding username!" });
+        }
+        if (results.length === 0) {
+            return res.status(200).json({ success: false, message: "Username doesn't exist!" });
+        }
+        else {
+            return res.status(200).json({ success: true, message: "Successfully logged in!", results });
+        }
+    })
+
+});
+
 // POST Request to signup
 app.route('/signup').post((req, res) => {
     // Query to find an existing user with the same email
     console.log("signing up");
-    connection.query("SELECT * FROM `Users` WHERE email=?", [req.body.email], (error, results, fields) => {
+    connection.query("SELECT * FROM `Users` WHERE username=?", [req.body.username], (error, results, fields) => {
         if (error) {
-            console.log("1");
-            return res.status(500).json({ success: false, message: "Error querying database finding email!" });
-        };
+            console.log("Error querying database finding username!");
+            return res.status(500).json({ success: false, message: "Error querying database finding username!" });
+        }
         
         // If the results array has more than one result, then there is an existing user
         if (results.length > 0) {
-            console.log("2");
-            return res.status(200).json({ success: false, message: "That email is already associated with an account!" });
+            console.log("That username is already associated with an account!");
+            return res.status(200).json({ success: false, message: "That username is already associated with an account!" });
         }
 
         // Otherwise, add the new user to database
@@ -52,10 +67,10 @@ app.route('/signup').post((req, res) => {
             [req.body.username, req.body.email, req.body.password, req.body.confirmpassword],
             (error, results, fields) => {
                 if (error) {
-                    console.log("3");
+                    console.log("Something went wrong with adding a new user.");
                     return res.status(500).json({ success: false, message: error });
                 };
-                console.log("4");
+                console.log("Successfully logged in!");
                 return res.status(200).json({ success: true, message: "Successfully logged in!"});
             }
         );
