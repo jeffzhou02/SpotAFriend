@@ -12,9 +12,11 @@ import { Text, View } from "../components/Themed";
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
 
+import axios from 'axios';
+
 const API_URL =
   Platform.OS === "ios" || Platform.OS === "web"
-    ? "https://spotafriend.wl.r.appspot.com/"
+    ? "https://improvedspotafriend.wl.r.appspot.com"
     : "http://10.0.2.2:3000";
 
 export default function SignupScreen({
@@ -155,36 +157,40 @@ async function SignupHandler(props: any) {
     password,
     confirmpassword,
   };
-  try {
-    console.log("About to call fetch");
-    const res = await fetch(`${API_URL}/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profile),
-    });
-    console.log("Fetch.then");
-    try {
-      const jsonRes = await res.json();
-      if (res.status !== 200) {
-        // setIsError(true);
-        console.log("there was an error");
-        console.log(jsonRes.message);
-        // setMessage(jsonRes.message);
-      } else {
-        console.log("should log in");
-        // onLoggedIn(jsonRes.token);
-        // setIsError(false);
-        // setMessage(jsonRes.message);
-      }
-    } catch (err) {
-      console.log("err");
-      console.log(err);
-    }
-  } catch (error) {
-    console.log("LMAO FETCH DIDNT WRRK");
-  }
+  console.log("About to post");
+  const res = await axios.post(
+    "https://improvedspotafriend.wl.r.appspot.com/signup", profile
+  );
+  console.log("sent post request");
+  console.log(res);
+  // try {
+  //   const res = await fetch(`${API_URL}/signup`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(profile),
+  //   });
+  //   try {
+  //     const jsonRes = await res.json();
+  //     if (res.status !== 200) {
+  //       // setIsError(true);
+  //       console.log("there was an error");
+  //       console.log(jsonRes.message);
+  //       // setMessage(jsonRes.message);
+  //     } else {
+  //       console.log("should log in");
+  //       // onLoggedIn(jsonRes.token);
+  //       // setIsError(false);
+  //       // setMessage(jsonRes.message);
+  //     }
+  //   } catch (err) {
+  //     console.log("err");
+  //     console.log(err);
+  //   }
+  // } catch (error) {
+  //   console.log("LMAO FETCH DIDNT WRRK");
+  // }
 
   console.log(props.username);
   console.log(props.email);
@@ -193,6 +199,7 @@ async function SignupHandler(props: any) {
   props.navigate("Root", { screen: "Home" });
   return;
 }
+
 
 function BackHandler(props: { navigate: (arg0: string) => void }) {
   props.navigate("Landing");

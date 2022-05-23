@@ -10,7 +10,7 @@ const connection = require('../utils/database');
 app.use(cors());
 app.use(express.json());
 
-app.route('/users/').get((req, res) => {
+app.route('/users').get((req, res) => {
     connection.query(
         "SELECT * FROM `Users`",
         (error, results, fields) => {
@@ -29,7 +29,7 @@ app.route('/users/').get((req, res) => {
 // })
 
 // POST Request to signup
-app.route('/signup/').post((req, res) => {
+app.route('/signup').post((req, res) => {
     // Query to find an existing user with the same email
     connection.query("SELECT * FROM `Users` WHERE email=?", [req.body.email], (error, results, fields) => {
         if (error) {
