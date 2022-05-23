@@ -43,8 +43,8 @@ app.route('/signup/').post((req, res) => {
 
         // Otherwise, add the new user to database
         connection.query(
-            "INSERT INTO `Users` (username, email, password) VALUES (?, ?, ?)",
-            [req.body.username, req.body.email, req.body.password],
+            "INSERT INTO `Users` (username, email, password, confirmpassword) VALUES (?, ?, ?, ?)",
+            [req.body.username, req.body.email, req.body.password, req.body.confirmpassword],
             (error, results, fields) => {
                 if (error) {
                     return res.status(500).json({ success: false, message: error });
@@ -59,5 +59,8 @@ app.route('/signup/').post((req, res) => {
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
-app.set('port', process.env.PORT || 3000);
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+const PORT = parseInt(process.env.PORT) || 8080;
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+  console.log('Press Ctrl+C to quit.');
+});

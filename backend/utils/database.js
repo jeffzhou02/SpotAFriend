@@ -2,10 +2,11 @@ const mysql = require('mysql2');
 
 // Create connection to database
 let connection = mysql.createConnection({
-    host: '34.67.189.9',              // public IP of instance
+    //host: '/cloudsql/improvedspotafriend:us-central1:spotafriend1',              // public IP of instance
     user: 'root',              // name of created user 
     database: 'loginDB',      // name of created database (i.e. 'loginDB')
-    password: 'CS35LSpotafriend'           // password of created user
+    password: 'CS35LSpotafriend',           // password of created user
+    socketPath: '/cloudsql/improvedspotafriend:us-central1:spotafriend1'
 });
 
 // Connect to database
