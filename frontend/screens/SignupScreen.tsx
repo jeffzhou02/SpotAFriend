@@ -132,6 +132,7 @@ function onLoggedIn(token: any) {
       try {
         const jsonRes = await res.json();
         if (res.status === 200) {
+          console.log(jsonRes);
           // setMessage(jsonRes.message);
         }
       } catch (err) {
@@ -188,7 +189,7 @@ async function SignupHandler(props: any) {
         // setMessage(jsonRes.message);
       } else {
         console.log("should log in");
-        // onLoggedIn(jsonRes.token);
+        onLoggedIn(jsonRes.token);
         // setIsError(false);
         // setMessage(jsonRes.message);
       }

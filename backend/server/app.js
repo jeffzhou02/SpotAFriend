@@ -20,17 +20,19 @@ app.route('/users').get((req, res) => {
     );
 });
 
-// app.route('/private/').get((req, res) => {
-//     connection.query(
-//         "SELECT * FROM 'Users' WHERE email=?", [req.body.email], (error, results, fields) => {
-
-//         }
-//     )
-// })
+app.route('/private').get((req, res) => {
+    connection.query(
+        "SELECT * FROM 'Users' WHERE email=?", [req.body.email], (error, results, fields) => {
+            if (error) throw error;
+            res.json(results);
+        }
+    );
+});
 
 // POST Request to signup
 app.route('/signup').post((req, res) => {
     // Query to find an existing user with the same email
+    console.log("signing up");
     connection.query("SELECT * FROM `Users` WHERE email=?", [req.body.email], (error, results, fields) => {
         if (error) {
             console.log("1");
