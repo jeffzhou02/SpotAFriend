@@ -149,7 +149,6 @@ function onLoggedIn(token: any) {
 
 async function SignupHandler(props: any) {
   console.log("Sign up handler");
-  // const [isError, setIsError] = useState(false);
   const username = props.username;
   const email = props.email;
   const password = props.password;
@@ -174,32 +173,42 @@ async function SignupHandler(props: any) {
   // // );
   // console.log("sent post request");
   // console.log(res);
+  console.log(profile);
+  console.log(API_URL);
   try {
-    const res = await fetch(`${API_URL}/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profile),
-    });
-    try {
-      const jsonRes = await res.json();
-      if (res.status !== 200) {
-        // setIsError(true);
-        console.log(jsonRes.message);
-        //setMessage(jsonRes.message);
-      } else {
-        onLoggedIn(jsonRes.token);
-        // setIsError(false);
-        //setMessage(jsonRes.message);
-      }
-    } catch (err) {
-      console.log(err);
+    const res = await axios.post( 
+      `${API_URL}/signup`, profile
+    );
+    console.log(res);
+    if (res?.data?.success) {
+      props.navigate("Root", { screen: "Home" });
     }
   } catch (error) {
-    console.log("LMAO FETCH DIDNT WRRK");
+    console.log(error);
   }
-  props.navigate("Root", { screen: "Home" });
+  
+
+  // const res = await fetch(`${API_URL}/signup`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(profile),
+  // });
+  // console.log("About to try");
+  // try {
+  //   const jsonRes = await res.json();
+  //   if (res.status !== 200) {
+  //     console.log(jsonRes.message);
+  //     //setMessage(jsonRes.message);
+  //   } else {
+  //     onLoggedIn(jsonRes.token);
+  //     props.navigate("Root", { screen: "Home" });
+  //     //setMessage(jsonRes.message);
+  //   }
+  // } catch (err) {
+  //   console.log(err);
+  // }
   return;
 }
 
