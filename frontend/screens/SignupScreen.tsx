@@ -19,6 +19,9 @@ const API_URL =
     ? "http://improvedspotafriend.wl.r.appspot.com"
     : "http://10.0.2.2:3000";
 
+
+const [message, setMessage] = useState("");
+
 export default function SignupScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
@@ -133,7 +136,7 @@ function onLoggedIn(token: any) {
         const jsonRes = await res.json();
         if (res.status === 200) {
           console.log(jsonRes);
-          // setMessage(jsonRes.message);
+          setMessage(jsonRes.message);
         }
       } catch (err) {
         console.log(err);
@@ -184,27 +187,19 @@ async function SignupHandler(props: any) {
       const jsonRes = await res.json();
       if (res.status !== 200) {
         // setIsError(true);
-        console.log("there was an error");
         console.log(jsonRes.message);
-        // setMessage(jsonRes.message);
+        setMessage(jsonRes.message);
       } else {
-        console.log("should log in");
         onLoggedIn(jsonRes.token);
         // setIsError(false);
-        // setMessage(jsonRes.message);
+        setMessage(jsonRes.message);
       }
     } catch (err) {
-      console.log("err");
       console.log(err);
     }
   } catch (error) {
     console.log("LMAO FETCH DIDNT WRRK");
   }
-
-  console.log(props.username);
-  console.log(props.email);
-  console.log(props.password);
-  console.log(props.confirmpassword);
   props.navigate("Root", { screen: "Home" });
   return;
 }

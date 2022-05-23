@@ -1,12 +1,14 @@
 const mysql = require('mysql2');
 
+const dbSocketPath = process.env.DB_SOCKET_PATH || '/cloudsql';
+
 // Create connection to database
 let connection = mysql.createConnection({
     //host: '/cloudsql/improvedspotafriend:us-central1:spotafriend1',              // public IP of instance
     user: 'root',              // name of created user 
     database: 'loginDB',      // name of created database (i.e. 'loginDB')
     password: 'CS35LSpotafriend',           // password of created user
-    socketPath: '/cloudsql/improvedspotafriend:us-central1:spotafriend1'
+    socketPath: `${dbSocketPath}/improvedspotafriend:us-central1:spotafriend1`
 });
 
 // Connect to database

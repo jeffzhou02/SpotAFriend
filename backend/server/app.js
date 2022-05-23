@@ -20,9 +20,10 @@ app.route('/users').get((req, res) => {
     );
 });
 
+// need to change so it checks authorization of resource
 app.route('/private').get((req, res) => {
     connection.query(
-        "SELECT * FROM 'Users' WHERE email=?", [req.body.email], (error, results, fields) => {
+        "SELECT * FROM `Users` WHERE email=?", [req.body.email], (error, results, fields) => {
             if (error) throw error;
             res.json(results);
         }
