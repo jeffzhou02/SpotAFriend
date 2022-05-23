@@ -33,11 +33,13 @@ app.route('/signup').post((req, res) => {
     // Query to find an existing user with the same email
     connection.query("SELECT * FROM `Users` WHERE email=?", [req.body.email], (error, results, fields) => {
         if (error) {
+            console.log("1");
             return res.status(500).json({ success: false, message: "Error querying database finding email!" });
         };
         
         // If the results array has more than one result, then there is an existing user
         if (results.length > 0) {
+            console.log("2");
             return res.status(200).json({ success: false, message: "That email is already associated with an account!" });
         }
 
@@ -47,9 +49,10 @@ app.route('/signup').post((req, res) => {
             [req.body.username, req.body.email, req.body.password, req.body.confirmpassword],
             (error, results, fields) => {
                 if (error) {
+                    console.log("3");
                     return res.status(500).json({ success: false, message: error });
                 };
-
+                console.log("4");
                 return res.status(200).json({ success: true, message: "Successfully logged in!"});
             }
         );
