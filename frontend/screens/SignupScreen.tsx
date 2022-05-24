@@ -12,14 +12,8 @@ import { Text, View } from "../components/Themed";
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
 
-import axios from 'axios';
-
-const API_URL =
-  Platform.OS === "ios" || Platform.OS === "web"
-    ? "http://improvedspotafriend.wl.r.appspot.com"
-    : "http://10.0.2.2:3000";
-
-
+import { collection, addDoc, doc } from "firebase/firestore"; 
+import db  from "../fb/config.js";
 
 export default function SignupScreen({
   navigation,
@@ -122,30 +116,30 @@ function BackButton(props: { navigate: (arg0: string) => void }) {
   );
 }
 
-function onLoggedIn(token: any) {
-  fetch(`${API_URL}/private`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(async (res) => {
-      try {
-        const jsonRes = await res.json();
-        if (res.status === 200) {
-          console.log(jsonRes);
-          //setMessage(jsonRes.message);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  console.log("finished logging in");
-}
+// function onLoggedIn(token: any) {
+//   fetch(`${API_URL}/private`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`,
+//     },
+//   })
+//     .then(async (res) => {
+//       try {
+//         const jsonRes = await res.json();
+//         if (res.status === 200) {
+//           console.log(jsonRes);
+//           //setMessage(jsonRes.message);
+//         }
+//       } catch (err) {
+//         console.log(err);
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+//   console.log("finished logging in");
+// }
 
 async function SignupHandler(props: any) {
   console.log("Sign up handler");
@@ -159,18 +153,31 @@ async function SignupHandler(props: any) {
     password,
     confirmpassword,
   };
-  console.log("About to post");
-  console.log(profile);
-  console.log(API_URL);
-  const res = await axios({
-    method: 'post',
-    url: "https://improvedspotafriend.wl.r.appspot.com/signup",
-    data: profile,
-    headers: { 'content-type': 'application/json', 'Access-Control-Allow-Origin': true },
-  });
-  if (res?.data?.success) {
+  // console.log(db);
+  try {
+    const docRef = await addDoc(collection(db, "users"), {
+      username: username,
+      email: email,
+      password: password,
+      confirmpassword: confirmpassword
+    });
+    console.log("Document written with ID: ", docRef.id);
     props.navigate("Root", { screen: "Home" });
+  } catch (e) {
+    console.error("Error adding document: ", e);
   }
+  // console.log("About to post");
+  // console.log(profile);
+  // console.log(API_URL);
+  // const res = await axios({
+  //   method: 'post',
+  //   url: "https://improvedspotafriend.wl.r.appspot.com/signup",
+  //   data: profile,
+  //   headers: { 'content-type': 'application/json', 'Access-Control-Allow-Origin': true },
+  // });
+  // if (res?.data?.success) {
+  //   props.navigate("Root", { screen: "Home" });
+  // }
   // // .post(
   // //   "https://improvedspotafriend.wl.r.appspot.com/signup", profile
   // // );

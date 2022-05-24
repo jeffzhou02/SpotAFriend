@@ -81,7 +81,7 @@ function PasswordInput() {
   );
 }
 
-function LoginButton(props) {
+function LoginButton(props: any) {
   return (
     <TouchableOpacity
       style={styles.LoginButtonStyling}
@@ -92,7 +92,7 @@ function LoginButton(props) {
   );
 }
 
-function BackButton(props) {
+function BackButton(props: any) {
   return (
     <TouchableOpacity
       style={styles.BackButtonStyling}
@@ -111,12 +111,12 @@ function setPassword() {
   return;
 }
 
-function LoginHandler(props) {
+function LoginHandler(props: any) {
   props.navigate("Root", { screen: "Home" });
   return;
 }
 
-function BackHandler(props) {
+function BackHandler(props: any) {
   props.navigate("Landing");
   return;
 }
