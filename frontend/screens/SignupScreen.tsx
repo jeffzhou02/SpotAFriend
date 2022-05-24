@@ -160,32 +160,41 @@ async function SignupHandler(props: any) {
     confirmpassword,
   };
   console.log("About to post");
-  // const res = await axios({
-  //   method: 'post',
-  //   url: "https://improvedspotafriend.wl.r.appspot.com/signup",
-  //   data: profile,
-  //   headers: { 'content-type': 'application/json' },
-  //   validateStatus: (status) => {return true;},
-
-  // });
+  console.log(profile);
+  console.log(API_URL);
+  const res = await axios({
+    method: 'post',
+    url: "https://improvedspotafriend.wl.r.appspot.com/signup",
+    data: profile,
+    headers: { 'content-type': 'application/json', 'Access-Control-Allow-Origin': true },
+  });
+  if (res?.data?.success) {
+    props.navigate("Root", { screen: "Home" });
+  }
   // // .post(
   // //   "https://improvedspotafriend.wl.r.appspot.com/signup", profile
   // // );
   // console.log("sent post request");
   // console.log(res);
-  console.log(profile);
-  console.log(API_URL);
-  try {
-    const res = await axios.post( 
-      `${API_URL}/signup`, profile
-    );
-    console.log(res);
-    if (res?.data?.success) {
-      props.navigate("Root", { screen: "Home" });
-    }
-  } catch (error) {
-    console.log(error);
-  }
+
+  // try {
+    // const res = await axios.post( 
+    //   `${API_URL}/signup`, profile
+    // );
+    // const promise = axios.post( 
+    //   `${API_URL}/signup`, profile
+    // );
+    // promise.then((res) => {
+    //   console.log(res)
+    // }).catch( () => { console.log("error") })
+
+  //   console.log(res);
+    // if (res?.data?.success) {
+    //   props.navigate("Root", { screen: "Home" });
+    // }
+  // } catch (error) {
+  //   console.log(error);
+  // }
   
 
   // const res = await fetch(`${API_URL}/signup`, {
