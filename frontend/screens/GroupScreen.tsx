@@ -49,8 +49,8 @@ const GroupCard = (props: any) => {
               <Text style={styles.tagsText}>target not spotted</Text>
             </View>
             <Image style={styles.targetImage} source={{ uri: props.pfp1 }} />
-            <View style={{ backgroundColor: "transparent" }}>
-              <Text style={styles.modalText}>
+            <View style={{ backgroundColor: "transparent", height: "auto" }}>
+              <Text style={styles.modalText2}>
                 today's target: {props.person1}
               </Text>
               <Text style={styles.names}>
@@ -186,6 +186,12 @@ export default function GroupScreen({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E3DAC9",
+  },
   centeredView: {
     flex: 1,
     alignItems: "center",
@@ -213,10 +219,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: "#00AFB5",
     borderRadius: 30,
+    borderWidth: 2,
+    borderColor: "#083D77",
   },
   buttonClose: {
     backgroundColor: "transparent",
-    height: 30,
+    height: "auto",
   },
   textStyle: {
     fontSize: 18,
@@ -225,23 +233,29 @@ const styles = StyleSheet.create({
     color: "#689689",
   },
   modalText: {
+    fontSize: 30,
+    fontStyle: "italic",
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  modalText2: {
     fontSize: 20,
     fontStyle: "italic",
     fontWeight: "bold",
     color: "#fff",
   },
   names: {
-    fontSize: 16,
+    fontSize: 18,
     fontStyle: "italic",
     color: "#fff",
-    marginTop: "10%",
+    marginTop: "5%",
   },
   dismiss: {
     fontSize: 16,
     fontStyle: "italic",
     textDecorationLine: "underline",
     color: "#fff",
-    marginTop: "80%",
+    marginTop: "40%",
   },
   modalContainer: {
     backgroundColor: "transparent",
