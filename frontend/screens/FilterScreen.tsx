@@ -1,11 +1,16 @@
-import { StyleSheet, ScrollView, Image } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 
 import React, { ReactNode, useEffect, useState } from "react";
 
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
-import NotFoundScreen from "./NotFoundScreen";
 
 const postText = new Array(64).fill(0).map((i) => {
   return {
@@ -57,9 +62,91 @@ const Card = (props: any) => {
   );
 };
 
-export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
+function SettingsButton(props: any) {
+  return (
+    <TouchableOpacity
+      style={styles.settings}
+      onPress={() => SettingsHandler(props)}
+    >
+      <Image
+        style={{
+          resizeMode: "contain",
+          height: 30,
+          width: 30,
+          alignSelf: "center",
+        }}
+        source={require("../assets/images/settings.png")}
+      />
+    </TouchableOpacity>
+  );
+}
+
+function SettingsHandler(props: any) {
+  props.navigate("Settings");
+  return;
+}
+
+function Logo() {
+  return (
+    <Image
+      style={{
+        resizeMode: "contain",
+        height: 40,
+        width: 40,
+        marginTop: 50,
+      }}
+      source={require("../assets/images/icon.png")}
+    />
+  );
+}
+
+function SearchBar() {
+  return (
+    <View style={styles.searchbar}>
+      <TextInput placeholder="search tags" keyboardType="default" />
+      <TouchableOpacity style={{ alignSelf: "center" }}>
+        <Image
+          style={{
+            resizeMode: "contain",
+            height: 30,
+            width: 30,
+          }}
+          source={require("../assets/images/search.png")}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+export default function FilterScreen({
+  navigation,
+}: RootTabScreenProps<"Filter">) {
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          height: 55,
+          flexDirection: "row",
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+          marginTop: "20%",
+          paddingHorizontal: 15,
+          width: "90%",
+          backgroundColor: "transparent",
+        }}
+      >
+        <Logo></Logo>
+        <SettingsButton {...navigation} />
+      </View>
+      <View
+        style={{
+          paddingHorizontal: "20%",
+          backgroundColor: "transparent",
+          marginTop: "5%",
+        }}
+      >
+        <SearchBar></SearchBar>
+      </View>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -103,7 +190,7 @@ const styles = StyleSheet.create({
     width: "90%",
     borderTopStartRadius: 30,
     borderTopEndRadius: 30,
-    marginTop: "40%",
+    marginTop: "7%",
     padding: "4%",
     paddingBottom: "100%",
   },
@@ -172,5 +259,24 @@ const styles = StyleSheet.create({
   },
   likesContainer: {
     backgroundColor: "rgba(0,0,0,0)", // this is temporary cuz im too lazy to code a heart for now
+  },
+  settings: {
+    backgroundColor: "#083D77",
+    height: 40,
+    width: 40,
+    borderRadius: 15,
+    justifyContent: "center",
+  },
+  searchbar: {
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#00AFB5",
+    borderRadius: 15,
+    width: 330,
+    height: 40,
+    alignContent: "center",
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });

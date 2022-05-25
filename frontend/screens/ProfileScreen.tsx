@@ -1,14 +1,14 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
+import { RootStackParamList } from '../types';
 
 //remeber to add profile photo later
-export default function ProfileScreen({ navigation }: RootTabScreenProps<'Profile'>) {
+export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>) {
   const name='asdfasdf';
   const username='asdf';
   const email='';
-  const cancelFunction=() => navigation.navigate('Root', {screen: 'ProfileScreen'});
+  const cancelFunction=() => navigation.navigate("Profile");
   return (
     <View style={styles.container}>
       <InfoView name={name} username={username} email={email}
