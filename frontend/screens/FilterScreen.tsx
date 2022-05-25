@@ -12,11 +12,14 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
 
-const postText = new Array(64).fill(0).map((i) => {
+const postText = new Array(5).fill(0).map((i) => {
   return {
     person1: faker.name.firstName(),
     person2: faker.name.firstName(),
     tag1: faker.lorem.word(),
+    tag2: faker.lorem.word(),
+    pfp: faker.image.avatar(),
+    pic: faker.image.imageUrl(),
   };
 });
 
@@ -24,12 +27,8 @@ const Card = (props: any) => {
   return (
     <View style={styles.post}>
       <View style={styles.postHeader}>
-        <Image
-          style={styles.pfp}
-          source={{
-            uri: "https://media-exp1.licdn.com/dms/image/C5603AQGwFXFKntjWpQ/profile-displayphoto-shrink_800_800/0/1603152205934?e=1657756800&v=beta&t=V5o9xW9ARCCHRUto_eG11duhbT-asqy5I8hDyaAcAOM",
-          }}
-        />
+        <Image style={styles.pfp} source={{ uri: props.pfp }} />
+
         <View style={styles.captionBox}>
           <Text style={styles.postTitle}>
             <Text style={styles.postTitleName}>{props.person1} </Text>
@@ -38,19 +37,15 @@ const Card = (props: any) => {
           </Text>
         </View>
       </View>
-      <Image
-        style={styles.postImage}
-        source={{
-          uri: "https://thedublinshield.com/wp-content/uploads/2020/03/FullSizeRender-1.jpeg",
-        }}
-      />
+      <Image style={styles.postImage} source={{ uri: props.pic }} />
       <View style={styles.tagsLikes}>
         <View style={styles.tagsContainer}>
           <View style={styles.tags}>
-            <Text style={styles.tagsText}>sleeping</Text>
+            <Text style={styles.tagsText}>{props.tag1}</Text>
           </View>
           <View style={styles.tags}>
-            <Text style={styles.tagsText}>coding</Text>
+            <Text style={styles.tagsText}>{props.tag2}</Text>
+
           </View>
         </View>
         <View style={styles.likesContainer}>
@@ -128,7 +123,7 @@ export default function FilterScreen({
           flexDirection: "row",
           alignItems: "flex-end",
           justifyContent: "space-between",
-          marginTop: "20%",
+          marginTop: "10%",
           paddingHorizontal: 15,
           width: "90%",
           backgroundColor: "transparent",
@@ -159,7 +154,9 @@ export default function FilterScreen({
               person1={note.person1}
               person2={note.person2}
               pic={note.pic}
-              description={note.description}
+              pfp={note.pfp}
+              tag1={note.tag1}
+              tag2={note.tag2}
             />
           );
         })}

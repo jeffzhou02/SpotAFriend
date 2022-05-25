@@ -35,6 +35,8 @@ import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 
+import PostScreen from "../screens/PostScreen";
+
 export default function Navigation({
   colorScheme,
 }: {
@@ -77,6 +79,11 @@ function RootNavigator() {
       <Stack.Screen
         name="EditInfo"
         component={EditInfo}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Post"
+        component={PostScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

@@ -46,6 +46,7 @@
     "react-native-screens": "~3.10.1",
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
+    "react-select": "^5.3.2",
     "sequelize": "^6.19.0"
   },
   "devDependencies": {
