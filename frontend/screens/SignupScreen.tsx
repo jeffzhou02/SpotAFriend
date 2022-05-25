@@ -13,9 +13,9 @@ import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
 
 import { collection, addDoc, doc, getFirestore } from "firebase/firestore"; 
-import { app } from "../fb/index.js";
+import { ref, set } from "firebase/database";
+import { db } from "../fb/index.js";
 
-const db = getFirestore(app);
 
 export default function SignupScreen({
   navigation,
@@ -118,115 +118,24 @@ function BackButton(props: { navigate: (arg0: string) => void }) {
   );
 }
 
-// function onLoggedIn(token: any) {
-//   fetch(`${API_URL}/private`, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${token}`,
-//     },
-//   })
-//     .then(async (res) => {
-//       try {
-//         const jsonRes = await res.json();
-//         if (res.status === 200) {
-//           console.log(jsonRes);
-//           //setMessage(jsonRes.message);
-//         }
-//       } catch (err) {
-//         console.log(err);
-//       }
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-//   console.log("finished logging in");
-// }
-
 async function SignupHandler(props: any) {
   console.log("Sign up handler");
   const username = props.username;
   const email = props.email;
   const password = props.password;
   const confirmpassword = props.confirmpassword;
-  const profile = {
-    username,
-    email,
-    password,
-    confirmpassword,
-  };
-  // console.log(db);
   try {
-    const docRef = await addDoc(collection(db, "users"), {
+    set(ref(db, 'users/' + username), {
       username: username,
       email: email,
       password: password,
       confirmpassword: confirmpassword
     });
-    console.log("Document written with ID: ", docRef.id);
+    console.log("Successfully added to database with userID: ", username);
     props.navigate("Root", { screen: "Home" });
   } catch (e) {
-    console.error("Error adding document: ", e);
+    console.error("Error adding to database: ", e);
   }
-  // console.log("About to post");
-  // console.log(profile);
-  // console.log(API_URL);
-  // const res = await axios({
-  //   method: 'post',
-  //   url: "https://improvedspotafriend.wl.r.appspot.com/signup",
-  //   data: profile,
-  //   headers: { 'content-type': 'application/json', 'Access-Control-Allow-Origin': true },
-  // });
-  // if (res?.data?.success) {
-  //   props.navigate("Root", { screen: "Home" });
-  // }
-  // // .post(
-  // //   "https://improvedspotafriend.wl.r.appspot.com/signup", profile
-  // // );
-  // console.log("sent post request");
-  // console.log(res);
-
-  // try {
-    // const res = await axios.post( 
-    //   `${API_URL}/signup`, profile
-    // );
-    // const promise = axios.post( 
-    //   `${API_URL}/signup`, profile
-    // );
-    // promise.then((res) => {
-    //   console.log(res)
-    // }).catch( () => { console.log("error") })
-
-  //   console.log(res);
-    // if (res?.data?.success) {
-    //   props.navigate("Root", { screen: "Home" });
-    // }
-  // } catch (error) {
-  //   console.log(error);
-  // }
-  
-
-  // const res = await fetch(`${API_URL}/signup`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(profile),
-  // });
-  // console.log("About to try");
-  // try {
-  //   const jsonRes = await res.json();
-  //   if (res.status !== 200) {
-  //     console.log(jsonRes.message);
-  //     //setMessage(jsonRes.message);
-  //   } else {
-  //     onLoggedIn(jsonRes.token);
-  //     props.navigate("Root", { screen: "Home" });
-  //     //setMessage(jsonRes.message);
-  //   }
-  // } catch (err) {
-  //   console.log(err);
-  // }
   return;
 }
 
