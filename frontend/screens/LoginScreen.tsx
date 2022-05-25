@@ -16,7 +16,7 @@ export default function LoginScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
   return (
-    <View>
+    <View style={{ backgroundColor: theme["color-background"] }}>
       <View style={styles.ImageContainer}>
         <Logo />
       </View>
@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
   },
   LoginButtonTextStyling: {
     textAlign: "center",
+    color: "white",
   },
   BackButtonTextStyling: {
     textAlign: "center",

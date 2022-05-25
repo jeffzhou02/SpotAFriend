@@ -34,6 +34,7 @@ import LandingScreen from "../screens/LandingScreen";
 import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+
 import PostScreen from "../screens/PostScreen";
 
 export default function Navigation({

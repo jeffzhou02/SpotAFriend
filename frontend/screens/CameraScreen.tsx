@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     alignItems: "center",
   },
+
   row: {
     width: "100%",
     flexDirection: "row",

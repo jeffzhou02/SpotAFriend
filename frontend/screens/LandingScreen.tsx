@@ -8,6 +8,7 @@ import {
 import { Text, View } from "../components/Themed";
 
 import { default as theme } from "../theme.json";
+
 import { RootStackScreenProps } from "../types";
 
 export default function LandingScreen({
