@@ -29,6 +29,7 @@ const Card = (props: any) => {
     <View style={styles.post}>
       <View style={styles.postHeader}>
         <Image style={styles.pfp} source={{ uri: props.pfp }} />
+
         <View style={styles.captionBox}>
           <Text style={styles.postTitle}>
             <Text style={styles.postTitleName}>{props.person1} </Text>
@@ -45,6 +46,7 @@ const Card = (props: any) => {
           </View>
           <View style={styles.tags}>
             <Text style={styles.tagsText}>{props.tag2}</Text>
+
           </View>
         </View>
         <View style={styles.likesContainer}>

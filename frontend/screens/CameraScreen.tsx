@@ -9,8 +9,11 @@ import {
   Button,
 } from "react-native";
 import { Camera } from "expo-camera";
+import { RootStackScreenProps } from "../types";
 
-export default function App() {
+export default function App({
+  navigation,
+}: RootStackScreenProps<"Modal">) {
   let camera: Camera;
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -43,21 +46,33 @@ export default function App() {
     setPreviewVisible(true);
     setCapturedImage(photo);
   };
+  
+  const __retakePicture = () => {
+    setCapturedImage(null);
+    setPreviewVisible(false);
+  };
+
+  const __uploadPicture = () => {
+    navigation.navigate("Post");
+  };
 
   const CameraPreview = ({ photo }: any) => {
     return (
       <View style={styles.preview}>
         <ImageBackground
-          source={{ uri: photo && photo.uri }}
-          style={styles.container}
-        />
-        <TouchableOpacity onPress={__retakePicture} style={styles.takepic} />
+        source={{ uri: photo && photo.uri }}
+        style={styles.container}>
+          <View style={styles.row}>
+            <TouchableOpacity onPress={__retakePicture} style={styles.retake}>
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={__uploadPicture} style={styles.retake}>
+              <Text>Upload</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
       </View>
     );
-  };
-  const __retakePicture = () => {
-    setCapturedImage(null);
-    setPreviewVisible(false);
   };
 
   return (
@@ -71,17 +86,27 @@ export default function App() {
             camera = r;
           }}
         >
-          <View style={styles.pictureContainer}>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.ring} onPress={__takePicture}>
+              <TouchableOpacity
+                onPress={__takePicture}
+                style={styles.takepic}
+              />
+            </TouchableOpacity>
+          </View>
+          {/* <View style={styles.pictureContainer}>
             <View style={styles.picborder}></View>
             <View style={styles.lowersection}>
               <View>
-                <TouchableOpacity
-                  onPress={__takePicture}
-                  style={styles.takepic}
-                />
+                <TouchableOpacity style={styles.ring}>
+                  <TouchableOpacity
+                    onPress={__takePicture}
+                    style={styles.takepic}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </View> */}
         </Camera>
       )}
     </View>
@@ -108,11 +133,41 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     alignItems: "center",
   },
-  takepic: {
-    width: 90,
-    height: 40,
+
+  row: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    position: "absolute",
     bottom: 0,
+    padding: 20,
+    backgroundColor: "transparent",
+  },
+  retake: {
+    padding: 15,
+    alignItems: "center",
     borderRadius: 50,
+    borderColor: "black",
+    borderWidth: 2,
+    backgroundColor: "#00AFB5",
+  },
+  takepic: {
+    width: 48,
+    height: 48,
+    bottom: 0,
+    borderRadius: 48,
+    borderColor: "black",
+    borderWidth: 2,
+    backgroundColor: "#00AFB5",
+  },
+  ring: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 60,
+    height: 60,
+    bottom: 0,
+    borderRadius: 60,
     backgroundColor: "#00AFB5",
   },
   pictureContainer: {

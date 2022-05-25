@@ -8,7 +8,7 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
   const name='asdfasdf';
   const username='asdf';
   const email='';
-  const cancelFunction=() => navigation.navigate("ProfileScreen");
+  const cancelFunction=() => navigation.navigate("Profile");
   return (
     <View style={styles.container}>
       <InfoView name={name} username={username} email={email}

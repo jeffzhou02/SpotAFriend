@@ -184,8 +184,9 @@ export default function GroupScreen({
     </View>
   );
 }
+
 const styles = StyleSheet.create({
-  container: {
+  centeredView: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
