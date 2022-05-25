@@ -12,9 +12,8 @@ import { Text, View } from "../components/Themed";
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
 
-import { collection, addDoc, doc, getFirestore } from "firebase/firestore"; 
 import { ref, set } from "firebase/database";
-import { db } from "../fb/index.js";
+import { db } from "../firebase/index.js";
 
 
 export default function SignupScreen({
