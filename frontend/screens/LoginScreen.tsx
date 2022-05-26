@@ -24,7 +24,7 @@ export default function LoginScreen({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { setUser } = useContext(UserContext); // using context to set the user globally
+  const { setUser } = useContext(UserContext); // using context to set the user globally (pass in the entire user)
 
   const update = (data: any) => {
     setErrorMessage(data);
