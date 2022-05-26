@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -12,6 +12,7 @@ import Navigation from "../navigation";
 
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
+import { UserContext } from '../components/UserContext';
 
 import { ref, onValue } from "firebase/database";
 import { db } from "../firebase/index.js";
@@ -23,8 +24,13 @@ export default function LoginScreen({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { setUser } = useContext(UserContext); // using context to set the user globally
+
   const update = (data: any) => {
     setErrorMessage(data);
+  }
+  const updateUser = (data: any) => {
+    setUser(data);
   }
 
   return (
@@ -58,6 +64,7 @@ export default function LoginScreen({
           username={username}
           password={password}
           func={update}
+          updateUser={updateUser}
         />
         <BackButton {...navigation} />
       </View>
@@ -113,6 +120,7 @@ function ErrorMessage(props: any) {
 function LoginHandler(props: any) {
   const username = props.username;
   const password = props.password;
+
   try {
     const userRef = ref(db, 'users/' + username);
     onValue(userRef, (snapshot) => {
@@ -121,6 +129,7 @@ function LoginHandler(props: any) {
         props.func("there is no account for that user yet");
       }
       else if (data.password === password) { // successful login
+        props.updateUser(data);
         props.navigate("Root", { screen: "Home" }); // still need to pass in username and password useContext
       } else { // password incorrect
         props.func("incorrect password");
