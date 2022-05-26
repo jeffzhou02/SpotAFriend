@@ -12,7 +12,7 @@ import { Text, View } from "../components/Themed";
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
 
-import { ref, set } from "firebase/database";
+import { ref, set, onValue } from "firebase/database";
 import { db } from "../firebase/index.js";
 
 
@@ -118,7 +118,6 @@ function BackButton(props: { navigate: (arg0: string) => void }) {
 }
 
 async function SignupHandler(props: any) {
-  console.log("Sign up handler");
   const username = props.username;
   const email = props.email;
   const password = props.password;
@@ -130,7 +129,6 @@ async function SignupHandler(props: any) {
       password: password,
       confirmpassword: confirmpassword
     });
-    console.log("Successfully added to database with userID: ", username);
     props.navigate("Root", { screen: "Home" });
   } catch (e) {
     console.error("Error adding to database: ", e);
