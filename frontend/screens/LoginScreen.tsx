@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useContext } from "react";
-=======
-import React, { useState, useEffect } from "react";
->>>>>>> 7a10d61112c0ee6af451aa65c1e3dfc4729e7c42
+
 import {
   StyleSheet,
   TextInput,
@@ -20,11 +17,6 @@ import { UserContext } from '../components/UserContext';
 
 import { ref, onValue } from "firebase/database";
 import { db } from "../firebase/index.js";
-
-
-import { ref, onValue } from "firebase/database";
-import { db } from "../firebase/index.js";
-
 
 export default function LoginScreen({
   navigation,
@@ -128,10 +120,6 @@ function ErrorMessage(props: any) {
 function LoginHandler(props: any) {
   const username = props.username;
   const password = props.password;
-<<<<<<< HEAD
-
-=======
->>>>>>> 7a10d61112c0ee6af451aa65c1e3dfc4729e7c42
   try {
     const userRef = ref(db, 'users/' + username);
     onValue(userRef, (snapshot) => {
@@ -140,10 +128,7 @@ function LoginHandler(props: any) {
         props.func("there is no account for that user yet");
       }
       else if (data.password === password) { // successful login
-<<<<<<< HEAD
         props.updateUser(data);
-=======
->>>>>>> 7a10d61112c0ee6af451aa65c1e3dfc4729e7c42
         props.navigate("Root", { screen: "Home" }); // still need to pass in username and password useContext
       } else { // password incorrect
         props.func("incorrect password");
