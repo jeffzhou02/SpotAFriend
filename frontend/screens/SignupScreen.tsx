@@ -12,10 +12,9 @@ import { Text, View } from "../components/Themed";
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
 
-const API_URL =
-  Platform.OS === "ios" || Platform.OS === "web"
-    ? "http://localhost:5000"
-    : "http://10.0.2.2:5000";
+import { ref, set, onValue } from "firebase/database";
+import { db } from "../firebase/index.js";
+
 
 export default function SignupScreen({
   navigation,
@@ -24,7 +23,10 @@ export default function SignupScreen({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const update = (data: any) => {
+    setErrorMessage(data);
+  }
   return (
     <View>
       <View style={styles.ImageContainer}>
@@ -67,6 +69,7 @@ export default function SignupScreen({
             }
           />
         </View>
+        <ErrorMessage message={errorMessage}/>
       </View>
       <View style={styles.ButtonContainer}>
         <SignupButton
@@ -75,6 +78,7 @@ export default function SignupScreen({
           email={email}
           password={password}
           confirmpassword={confirmpassword}
+          func={update}
         />
         <BackButton {...navigation} />
       </View>
@@ -118,81 +122,47 @@ function BackButton(props: { navigate: (arg0: string) => void }) {
   );
 }
 
-function onLoggedIn(token: any) {
-  fetch(`${API_URL}/private`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(async (res) => {
-      try {
-        const jsonRes = await res.json();
-        if (res.status === 200) {
-          // setMessage(jsonRes.message);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  console.log("finished logging in");
+function ErrorMessage(props: any) {
+  return (
+    props.message === undefined ? null :
+      <View style={styles.ErrorMessageContainer}>
+        <Text style={styles.ErrorMessage}>{props.message}</Text>
+      </View>
+  )
 }
 
 async function SignupHandler(props: any) {
-  console.log("Sign up handler");
-  // const [isError, setIsError] = useState(false);
   const username = props.username;
   const email = props.email;
   const password = props.password;
   const confirmpassword = props.confirmpassword;
-  const profile = {
-    username,
-    email,
-    password,
-    confirmpassword,
-  };
-  try {
-    console.log("About to call fetch");
-    const res = await fetch(`${API_URL}/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profile),
-    });
-    console.log("Fetch.then");
-    try {
-      const jsonRes = await res.json();
-      if (res.status !== 200) {
-        // setIsError(true);
-        console.log("there was an error");
-        console.log(jsonRes.message);
-        // setMessage(jsonRes.message);
-      } else {
-        console.log("should log in");
-        // onLoggedIn(jsonRes.token);
-        // setIsError(false);
-        // setMessage(jsonRes.message);
-      }
-    } catch (err) {
-      console.log("err");
-      console.log(err);
-    }
-  } catch (error) {
-    console.log("LMAO FETCH DIDNT WRRK");
+  if (password != confirmpassword) {
+    props.func("passwords do not match");
+    return;
   }
-
-  console.log(props.username);
-  console.log(props.email);
-  console.log(props.password);
-  console.log(props.confirmpassword);
-  props.navigate("Root", { screen: "Home" });
+  try {
+    const userRef = ref(db, 'users/' + username);
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {     // no user exists 
+        set(ref(db, 'users/' + username), {
+          username: username,
+          email: email,
+          password: password,
+          confirmpassword: confirmpassword
+        });
+        props.navigate("Root", { screen: "Home" });
+      } else {        // user already exists
+        props.func("user already exists with that username");
+      }
+    });
+ 
+  } catch (e) {
+    console.error("Error adding to database: ", e);
+  }
   return;
 }
+
 
 function BackHandler(props: { navigate: (arg0: string) => void }) {
   props.navigate("Landing");
@@ -206,6 +176,18 @@ const styles = StyleSheet.create({
     height: "20%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  ErrorMessageContainer: {
+    backgroundColor: theme["color-background"],
+    width: "70%",
+    height: "10%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ErrorMessage: {
+    color: theme["error-message"],
+    width: "100%",
+    textAlign: "center",
   },
   InputContainer: {
     backgroundColor: theme["color-background"],

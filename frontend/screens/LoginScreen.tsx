@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
   Image,
+  Platform,
   ImageBackground,
 } from "react-native";
 import { Text, View } from "../components/Themed";
@@ -12,20 +13,52 @@ import Navigation from "../navigation";
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
 
+import { ref, onValue } from "firebase/database";
+import { db } from "../firebase/index.js";
+
+
 export default function LoginScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const update = (data: any) => {
+    setErrorMessage(data);
+  }
+
   return (
     <View style={{ backgroundColor: theme["color-background"] }}>
       <View style={styles.ImageContainer}>
         <Logo />
       </View>
       <View style={styles.InputContainer}>
-        <UsernameInput />
-        <PasswordInput />
+        <View style={styles.InputStyling}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="username"
+            placeholderTextColor="#689689"
+            onChangeText={(username) => setUsername(username)}
+          />
+        </View>
+        <View style={styles.InputStyling}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="password"
+            placeholderTextColor="#689689"
+            secureTextEntry={true}
+            onChangeText={(password) => setPassword(password)}
+          />
+        </View>
+        <ErrorMessage message={errorMessage}/>
       </View>
       <View style={styles.ButtonContainer}>
-        <LoginButton {...navigation} />
+        <LoginButton
+          {...navigation}
+          username={username}
+          password={password}
+          func={update}
+        />
         <BackButton {...navigation} />
       </View>
     </View>
@@ -43,35 +76,6 @@ function Logo() {
       }}
       source={require("../assets/images/icon.png")}
     />
-  );
-}
-
-function UsernameInput() {
-  const [username, setUsername] = useState("");
-  return (
-    <View style={styles.InputStyling}>
-      <TextInput
-        style={styles.TextInput}
-        placeholder="username"
-        placeholderTextColor="#689689"
-        onChangeText={(username) => setUsername(username)}
-      />
-    </View>
-  );
-}
-
-function PasswordInput() {
-  const [password, setPassword] = useState("");
-  return (
-    <View style={styles.InputStyling}>
-      <TextInput
-        style={styles.TextInput}
-        placeholder="password"
-        placeholderTextColor="#689689"
-        secureTextEntry={true}
-        onChangeText={(password) => setPassword(password)}
-      />
-    </View>
   );
 }
 
@@ -97,17 +101,35 @@ function BackButton(props: any) {
   );
 }
 
-function setUsername() {
-  return;
-}
-
-function setPassword() {
-  return;
+function ErrorMessage(props: any) {
+  return (
+    props.message === undefined ? null :
+      <View style={styles.ErrorMessageContainer}>
+        <Text style={styles.ErrorMessage}>{props.message}</Text>
+      </View>
+  )
 }
 
 function LoginHandler(props: any) {
-  props.navigate("Root", { screen: "Home" });
-  return;
+  const username = props.username;
+  const password = props.password;
+  try {
+    const userRef = ref(db, 'users/' + username);
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) { // no user exists 
+        props.func("there is no account for that user yet");
+      }
+      else if (data.password === password) { // successful login
+        props.navigate("Root", { screen: "Home" }); // still need to pass in username and password useContext
+      } else { // password incorrect
+        props.func("incorrect password");
+      }
+    });
+  } catch (e) {
+    console.error("Error retrieving info from db: ", e);
+  }
+
 }
 
 function BackHandler(props: any) {
@@ -122,6 +144,18 @@ const styles = StyleSheet.create({
     height: "20%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  ErrorMessageContainer: {
+    backgroundColor: theme["color-background"],
+    width: "70%",
+    height: "10%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ErrorMessage: {
+    color: theme["error-message"],
+    width: "100%",
+    textAlign: "center",
   },
   InputContainer: {
     backgroundColor: theme["color-background"],

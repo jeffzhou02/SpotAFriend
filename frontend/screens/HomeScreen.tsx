@@ -18,7 +18,6 @@ const postText = new Array(5).fill(0).map((i) => {
 });
 
 const Card = (props: any) => {
-  console.log(props);
   return (
     <View style={styles.post}>
       <View style={styles.postHeader}>
