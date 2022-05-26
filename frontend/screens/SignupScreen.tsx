@@ -23,7 +23,10 @@ export default function SignupScreen({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const update = (data: any) => {
+    setErrorMessage(data);
+  }
   return (
     <View>
       <View style={styles.ImageContainer}>
@@ -66,6 +69,7 @@ export default function SignupScreen({
             }
           />
         </View>
+        <ErrorMessage message={errorMessage}/>
       </View>
       <View style={styles.ButtonContainer}>
         <SignupButton
@@ -74,6 +78,7 @@ export default function SignupScreen({
           email={email}
           password={password}
           confirmpassword={confirmpassword}
+          func={update}
         />
         <BackButton {...navigation} />
       </View>
@@ -117,19 +122,41 @@ function BackButton(props: { navigate: (arg0: string) => void }) {
   );
 }
 
+function ErrorMessage(props: any) {
+  return (
+    props.message === undefined ? null :
+      <View style={styles.ErrorMessageContainer}>
+        <Text style={styles.ErrorMessage}>{props.message}</Text>
+      </View>
+  )
+}
+
 async function SignupHandler(props: any) {
   const username = props.username;
   const email = props.email;
   const password = props.password;
   const confirmpassword = props.confirmpassword;
+  if (password != confirmpassword) {
+    props.func("passwords do not match");
+    return;
+  }
   try {
-    set(ref(db, 'users/' + username), {
-      username: username,
-      email: email,
-      password: password,
-      confirmpassword: confirmpassword
+    const userRef = ref(db, 'users/' + username);
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {     // no user exists 
+        set(ref(db, 'users/' + username), {
+          username: username,
+          email: email,
+          password: password,
+          confirmpassword: confirmpassword
+        });
+        props.navigate("Root", { screen: "Home" });
+      } else {        // user already exists
+        props.func("user already exists with that username");
+      }
     });
-    props.navigate("Root", { screen: "Home" });
+ 
   } catch (e) {
     console.error("Error adding to database: ", e);
   }
@@ -149,6 +176,18 @@ const styles = StyleSheet.create({
     height: "20%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  ErrorMessageContainer: {
+    backgroundColor: theme["color-background"],
+    width: "70%",
+    height: "10%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ErrorMessage: {
+    color: theme["error-message"],
+    width: "100%",
+    textAlign: "center",
   },
   InputContainer: {
     backgroundColor: theme["color-background"],
