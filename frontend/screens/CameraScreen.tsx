@@ -11,9 +11,7 @@ import {
 import { Camera } from "expo-camera";
 import { RootStackScreenProps } from "../types";
 
-export default function App({
-  navigation,
-}: RootStackScreenProps<"Modal">) {
+export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   let camera: Camera;
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -46,22 +44,35 @@ export default function App({
     setPreviewVisible(true);
     setCapturedImage(photo);
   };
-  
+
   const __retakePicture = () => {
     setCapturedImage(null);
     setPreviewVisible(false);
   };
 
   const __uploadPicture = () => {
-    navigation.navigate("Post");
+    goSaveImage();
+  };
+
+  const saveImage = async () => {
+    var image = null;
+    image = capturedImage;
+    if (image) return image;
+  };
+
+  const goSaveImage = () => {
+    saveImage().then((image) => {
+      navigation.navigate("Post");
+    });
   };
 
   const CameraPreview = ({ photo }: any) => {
     return (
       <View style={styles.preview}>
         <ImageBackground
-        source={{ uri: photo && photo.uri }}
-        style={styles.container}>
+          source={{ uri: photo && photo.uri }}
+          style={styles.container}
+        >
           <View style={styles.row}>
             <TouchableOpacity onPress={__retakePicture} style={styles.retake}>
               <Text>Cancel</Text>
