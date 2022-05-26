@@ -17,11 +17,6 @@ import { UserContext } from '../components/UserContext';
 import { ref, onValue } from "firebase/database";
 import { db } from "../firebase/index.js";
 
-
-import { ref, onValue } from "firebase/database";
-import { db } from "../firebase/index.js";
-
-
 export default function LoginScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
