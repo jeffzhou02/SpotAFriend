@@ -72,10 +72,7 @@ export default function LoginScreen({
           username={username}
           password={password}
           func={update}
-<<<<<<< HEAD
           updateUser={updateUser}
-=======
->>>>>>> 7a10d61112c0ee6af451aa65c1e3dfc4729e7c42
         />
         <BackButton {...navigation} />
       </View>
