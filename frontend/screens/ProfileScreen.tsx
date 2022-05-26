@@ -1,17 +1,17 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
-
+import { useContext } from 'react';
 import { Text, View } from '../components/Themed';
 import { RootStackParamList } from '../types';
+import { UserContext } from '../components/UserContext';
 
 //remeber to add profile photo later
 export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>) {
   const name='asdfasdf';
-  const username='asdf';
-  const email='';
+  const { user } = useContext(UserContext);
   const cancelFunction=() => navigation.navigate("Profile");
   return (
     <View style={styles.container}>
-      <InfoView name={name} username={username} email={email}
+      <InfoView name={name} username={user.username} email={user.email}
         nameHandler={() => navigation.navigate(
           'EditInfo',
           {
