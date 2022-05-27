@@ -186,6 +186,12 @@ export default function GroupScreen({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E3DAC9",
+  },
   centeredView: {
     flex: 1,
     alignItems: "center",
@@ -216,7 +222,7 @@ const styles = StyleSheet.create({
   },
   buttonClose: {
     backgroundColor: "transparent",
-    height: 30,
+    height: "auto",
   },
   textStyle: {
     fontSize: 18,
@@ -241,12 +247,12 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textDecorationLine: "underline",
     color: "#fff",
-    marginTop: "80%",
+    marginTop: "40%",
   },
   modalContainer: {
     backgroundColor: "transparent",
     margin: "5%",
-    height: "auto",
+    height: 400,
     alignItems: "center",
   },
   addgroup: {
