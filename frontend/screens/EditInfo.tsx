@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, Touchable, TouchableOpacity } from 'react-native
 import { Text, View } from '../components/Themed';
 import { default as theme } from '../theme.json';
 
-export default function EditInfo({ route, navigation }) {
+export default function EditInfo({ route, navigation } : any) {
   const {name, cancel, done, initial} = route.params;
   return (
     <View style={styles.container}>
@@ -16,21 +16,21 @@ export default function EditInfo({ route, navigation }) {
   );
 }
 
-function Header(props) {
+function Header(props: any) {
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.cancelButton} onPress={props.cancel}>
-        <Text>Cancel</Text>
+        <Text>cancel</Text>
       </TouchableOpacity>
       <Text style={styles.title}>{props.name}</Text>
       <TouchableOpacity style={styles.doneButton} onPress={props.done}>
-        <Text style={{color: theme['color-button-fill-blue'], fontWeight: 'bold'}}>Done</Text>
+        <Text style={{color: theme['color-button-fill-blue'], fontWeight: 'bold'}}>done</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-function DataInput(props) {
+function DataInput(props: any) {
   const [data, setData] = useState('');
   return (
     <TextInput
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    paddingTop: 25,
+    paddingTop: 50,
     backgroundColor: 'transparent',
   },
   cancelButton: {

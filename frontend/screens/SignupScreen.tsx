@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Platform,
@@ -15,6 +15,8 @@ import { RootStackScreenProps } from "../types";
 import { ref, set, onValue } from "firebase/database";
 import { db } from "../firebase/index.js";
 
+import { UserContext } from "../components/UserContext";
+
 
 export default function SignupScreen({
   navigation,
@@ -24,8 +26,13 @@ export default function SignupScreen({
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { setUser } = useContext(UserContext); // using context to set the user globally (pass in the entire user)
+
   const update = (data: any) => {
     setErrorMessage(data);
+  }
+  const updateUser = (data: any) => {
+    setUser(data);
   }
   return (
     <View>
@@ -79,6 +86,7 @@ export default function SignupScreen({
           password={password}
           confirmpassword={confirmpassword}
           func={update}
+          updateUser={updateUser}
         />
         <BackButton {...navigation} />
       </View>
@@ -151,6 +159,7 @@ async function SignupHandler(props: any) {
           password: password,
           confirmpassword: confirmpassword
         });
+        props.updateUser(data);
         props.navigate("Root", { screen: "Home" });
       } else {        // user already exists
         props.func("user already exists with that username");
