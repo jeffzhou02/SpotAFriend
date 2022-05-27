@@ -76,7 +76,7 @@ export default function SignupScreen({
             }
           />
         </View>
-        <ErrorMessage message={errorMessage}/>
+        <ErrorMessage message={errorMessage} />
       </View>
       <View style={styles.ButtonContainer}>
         <SignupButton
@@ -159,13 +159,17 @@ async function SignupHandler(props: any) {
           password: password,
           confirmpassword: confirmpassword
         });
-        props.updateUser(data);
+        const newUser = ref(db, 'users/' + username);
+        onValue(newUser, (snapshot) => {
+          const data = snapshot.val();
+          props.updateUser(data);
+        });
         props.navigate("Root", { screen: "Home" });
       } else {        // user already exists
         props.func("user already exists with that username");
       }
     });
- 
+
   } catch (e) {
     console.error("Error adding to database: ", e);
   }
