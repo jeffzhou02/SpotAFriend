@@ -12,28 +12,20 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
   return (
     <View style={styles.container}>
       <InfoView name={name} username={user.username} email={user.email}
-        nameHandler={() => navigation.navigate(
-          'EditInfo',
-          {
-            name: 'Name',
-            cancel: cancelFunction,
-            initial: name,
-          })
-        }
         usernameHandler={() => navigation.navigate(
           'EditInfo',
           {
-            name: 'Username',
+            name: 'username',
             cancel: cancelFunction,
-            initial: username,
+            initial: user.username,
           })
         }
         emailHandler={() => navigation.navigate(
           'EditInfo',
           {
-            name: 'Email',
+            name: 'email',
             cancel: cancelFunction,
-            initial: email,
+            initial: user.email,
           })
         }
       />
@@ -41,22 +33,20 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
   );
 }
 
-function InfoView(props) {
+function InfoView(props: any) {
   return(
     <View style={{alignItems: 'center', justifyContent: 'center'}}>
 
       <Divider/>
-      <RowButton label='Name' data={props.name} onPress={props.nameHandler}/>
+      <RowButton label='username' data={props.username} onPress={props.usernameHandler}/>
       <Divider/>
-      <RowButton label='Username' data={props.username} onPress={props.usernameHandler}/>
-      <Divider/>
-      <RowButton label='Email' data={props.email} onPress={props.emailHandler}/>
+      <RowButton label='email' data={props.email} onPress={props.emailHandler}/>
       <Divider/>
     </View>
   );
 }
 
-function RowButton(props) {
+function RowButton(props: any) {
   return (
     <TouchableOpacity style={styles.row} onPress={props.onPress}>
       <View style={styles.label}>
