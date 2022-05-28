@@ -1,5 +1,5 @@
 import React, { useState, } from "react";
-import Select from 'react-select'
+import DropDownPicker from 'react-native-dropdown-picker';
 import {
   StyleSheet,
   TextInput,
@@ -15,42 +15,40 @@ import { RootStackScreenProps } from "../types";
 export default function PostScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
+  
   return (
     <View>
-      <View style={styles.ImageContainer}>
+      <View>
         <Picture />
       </View>
-      <View>
-      </View>
-      <View>
+      <View style={styles.GroupAndTagContainer}>
+        <GroupSelection />
+        <TagSelection />
       </View>
       <View style={styles.ButtonContainer}>
-        <PostButton {...navigation} />
-        <CancelButton {...navigation} />
+        <View style={styles.row}>
+          <PostButton />
+          <CancelButton />
+        </View>
       </View>
     </View>
   );
+  
 }
 
-function getPicture(){
+function getPicture() {
   return "../assets/images/icon.png";
 }
 
 function Picture() {
   return (
-    <Image
-      style={{
-        resizeMode: "contain", // change size later
-        height: 100,
-        width: 200,
-        marginTop: 50,
-      }}
+    <Image style={styles.PictureContainer}
       source={require("../assets/images/icon.png")}
     />
   );
 }
 
-function getGroups(){
+function getGroups() {
   let fruits = [
     { label: "Apple", value: "🍎" }, // make a legit way to get groups
     { label: "Banana", value: "🍌" },
@@ -59,14 +57,50 @@ function getGroups(){
   return fruits;
 }
 
-function GroupSelection(){ // hopefully this works
-  let groups = getGroups();
-  <Select
-    name="Group"
-    options={getGroups()}
-    className="basic-single"
-    classNamePrefix="select"
-  />
+function GroupSelection() { // hopefully this works
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState(getGroups());
+
+  return (
+    <DropDownPicker
+      placeholder = "choose a group"
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+    />
+  );
+}
+
+function getTags() {
+  let fruits = [
+    { label: "Apple", value: "🍎" }, // make a legit way to get groups
+    { label: "Banana", value: "🍌" },
+    { label: "Orange", value: "🍊" }
+  ]
+  return fruits;
+}
+
+function TagSelection() { // hopefully this works
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState(getTags());
+
+  return (
+    <DropDownPicker
+      multiple={true}
+      placeholder = "choose your tags"
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+    />
+  );
 }
 
 function PostButton(props: any) {
@@ -75,7 +109,7 @@ function PostButton(props: any) {
       style={styles.PostButtonStyling}
       onPress={() => PostHandler(props)}
     >
-      <Text style={styles.PostButtonTextStyling}>log in</Text>
+      <Text style={styles.PostButtonTextStyling}>post</Text>
     </TouchableOpacity>
   );
 }
@@ -102,32 +136,23 @@ function CancelHandler(props: any) {
 }
 
 const styles = StyleSheet.create({
-  ImageContainer: {
+  PictureContainer: {
+    backgroundColor: theme["color-background"],
+    resizeMode: "contain", // change size later
+    width: "100%",
+    height: "50%",
+  },
+  GroupAndTagContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
     height: "20%",
     alignItems: "center",
     justifyContent: "center",
   },
-  TagContainer: {
-    backgroundColor: theme["color-background"],
-    width: "100%",
-    height: "50%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  GroupContainer: {
-    backgroundColor: theme["color-background"],
-    width: "100%",
-    height: "50%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   ButtonContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
-    alignItems: "center",
-    height: "30%",
+    height: "20%",
   },
   PostButtonStyling: {
     marginBottom: 20,
@@ -150,5 +175,15 @@ const styles = StyleSheet.create({
   CancelButtonTextStyling: {
     textAlign: "center",
     color: theme["color-button-fill-blue"],
+  },
+  row: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    position: "absolute",
+    bottom: 0,
+    padding: 20,
+    backgroundColor: "transparent",
   },
 });
