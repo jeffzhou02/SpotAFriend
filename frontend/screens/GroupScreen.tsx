@@ -10,6 +10,10 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 
+import { AddUserGroup } from "../firebase/library";
+import { useContext } from 'react';
+import { UserContext } from "../components/UserContext.js";
+
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
@@ -105,7 +109,7 @@ function AddGroup(props: any) {
   return (
     <TouchableOpacity
       style={styles.addgroup}
-      onPress={() => AddGroupHandler(props)}
+      onPress={props.handler}
     >
       <Image
         style={{
@@ -121,7 +125,6 @@ function AddGroup(props: any) {
 }
 
 function AddGroupHandler(props: any) {
-  props.navigate("Settings");
   return;
 }
 
@@ -142,6 +145,8 @@ function Logo() {
 export default function GroupScreen({
   navigation,
 }: RootTabScreenProps<"Group">) {
+  const { user } = useContext(UserContext);
+
   return (
     <View style={styles.container}>
       <View
@@ -157,7 +162,7 @@ export default function GroupScreen({
         }}
       >
         <Logo></Logo>
-        <AddGroup {...navigation} />
+        <AddGroup handler={() => AddUserGroup(user, 'fdsa')} />
       </View>
 
       <ScrollView
@@ -167,6 +172,13 @@ export default function GroupScreen({
           marginTop: "10%",
         }}
       >
+        <GroupCard
+          person1={'asdf'}
+          person2={'fdsa'}
+          person3={'1234'}
+          adj={"male"}
+          group={"dingdong"}
+        />
         {groupData.map((note: any) => {
           return (
             <GroupCard
