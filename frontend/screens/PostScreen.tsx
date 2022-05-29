@@ -18,11 +18,13 @@ export default function PostScreen({
   
   return (
     <View>
-      <View>
+      <View style={styles.PictureContainer}>
         <Picture />
-      </View>
-      <View style={styles.GroupAndTagContainer}>
+      </View> 
+      <View style={styles.GroupContainer}>
         <GroupSelection />
+      </View>
+      <View style={styles.TagContainer}>
         <TagSelection />
       </View>
       <View style={styles.ButtonContainer}>
@@ -32,9 +34,26 @@ export default function PostScreen({
         </View>
       </View>
     </View>
+    
+    
   );
   
 }
+
+/*
+      <View style={styles.GroupAndTagContainer}>
+        <View style={styles.row}>
+          <GroupSelection />
+          <TagSelection />
+        </View>
+      </View>
+      <View style={styles.ButtonContainer}>
+        <View style={styles.row}>
+          <PostButton />
+          <CancelButton />
+        </View>
+      </View>
+*/
 
 function getPicture() {
   return "../assets/images/icon.png";
@@ -42,7 +61,12 @@ function getPicture() {
 
 function Picture() {
   return (
-    <Image style={styles.PictureContainer}
+    <Image
+      style={{
+        resizeMode: "contain",
+        height: "100%",
+        width: "100%",
+      }}
       source={require("../assets/images/icon.png")}
     />
   );
@@ -64,6 +88,7 @@ function GroupSelection() { // hopefully this works
 
   return (
     <DropDownPicker
+      dropDownDirection="TOP"
       placeholder = "choose a group"
       open={open}
       value={value}
@@ -91,6 +116,7 @@ function TagSelection() { // hopefully this works
 
   return (
     <DropDownPicker
+      dropDownDirection="TOP"
       multiple={true}
       placeholder = "choose your tags"
       open={open}
@@ -138,21 +164,25 @@ function CancelHandler(props: any) {
 const styles = StyleSheet.create({
   PictureContainer: {
     backgroundColor: theme["color-background"],
-    resizeMode: "contain", // change size later
     width: "100%",
-    height: "50%",
-  },
-  GroupAndTagContainer: {
-    backgroundColor: theme["color-background"],
-    width: "100%",
-    height: "20%",
+    height: "70%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  GroupContainer: {
+    backgroundColor: theme["color-background"],
+    width: "100%",
+    height: "10%",
+  },
+  TagContainer:{
+    backgroundColor: theme["color-background"],
+    width: "100%",
+    height: "10%",
   },
   ButtonContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
-    height: "20%",
+    height: "10%",
   },
   PostButtonStyling: {
     marginBottom: 20,
@@ -183,7 +213,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     position: "absolute",
     bottom: 0,
-    padding: 20,
+    padding: 0,
     backgroundColor: "transparent",
   },
 });
