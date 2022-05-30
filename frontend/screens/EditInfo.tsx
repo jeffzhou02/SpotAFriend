@@ -6,10 +6,6 @@ import { default as theme } from '../theme.json';
 import { EditUserAttrib } from '../firebase/library';
 import { useContext } from 'react';
 import { UserContext } from '../components/UserContext';
-<<<<<<< HEAD
-=======
-import { db } from '../firebase/index';
->>>>>>> main
 
 export default function EditInfo({ route, navigation } : any) {
   const {name, cancel, attrib, initial} = route.params;
@@ -23,7 +19,7 @@ export default function EditInfo({ route, navigation } : any) {
       <Divider/>
       <DataInput initial={data} hook={setData}/>
       <Divider/>
-      <View style={{flexDirection: 'row', padding: 5,width: '90%', justifyContent: 'flex-end', borderColor: 'black', borderWidth: 5}}>
+      <View style={{flexDirection: 'row', padding: 5,width: '90%', justifyContent: 'flex-end'}}>
         <Text style={{color: msgColor}}>{errorMsg}</Text>
       </View>
     </View>
@@ -123,5 +119,6 @@ const styles = StyleSheet.create({
     marginVertical: 1,
     height: 1,
     width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
 });

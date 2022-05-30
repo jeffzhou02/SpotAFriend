@@ -49,6 +49,7 @@ export async function GetGroupMembers(group) {
         return [];
     });
     return promise;
+}
 
 export function AddUserGroup(user, groupname) {
     /*
