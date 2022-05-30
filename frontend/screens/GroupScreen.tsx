@@ -10,7 +10,7 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 
-import { AddUserGroup } from "../firebase/library";
+import { AddUserGroup, GetGroupMembers } from "../firebase/library";
 import { useContext } from 'react';
 import { UserContext } from "../components/UserContext.js";
 
@@ -146,7 +146,6 @@ export default function GroupScreen({
   navigation,
 }: RootTabScreenProps<"Group">) {
   const { user } = useContext(UserContext);
-
   return (
     <View style={styles.container}>
       <View
@@ -172,13 +171,6 @@ export default function GroupScreen({
           marginTop: "10%",
         }}
       >
-        <GroupCard
-          person1={'asdf'}
-          person2={'fdsa'}
-          person3={'1234'}
-          adj={"male"}
-          group={"dingdong"}
-        />
         {groupData.map((note: any) => {
           return (
             <GroupCard
