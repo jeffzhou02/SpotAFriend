@@ -1,7 +1,9 @@
 import { set, update, ref, get, child, remove } from 'firebase/database';
+import { useContext } from 'react';
+import { UserContext } from '../components/UserContext';
 import { db } from "../firebase/index.js";
 
-export function EditUserAttrib(userobj, attrib, value, func) {
+export function EditUserAttrib(userobj, attrib, value, func, setUser) {
     var userExists = true;
     const dbref = ref(db, 'users/' + userobj.username);
     if (attrib != "username") {
@@ -26,6 +28,7 @@ export function EditUserAttrib(userobj, attrib, value, func) {
                 console.error(error);
             });
             remove(ref(db, 'users/' + userobj.username));
+            userobj.username = value;
             return true;
         });
         return userExists;

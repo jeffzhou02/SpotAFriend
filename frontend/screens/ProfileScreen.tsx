@@ -6,12 +6,11 @@ import { UserContext } from '../components/UserContext';
 
 //remeber to add profile photo later
 export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>) {
-  const name='asdfasdf';
   const { user } = useContext(UserContext);
   const cancelFunction = () => navigation.navigate("Profile");
   return (
     <View style={styles.container}>
-      <InfoView name={name} username={user.username} email={user.email}
+      <InfoView username={user.username} email={user.email}
         usernameHandler={() => navigation.navigate(
           'EditInfo',
           {
