@@ -1,16 +1,46 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { useContext } from 'react';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { useContext, useState } from 'react';
 import { Text, View } from '../components/Themed';
 import { RootStackParamList } from '../types';
 import { UserContext } from '../components/UserContext';
+import { storage } from '../firebase/index';
+import { ref, uploadBytes } from 'firebase/storage';
+import * as ImagePicker from 'expo-image-picker';
 
 //remeber to add profile photo later
 export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>) {
-  const name='asdfasdf';
+  const storageRef = ref(storage, 'profilephotos');
+  const [image, setImage] = useState("");
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      setImage(result.uri);
+      const response = await fetch(image);
+      const blob = await response.blob();
+      console.log(blob);
+    }
+  };
+  const name = 'asdfasdf';
   const { user } = useContext(UserContext);
   const cancelFunction = () => navigation.navigate("Profile");
   return (
     <View style={styles.container}>
+      {
+        image === "" ? null :
+          <View>
+            <Image style={styles.targetImage} source={{ uri: image }} />
+          </View>
+      }
+      <TouchableOpacity style={styles.row} onPress={pickImage}>
+        <View style={styles.label}>
+          <Text>edit photo</Text>
+        </View>
+      </TouchableOpacity>
       <InfoView name={name} username={user.username} email={user.email}
         usernameHandler={() => navigation.navigate(
           'EditInfo',
@@ -41,14 +71,14 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
 }
 
 function InfoView(props: any) {
-  return(
-    <View style={{alignItems: 'center', justifyContent: 'center', backgroundColor: "#E3DAC9",  }}>
+  return (
+    <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: "#E3DAC9", }}>
 
-      <Divider/>
-      <RowButton label='username' data={props.username} onPress={props.usernameHandler}/>
-      <Divider/>
-      <RowButton label='email' data={props.email} onPress={props.emailHandler}/>
-      <Divider/>
+      <Divider />
+      <RowButton label='username' data={props.username} onPress={props.usernameHandler} />
+      <Divider />
+      <RowButton label='email' data={props.email} onPress={props.emailHandler} />
+      <Divider />
     </View>
   );
 }
@@ -114,7 +144,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    
+
   },
   separator: {
     marginVertical: 1,
@@ -123,4 +153,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#E3DAC9",
 
   },
+  targetImage: {
+    alignSelf: "center",
+    height: 140,
+    width: 140,
+    borderRadius: 70,
+    borderWidth: 2,
+    borderColor: "#FFF",
+    margin: "5%",
+  }
 });
