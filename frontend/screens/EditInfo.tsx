@@ -6,6 +6,10 @@ import { default as theme } from '../theme.json';
 import { EditUserAttrib } from '../firebase/library';
 import { useContext } from 'react';
 import { UserContext } from '../components/UserContext';
+<<<<<<< HEAD
+=======
+import { db } from '../firebase/index';
+>>>>>>> main
 
 export default function EditInfo({ route, navigation } : any) {
   const {name, cancel, attrib, initial} = route.params;
@@ -69,6 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
+    backgroundColor: "#E3DAC9",
   },
   row: {
     width: '90%',
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 15,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   header: {
     width: '100%',
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     paddingTop: 50,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   cancelButton: {
     width: '20%',
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
     padding: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   doneButton: {
     width: '20%',
@@ -100,14 +105,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     padding: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   divider: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   title: {
     fontSize: 18,

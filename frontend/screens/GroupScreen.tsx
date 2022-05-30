@@ -171,13 +171,6 @@ export default function GroupScreen({
           marginTop: "10%",
         }}
       >
-        <GroupCard
-          person1={arr}
-          person2={"fdsa"}
-          person3={"1234"}
-          group={"dingdongs"}
-          adj={"male"}
-        />
         {groupData.map((note: any) => {
           return (
             <GroupCard
