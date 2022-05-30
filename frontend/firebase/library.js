@@ -32,7 +32,23 @@ export function EditUserAttrib(userobj, attrib, value, func) {
     }
 }
 
-export function GetGroupMembers(group) {
+export async function GetGroupMembers(group) {
+    // requires the following code in the calling function to work:
+    // var [array, setArray] = useState('asdf');
+    // var func = async () => {
+    //     const promise = await GetGroupMembers("asdf");
+    //     const value = promise;
+    //     setArray(value);
+    // };
+    // func();
+    const dbref = ref(db, 'groups/' + group);
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            return snapshot.val();
+        }
+        return [];
+    });
+    return promise;
 }
 
 export function AddUserGroup(user, groupname) {
