@@ -1,5 +1,7 @@
-import { set, update, ref, get, child, remove } from 'firebase/database';
+import { set, update, ref, get, child, remove, push } from 'firebase/database';
 import { db } from "../firebase/index.js";
+import { useState } from 'react';
+
 
 export function EditUserAttrib(userobj, attrib, value, func) {
     var userExists = true;
@@ -20,7 +22,7 @@ export function EditUserAttrib(userobj, attrib, value, func) {
                     data.username = value;
                     var updated = {};
                     updated[value] = data;
-                    set(child(ref(db, 'users/'), value),updated[value]);
+                    set(child(ref(db, 'users/'), value), updated[value]);
                 }
             }).catch((error) => {
                 console.error(error);
@@ -51,39 +53,41 @@ export async function GetGroupMembers(group) {
     return promise;
 }
 
-export function AddUserGroup(user, groupname) {
+export function AddUserGroup(user, group) {
     /*
-    // Check if user exists
-    const userRef = ref(db, 'users/' + user);
-    onValue(userRef, (snapshot) => {
-        if (!data){
-            return;
-        }
-    })
     // Check if group exists
-    const groupRef = ref(db, 'groups/' + groupname);
-    onValue(groupRef, (snapshot) => {
-        if (!data){
+    get(ref(db, 'groups/' + group)).then((snapshot) => {
+        if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+                const childData = childSnapshot.val();
+                // Check if user is in group or not
+                if (childData == user.username) {
+                    console.log("User already in group");
+                    return;
+                }
+            });
+        } else {
+            console.log("No data available");
+        }
+    }).catch((error) => {
+        console.error(error);
+    });
+*/
+
+    // Add group to user
+    var groupArray = user.groups;
+    for (const element of groupArray){
+        if (element == group){
             return;
         }
-    })
-    // Add group to user
-    var groupArray = user.groups; 
+    }
     groupArray.push(group);
     update(ref(db, 'users/' + user.username), {
         groups: groupArray,
     });
+
     // Add user to group
-    /*
-    const groupArray = ref(db, 'groups/');
-    onValue(groupArray, (snapshot) => {
-        var userArray
-    })
-    */
-    const dbref = ref(db, 'users/' + user.username);
-    const usergroup = user.groups;
-    var groupArray = usergroup; groupArray.push(group);
-    update(ref(db, 'users/' + user.username), {
-        groups: groupArray,
-    });
-}
+    //userArray.push(user.username);
+    push(ref(db, 'groups/' + group), user.username);
+    //update(ref(db, 'groups/' + group), userArray);
+} 
