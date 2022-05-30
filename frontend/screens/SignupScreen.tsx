@@ -157,7 +157,13 @@ async function SignupHandler(props: any) {
           username: username,
           email: email,
           password: password,
-          confirmpassword: confirmpassword
+          confirmpassword: confirmpassword,
+        });
+        set(ref(db, 'users/' + username + "/groups"), {
+          0: username + "sgroup",
+        })
+        set(ref(db, 'groups/' + username + "sgroup"), {
+          0: username,
         });
         const newUser = ref(db, 'users/' + username);
         onValue(newUser, (snapshot) => {
