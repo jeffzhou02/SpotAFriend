@@ -162,6 +162,9 @@ async function SignupHandler(props: any) {
         set(ref(db, 'users/' + username + "/groups"), {
           0: username + "sgroup",
         })
+        set(ref(db, 'users/' + username + "/friends"), {
+          0: "null",
+        })
         set(ref(db, 'groups/' + username + "sgroup"), {
           0: username,
         });
