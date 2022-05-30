@@ -161,7 +161,7 @@ export default function GroupScreen({
         }}
       >
         <Logo></Logo>
-        <AddGroup handler={() => AddUserGroup(user, 'fdsa')} />
+        <AddGroup handler={() => AddUserGroup(user, 'asdf')} />
       </View>
 
       <ScrollView
