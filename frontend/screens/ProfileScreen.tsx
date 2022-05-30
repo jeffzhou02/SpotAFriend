@@ -8,55 +8,52 @@ import { UserContext } from '../components/UserContext';
 export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>) {
   const name='asdfasdf';
   const { user } = useContext(UserContext);
-  const cancelFunction=() => navigation.navigate("Profile");
+  const cancelFunction = () => navigation.navigate("Profile");
   return (
     <View style={styles.container}>
       <InfoView name={name} username={user.username} email={user.email}
-        nameHandler={() => navigation.navigate(
-          'EditInfo',
-          {
-            name: 'Name',
-            cancel: cancelFunction,
-            initial: name,
-          })
-        }
         usernameHandler={() => navigation.navigate(
           'EditInfo',
           {
-            name: 'Username',
+            name: 'username',
             cancel: cancelFunction,
-            initial: username,
+            attrib: 'username',
+            initial: user.username,
           })
         }
         emailHandler={() => navigation.navigate(
           'EditInfo',
           {
-            name: 'Email',
+            name: 'email',
             cancel: cancelFunction,
-            initial: email,
+            attrib: 'email',
+            initial: user.email,
           })
         }
       />
+      <View>
+        <Text>
+
+        </Text>
+      </View>
     </View>
   );
 }
 
-function InfoView(props) {
+function InfoView(props: any) {
   return(
-    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{alignItems: 'center', justifyContent: 'center', backgroundColor: "#E3DAC9",  }}>
 
       <Divider/>
-      <RowButton label='Name' data={props.name} onPress={props.nameHandler}/>
+      <RowButton label='username' data={props.username} onPress={props.usernameHandler}/>
       <Divider/>
-      <RowButton label='Username' data={props.username} onPress={props.usernameHandler}/>
-      <Divider/>
-      <RowButton label='Email' data={props.email} onPress={props.emailHandler}/>
+      <RowButton label='email' data={props.email} onPress={props.emailHandler}/>
       <Divider/>
     </View>
   );
 }
 
-function RowButton(props) {
+function RowButton(props: any) {
   return (
     <TouchableOpacity style={styles.row} onPress={props.onPress}>
       <View style={styles.label}>
@@ -82,18 +79,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center', //can change to flex-start if need to push to top
+    backgroundColor: "#E3DAC9",
   },
   label: {
     width: "30%",
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    backgroundColor: "#E3DAC9",
+
   },
   data: {
     width: "70%",
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    backgroundColor: "#E3DAC9",
+
   },
   row: {
     width: '90%',
@@ -101,21 +103,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 15,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    
   },
   separator: {
     marginVertical: 1,
     height: 1,
     width: '85%',
+    backgroundColor: "rgba(0,0,0,0.2)",
+
   },
 });

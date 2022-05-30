@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Platform,
@@ -15,6 +15,8 @@ import { RootStackScreenProps } from "../types";
 import { ref, set, onValue } from "firebase/database";
 import { db } from "../firebase/index.js";
 
+import { UserContext } from "../components/UserContext";
+
 
 export default function SignupScreen({
   navigation,
@@ -24,8 +26,13 @@ export default function SignupScreen({
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { setUser } = useContext(UserContext); // using context to set the user globally (pass in the entire user)
+
   const update = (data: any) => {
     setErrorMessage(data);
+  }
+  const updateUser = (data: any) => {
+    setUser(data);
   }
   return (
     <View>
@@ -69,7 +76,7 @@ export default function SignupScreen({
             }
           />
         </View>
-        <ErrorMessage message={errorMessage}/>
+        <ErrorMessage message={errorMessage} />
       </View>
       <View style={styles.ButtonContainer}>
         <SignupButton
@@ -79,6 +86,7 @@ export default function SignupScreen({
           password={password}
           confirmpassword={confirmpassword}
           func={update}
+          updateUser={updateUser}
         />
         <BackButton {...navigation} />
       </View>
@@ -149,14 +157,28 @@ async function SignupHandler(props: any) {
           username: username,
           email: email,
           password: password,
-          confirmpassword: confirmpassword
+          confirmpassword: confirmpassword,
+        });
+        set(ref(db, 'users/' + username + "/groups"), {
+          0: username + "sgroup",
+        })
+        set(ref(db, 'users/' + username + "/friends"), {
+          0: "null",
+        })
+        set(ref(db, 'groups/' + username + "sgroup"), {
+          0: username,
+        });
+        const newUser = ref(db, 'users/' + username);
+        onValue(newUser, (snapshot) => {
+          const data = snapshot.val();
+          props.updateUser(data);
         });
         props.navigate("Root", { screen: "Home" });
       } else {        // user already exists
         props.func("user already exists with that username");
       }
     });
- 
+
   } catch (e) {
     console.error("Error adding to database: ", e);
   }
