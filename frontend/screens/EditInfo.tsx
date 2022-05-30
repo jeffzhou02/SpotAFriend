@@ -6,6 +6,7 @@ import { default as theme } from '../theme.json';
 import { EditUserAttrib } from '../firebase/library';
 import { useContext } from 'react';
 import { UserContext } from '../components/UserContext';
+import { db } from '../firebase/index';
 
 export default function EditInfo({ route, navigation } : any) {
   const {name, cancel, attrib, initial} = route.params;
@@ -15,11 +16,11 @@ export default function EditInfo({ route, navigation } : any) {
   
   return (
     <View style={styles.container}>
-      <Header name={name} cancel={cancel} attrib={attrib} value={data} func={setErrorMsg} navigation={navigation}/>
+      <Header name={"edit " + name} cancel={cancel} attrib={attrib} value={data} func={setErrorMsg} navigation={navigation}/>
       <Divider/>
       <DataInput initial={data} hook={setData}/>
       <Divider/>
-      <View style={{flexDirection: 'row', padding: 5,width: '90%', justifyContent: 'flex-end', borderColor: 'black', borderWidth: 5}}>
+      <View style={{flexDirection: 'row', padding: 15, width: '90%', justifyContent: 'center', borderWidth: 0, backgroundColor: "#E3DAC9" }}>
         <Text style={{color: msgColor}}>{errorMsg}</Text>
       </View>
     </View>
@@ -36,9 +37,9 @@ function Header(props: any) {
       <Text style={styles.title}>{props.name}</Text>
       <TouchableOpacity style={styles.doneButton} onPress={async () => {
         var val = await EditUserAttrib(user, props.attrib, props.value, props.func);
-        if (val)
+        if (val) {
           props.navigation.navigate("Profile");
-        }}>
+      }}}>
         <Text style={{color: theme['color-button-fill-blue'], fontWeight: 'bold'}}>done</Text>
       </TouchableOpacity>
     </View>
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
+    backgroundColor: "#E3DAC9",
   },
   row: {
     width: '90%',
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 15,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   header: {
     width: '100%',
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     paddingTop: 50,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   cancelButton: {
     width: '20%',
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
     padding: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   doneButton: {
     width: '20%',
@@ -100,14 +102,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     padding: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   divider: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   title: {
     fontSize: 18,

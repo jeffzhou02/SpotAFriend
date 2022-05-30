@@ -12,7 +12,7 @@ export function EditUserAttrib(userobj, attrib, value, func) {
     } else {
         userExists = get(ref(db, 'users/' + value)).then(async (snapshot) => {
             if (snapshot.exists()) {
-                await func("User " + value + " already exists"); return false;
+                await func("user " + value + " already exists"); return false;
             }
             get(dbref).then((snap) => {
                 if (snap.exists()) {

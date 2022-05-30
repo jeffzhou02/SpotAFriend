@@ -31,13 +31,18 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
           })
         }
       />
+      <View>
+        <Text>
+
+        </Text>
+      </View>
     </View>
   );
 }
 
 function InfoView(props: any) {
   return(
-    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{alignItems: 'center', justifyContent: 'center', backgroundColor: "#E3DAC9",  }}>
 
       <Divider/>
       <RowButton label='username' data={props.username} onPress={props.usernameHandler}/>
@@ -74,18 +79,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center', //can change to flex-start if need to push to top
+    backgroundColor: "#E3DAC9",
   },
   label: {
     width: "30%",
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    backgroundColor: "#E3DAC9",
+
   },
   data: {
     width: "70%",
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    backgroundColor: "#E3DAC9",
+
   },
   row: {
     width: '90%',
@@ -93,21 +103,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 15,
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: "#E3DAC9",
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    
   },
   separator: {
     marginVertical: 1,
     height: 1,
     width: '85%',
+    backgroundColor: "#E3DAC9",
+
   },
 });
