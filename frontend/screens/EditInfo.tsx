@@ -27,7 +27,7 @@ export default function EditInfo({ route, navigation } : any) {
 }
 
 function Header(props: any) {
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.cancelButton} onPress={props.cancel}>
