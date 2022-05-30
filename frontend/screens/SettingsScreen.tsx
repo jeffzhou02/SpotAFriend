@@ -87,9 +87,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
           <View style={styles.openCard}>
             <View style={styles.modalContainer}>
               <View style={{ backgroundColor: "transparent" }}>
-                <Text style={styles.names2}>
-                  your notifications are now turned off
-                </Text>
+                <Text style={styles.names2}>notification settings updated</Text>
               </View>
               <Pressable
                 style={styles.buttonClose}
@@ -100,10 +98,17 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
             </View>
           </View>
         </Modal>
-        <View style={styles.box}>
-          <Pressable onPress={() => setModalVisible(true)}>
-            <Text style={styles.textStyle}>turn off notifications</Text>
-          </Pressable>
+        <View style={{ flexDirection: "row", justifyContents: "center" }}>
+          <View style={styles.box2}>
+            <Pressable onPress={() => setModalVisible(true)}>
+              <Text style={styles.textStyle}>turn off notifications</Text>
+            </Pressable>
+          </View>
+          <View style={styles.box2}>
+            <Pressable onPress={() => setModalVisible(true)}>
+              <Text style={styles.textStyle}>turn off notifications</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>
@@ -133,8 +138,20 @@ const styles = StyleSheet.create({
     paddingVertical: "5%",
     marginHorizontal: "5%",
   },
+  box2: {
+    backgroundColor: "#F4D58D",
+    borderColor: "#689689",
+    borderWidth: 2,
+    borderRadius: 17,
+    marginBottom: "5%",
+    paddingHorizontal: "2%",
+    paddingVertical: "2%",
+    marginHorizontal: "2%",
+    width: "43%",
+    alignItems: "center",
+  },
   openCard: {
-    height: "15%",
+    height: "12%",
     width: "90%",
     marginTop: "10%",
     alignSelf: "center",
@@ -169,7 +186,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textDecorationLine: "underline",
     color: "#fff",
-    marginTop: "10%",
+    marginTop: "4%",
   },
   modalContainer: {
     backgroundColor: "transparent",
