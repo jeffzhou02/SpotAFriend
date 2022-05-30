@@ -8,7 +8,7 @@ import { UserContext } from '../components/UserContext';
 export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>) {
   const name='asdfasdf';
   const { user } = useContext(UserContext);
-  const cancelFunction=() => navigation.navigate("Profile");
+  const cancelFunction = () => navigation.navigate("Profile");
   return (
     <View style={styles.container}>
       <InfoView name={name} username={user.username} email={user.email}
@@ -17,6 +17,7 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
           {
             name: 'username',
             cancel: cancelFunction,
+            attrib: 'username',
             initial: user.username,
           })
         }
@@ -25,6 +26,7 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
           {
             name: 'email',
             cancel: cancelFunction,
+            attrib: 'email',
             initial: user.email,
           })
         }

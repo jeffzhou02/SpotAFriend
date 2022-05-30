@@ -3,27 +3,42 @@ import { StyleSheet, TextInput, Touchable, TouchableOpacity } from 'react-native
 
 import { Text, View } from '../components/Themed';
 import { default as theme } from '../theme.json';
+import { EditUserAttrib } from '../firebase/library';
+import { useContext } from 'react';
+import { UserContext } from '../components/UserContext';
 
 export default function EditInfo({ route, navigation } : any) {
-  const {name, cancel, done, initial} = route.params;
+  const {name, cancel, attrib, initial} = route.params;
+  const [data, setData] = useState(initial);
+  var [errorMsg, setErrorMsg] = useState('');
+  var msgColor = 'red';
+  
   return (
     <View style={styles.container}>
-      <Header name={name} cancel={cancel} done={done}/>
+      <Header name={name} cancel={cancel} attrib={attrib} value={data} func={setErrorMsg} navigation={navigation}/>
       <Divider/>
-      <DataInput initial={initial}/>
+      <DataInput initial={data} hook={setData}/>
       <Divider/>
+      <View style={{flexDirection: 'row', padding: 5,width: '90%', justifyContent: 'flex-end', borderColor: 'black', borderWidth: 5}}>
+        <Text style={{color: msgColor}}>{errorMsg}</Text>
+      </View>
     </View>
   );
 }
 
 function Header(props: any) {
+  const {user} = useContext(UserContext);
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.cancelButton} onPress={props.cancel}>
         <Text>cancel</Text>
       </TouchableOpacity>
       <Text style={styles.title}>{props.name}</Text>
-      <TouchableOpacity style={styles.doneButton} onPress={props.done}>
+      <TouchableOpacity style={styles.doneButton} onPress={async () => {
+        var val = await EditUserAttrib(user, props.attrib, props.value, props.func);
+        if (val)
+          props.navigation.navigate("Profile");
+        }}>
         <Text style={{color: theme['color-button-fill-blue'], fontWeight: 'bold'}}>done</Text>
       </TouchableOpacity>
     </View>
@@ -36,7 +51,7 @@ function DataInput(props: any) {
     <TextInput
       style={styles.row}
       defaultValue={props.initial}
-      onChangeText={(data) => setData(data)}
+      onChangeText={(data) => {setData(data); props.hook(data);}}
     />
   );
 }
