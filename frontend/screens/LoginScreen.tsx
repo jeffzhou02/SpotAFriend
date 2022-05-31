@@ -13,7 +13,7 @@ import Navigation from "../navigation";
 
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
-import { UserContext } from '../components/UserContext';
+import { UserContext } from "../components/UserContext";
 
 import { ref, onValue } from "firebase/database";
 import { db } from "../firebase/index.js";
@@ -28,10 +28,10 @@ export default function LoginScreen({
 
   const update = (data: any) => {
     setErrorMessage(data);
-  }
+  };
   const updateUser = (data: any) => {
     setUser(data);
-  }
+  };
 
   return (
     <View style={{ backgroundColor: theme["color-background"] }}>
@@ -56,7 +56,7 @@ export default function LoginScreen({
             onChangeText={(password) => setPassword(password)}
           />
         </View>
-        <ErrorMessage message={errorMessage}/>
+        <ErrorMessage message={errorMessage} />
       </View>
       <View style={styles.ButtonContainer}>
         <LoginButton
@@ -109,35 +109,35 @@ function BackButton(props: any) {
 }
 
 function ErrorMessage(props: any) {
-  return (
-    props.message === undefined ? null :
-      <View style={styles.ErrorMessageContainer}>
-        <Text style={styles.ErrorMessage}>{props.message}</Text>
-      </View>
-  )
+  return props.message === undefined ? null : (
+    <View style={styles.ErrorMessageContainer}>
+      <Text style={styles.ErrorMessage}>{props.message}</Text>
+    </View>
+  );
 }
 
 function LoginHandler(props: any) {
   const username = props.username;
   const password = props.password;
   try {
-    const userRef = ref(db, 'users/' + username);
+    const userRef = ref(db, "users/" + username);
     onValue(userRef, (snapshot) => {
       const data = snapshot.val();
-      if (!data) { // no user exists 
+      if (!data) {
+        // no user exists
         props.func("there is no account for that user yet");
-      }
-      else if (data.password === password) { // successful login
+      } else if (data.password === password) {
+        // successful login
         props.updateUser(data);
         props.navigate("Root", { screen: "Home" }); // still need to pass in username and password useContext
-      } else { // password incorrect
+      } else {
+        // password incorrect
         props.func("incorrect password");
       }
     });
   } catch (e) {
     console.error("Error retrieving info from db: ", e);
   }
-
 }
 
 function BackHandler(props: any) {
@@ -214,9 +214,13 @@ const styles = StyleSheet.create({
   LoginButtonTextStyling: {
     textAlign: "center",
     color: "white",
+    fontWeight: "bold",
+    fontStyle: "italic",
   },
   BackButtonTextStyling: {
     textAlign: "center",
     color: theme["color-button-fill-blue"],
+    fontWeight: "bold",
+    fontStyle: "italic",
   },
 });

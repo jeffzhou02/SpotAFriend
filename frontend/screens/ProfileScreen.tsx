@@ -45,16 +45,15 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
           {
             name: 'username',
             cancel: cancelFunction,
-            attrib: 'username',
+            attrib: "username",
             initial: user.username,
           })
         }
-        emailHandler={() => navigation.navigate(
-          'EditInfo',
-          {
-            name: 'email',
+        emailHandler={() =>
+          navigation.navigate("EditInfo", {
+            name: "email",
             cancel: cancelFunction,
-            attrib: 'email',
+            attrib: "email",
             initial: user.email,
           })
         }
@@ -119,10 +118,27 @@ function RowButton(props: any) {
   return (
     <TouchableOpacity style={styles.row} onPress={props.onPress}>
       <View style={styles.label}>
-        <Text>{props.label}</Text>
+        <Text
+          style={{
+            color: "#689689",
+            fontSize: 17,
+            fontStyle: "italic",
+            fontWeight: "bold",
+          }}
+        >
+          {props.label}
+        </Text>
       </View>
       <View style={styles.data}>
-        <Text>{props.data}</Text>
+        <Text
+          style={{
+            color: "#689689",
+            fontSize: 17,
+            fontStyle: "italic",
+          }}
+        >
+          {props.data}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -131,7 +147,11 @@ function RowButton(props: any) {
 function Divider() {
   return (
     <View style={styles.divider}>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
     </View>
   );
 }
@@ -160,10 +180,10 @@ const styles = StyleSheet.create({
 
   },
   row: {
-    width: '90%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "90%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 15,
     backgroundColor: "#E3DAC9",
   },

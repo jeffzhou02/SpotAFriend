@@ -10,7 +10,7 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 
-import { AddUserGroup, GetGroupMembers } from "../firebase/library";
+import { AddUserGroup, GetGroupMembers, AddNewGroup } from "../firebase/library";
 import { useContext } from 'react';
 import { UserContext } from "../components/UserContext.js";
 
@@ -161,7 +161,7 @@ export default function GroupScreen({
         }}
       >
         <Logo></Logo>
-        <AddGroup handler={() => AddUserGroup(user, 'fdsa')} />
+        <AddGroup handler={() => AddNewGroup(user, 'fdsa')} />
       </View>
 
       <ScrollView
