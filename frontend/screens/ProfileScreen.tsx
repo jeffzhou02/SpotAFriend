@@ -1,3 +1,4 @@
+
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useContext, useState } from 'react';
 import { Text, View } from '../components/Themed';
@@ -59,9 +60,12 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
         }
       />
       <View>
-        <Text>
-
-        </Text>
+        <View style={styles.box2}>
+          <TouchableOpacity>
+            <Text style={styles.textStyle}>change profile picture</Text>
+          </TouchableOpacity>
+        </View>
+        <Text></Text>
       </View>
     </View>
   );
@@ -159,25 +163,23 @@ function Divider() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center', //can change to flex-start if need to push to top
+    alignItems: "center",
+    justifyContent: "center", //can change to flex-start if need to push to top
     backgroundColor: "#E3DAC9",
   },
   label: {
     width: "30%",
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     backgroundColor: "#E3DAC9",
-
   },
   data: {
     width: "70%",
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     backgroundColor: "#E3DAC9",
-
   },
   row: {
     width: "90%",
@@ -186,17 +188,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 15,
     backgroundColor: "#E3DAC9",
+    borderColor: "#689689",
+    borderWidth: 2,
+    borderRadius: 20,
+    margin: 10,
+  },
+  box2: {
+    backgroundColor: "#F4D58D",
+    borderColor: "#689689",
+    borderWidth: 2,
+    borderRadius: 17,
+    marginTop: "5%",
+    marginBottom: "5%",
+    paddingHorizontal: "2%",
+    paddingVertical: "2%",
+    marginHorizontal: "2%",
+    alignItems: "center",
+    width: 350,
   },
   divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#E3DAC9",
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-
   },
   separator: {
     marginVertical: 1,

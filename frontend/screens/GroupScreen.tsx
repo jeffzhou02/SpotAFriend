@@ -10,8 +10,12 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 
-import { AddUserGroup, GetGroupMembers, AddNewGroup } from "../firebase/library";
-import { useContext } from 'react';
+import {
+  AddUserGroup,
+  GetGroupMembers,
+  AddNewGroup,
+} from "../firebase/library";
+import { useContext } from "react";
 import { UserContext } from "../components/UserContext.js";
 
 import { Text, View } from "../components/Themed";
@@ -144,7 +148,7 @@ function AddGroup(props: any) {
   return (
     <TouchableOpacity
       style={styles.addgroup}
-      onPress={props.handler}
+      onPress={() => AddGroupHandler(props)}
     >
       <Image
         style={{
@@ -160,6 +164,7 @@ function AddGroup(props: any) {
 }
 
 function AddGroupHandler(props: any) {
+  props.navigate("AddGroup");
   return;
 }
 
@@ -200,7 +205,7 @@ export default function GroupScreen({
         }}
       >
         <Logo></Logo>
-        <AddGroup handler={() => AddNewGroup(user, 'fdsa')} />
+        <AddGroup {...navigation} />
       </View>
 
       <ScrollView
