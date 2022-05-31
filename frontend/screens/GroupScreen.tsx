@@ -18,7 +18,7 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
 
-import { set, update, ref, get, child, remove, push } from 'firebase/database';
+import { set, update, ref, get, child, remove, push, onValue } from 'firebase/database';
 import { db } from "../firebase/index.js";
 
 /*
@@ -42,14 +42,25 @@ function PopulateArray(user, groupData: Group[]) {
   var groupArray = user.groups;
   for (const groupname of groupArray) {
 
-    
+    const members: string[] = [];
 
-    const members: string[] = ['brian', 'ni'];
+    // Get members
+    /*
+    onValue(ref(db, 'groups/' + groupname), (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const childData = childSnapshot.val();
+        members.push(childData);
+      });
+    }, {
+      onlyOnce: true
+    });
+    */
+
     const tempGroup: Group = {
       members: members,
       person1: members[0],
-      person2: members[0],
-      person3: members[0],
+      person2: members[1],
+      person3: members[2],
       pfp1: faker.image.avatar(),
       pfp2: faker.image.avatar(),
       pfp3: faker.image.avatar(),
