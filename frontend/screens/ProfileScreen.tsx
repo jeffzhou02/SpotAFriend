@@ -84,8 +84,8 @@ export default function ProfileScreen({
 }
 
 
-async function uploadImageAsync(uri: any, user: any) {
-  const fileRef = ref(storage, 'profilephotos/' + {user});
+async function uploadImageAsync(uri: any, username: any) {
+  const fileRef = ref(storage, 'profilephotos/' + username);
   const img = await fetch(uri);
   const bytes = await img.blob();
   const result = await uploadBytes(fileRef, bytes);
