@@ -1,4 +1,3 @@
-
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useContext, useState } from 'react';
 import { Text, View } from '../components/Themed';
@@ -7,11 +6,25 @@ import { UserContext } from '../components/UserContext';
 import { storage } from '../firebase/index';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
+import { db } from "../firebase/index";
+import { getDatabase, onValue, ref as dbref, set, update } from 'firebase/database';
 
 //remeber to add profile photo later
 export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>) {
   const storageRef = ref(storage, 'profilephotos');
   const [image, setImage] = useState("");
+  const name = 'asdfasdf';
+  const { user } = useContext(UserContext);
+  const username = user.username;
+  let imageURL = "";
+  const cancelFunction = () => navigation.navigate("Profile");
+  const userRef = dbref(db, "users/" + username);
+  onValue(userRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data.profilePhotoRef) {
+      imageURL = data.profilePhotoRef;
+    }
+  });
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -19,20 +32,19 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
       aspect: [4, 3],
       quality: 1,
     });
-    if (!result.cancelled) {
-      setImage(result.uri);
-      uploadImageAsync(result.uri);
+    if (!result.cancelled) { // update photo as needed
+      imageURL = (await uploadImageAsync(result.uri, username)).toString();
+      update(dbref(db, "users/" + username), {profilePhotoRef: imageURL});
     }
+    setImage(imageURL);
   };
-  const name = 'asdfasdf';
-  const { user } = useContext(UserContext);
-  const cancelFunction = () => navigation.navigate("Profile");
+ 
   return (
     <View style={styles.container}>
       {
-        image === "" ? null :
+        imageURL === "" ? null :
           <View>
-            <Image style={styles.targetImage} source={{ uri: image }} />
+            <Image style={styles.targetImage} source={{ uri: imageURL }} />
           </View>
       }
       <TouchableOpacity style={styles.row} onPress={pickImage}>
@@ -60,48 +72,19 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
         }
       />
       <View>
-        <View style={styles.box2}>
-          <TouchableOpacity>
-            <Text style={styles.textStyle}>change profile picture</Text>
-          </TouchableOpacity>
-        </View>
-        <Text></Text>
+        <Text>
+
+        </Text>
       </View>
     </View>
   );
 }
 
-async function uploadImageAsync(uri: any) {
-  console.log("uploading...");
-  // uri = uri.replace("file:///", "file:/");
-  console.log(uri);
-
-  // const blob = await new Promise((resolve, reject) => {
-  //   const xhr = new XMLHttpRequest();
-  //   xhr.onload = function () {
-  //     resolve(xhr.response);
-  //   };
-  //   xhr.onerror = function (e) {
-  //     console.log(e);
-  //     reject(new TypeError("Network request failed"));
-  //   };
-  //   xhr.responseType = "blob";
-  //   xhr.open("GET", uri, true);
-  //   xhr.send();
-  // });
-  console.log("done making blob");
-  const fileRef = ref(storage, 'profilephotos/user.jpg');
-  console.log("done making fileRef");
+async function uploadImageAsync(uri: any, user: any) {
+  const fileRef = ref(storage, 'profilephotos/' + {user});
   const img = await fetch(uri);
-  console.log("done fetching");
   const bytes = await img.blob();
-  console.log("done bytes");
   const result = await uploadBytes(fileRef, bytes);
-  console.log("uploaded!");
-
-  // We're done with the blob, close and release it
-  // blob.close();
-
   return await getDownloadURL(fileRef);
 }
 
@@ -163,23 +146,25 @@ function Divider() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center", //can change to flex-start if need to push to top
+    alignItems: 'center',
+    justifyContent: 'center', //can change to flex-start if need to push to top
     backgroundColor: "#E3DAC9",
   },
   label: {
     width: "30%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: "#E3DAC9",
+
   },
   data: {
     width: "70%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: "#E3DAC9",
+
   },
   row: {
     width: "90%",
@@ -188,28 +173,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 15,
     backgroundColor: "#E3DAC9",
-    borderColor: "#689689",
-    borderWidth: 2,
-    borderRadius: 20,
-    margin: 10,
-  },
-  box2: {
-    backgroundColor: "#F4D58D",
-    borderColor: "#689689",
-    borderWidth: 2,
-    borderRadius: 17,
-    marginTop: "5%",
-    marginBottom: "5%",
-    paddingHorizontal: "2%",
-    paddingVertical: "2%",
-    marginHorizontal: "2%",
-    alignItems: "center",
-    width: 350,
   },
   divider: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: "#E3DAC9",
   },
   title: {
