@@ -36,6 +36,7 @@ import SignupScreen from "../screens/SignupScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 
 import PostScreen from "../screens/PostScreen";
+import AddGroupScreen from "../screens/AddGroupScreen";
 
 const MyTheme = {
   dark: false,
@@ -77,6 +78,11 @@ function RootNavigator() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AddGroup"
+        component={AddGroupScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
