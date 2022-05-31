@@ -3,7 +3,7 @@ import { StyleSheet, Modal, TextInput, TouchableOpacity, Button, Pressable, Imag
 
 import { Text, View } from '../components/Themed';
 import { default as theme } from '../theme.json';
-import { GetFriendsList, RemoveFriend } from '../firebase/library';
+import { GetFriendsList, RemoveFriend, SearchFriend } from '../firebase/library';
 import { useContext } from 'react';
 import { UserContext } from '../components/UserContext';
 
@@ -49,10 +49,41 @@ function Friend(props: any) {
   );
 }
 
+function FriendPrompt(props: any) {
+  const display = props.friendFound;
+  var row;
+  if (display) {
+    row = (
+      <View style={{width: '80%', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', padding: 10, borderColor: 'red', borderWidth: 5}}>
+        <Text style={{flex: 1, textAlign: 'left'}}>{props.friendName}</Text>
+        <TouchableOpacity onPress={props.addHandler} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+          <Text style={{paddingRight: '5%', color: "black", textDecorationLine: 'underline'}}>add</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  } else {
+    row = (
+      <View></View>
+    );
+  }
+  return row;
+}
+
 function Header(props: any) {
   const {user} = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
   const [friendAdded, setFriendAdded] = useState(false);
+
+  const [friendFound, setFriendFound] = useState(true);
+  var searchFriend = async () => {
+    const promise = await SearchFriend(user);
+    const value = promise;
+    setFriendFound(value);
+  };
+
+  const [friendName, setFriendName] = useState('asdf');
+  const [statusMessage, setStatusMessage] = useState('');
+
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.cancelButton} onPress={props.cancel}>
@@ -67,8 +98,14 @@ function Header(props: any) {
         <View style={{alignItems: 'center', height: '100%', width: '100%'}}>
           <View style={{alignSelf: 'center', alignItems: 'center', width: '90%', height: '75%', marginTop: '10%', backgroundColor: '#00AFB5', borderRadius: 30, borderColor: 'black', borderWidth: 2}}>
             <View style={{paddingTop:'10%'}}>
-              <SearchBar/>
+              <SearchBar searchHandler={() => searchFriend()}/>
             </View>
+            <FriendPrompt friendFound={friendFound} friendName={friendName} />
+            <Text 
+              style={{width: '90%', textAlign: 'center', textDecorationLine: 'underline', paddingTop: 10}}
+            >
+              {statusMessage}
+            </Text>
           </View>
           <Pressable
             onPress={() => setShowModal(!showModal)}

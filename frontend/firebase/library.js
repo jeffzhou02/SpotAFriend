@@ -72,6 +72,30 @@ export function RemoveFriend(userobj, index) {
     remove(child(dbref, index.toString()));
 }
 
+export async function SearchFriend(userobj, friend) {
+    const dbref = ref(db, 'users/' + friend);
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists() && snapshot.val() != userobj.username) {
+            return true;
+        }
+        return false;
+    }).catch((error) => {return false;});
+    return promise;
+}
+
+export function AddFriend(userobj, friendName, setState) {
+    const dbref = child(ref(db, 'users/' + userobj.username),'friends');
+    get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            var array = snapshot.val();
+            array.append(friendName);
+            set(dbref, array);
+            setState(true);
+        }
+        setState(false);
+    }).catch((error) => {setState(false)});
+}
+
 export function AddUserGroup(user, group) {
     /*
     // Check if group exists
