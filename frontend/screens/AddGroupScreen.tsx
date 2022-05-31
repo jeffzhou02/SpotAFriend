@@ -16,6 +16,7 @@ import { default as theme } from "../theme.json";
 import { Text, useThemeColor, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
+import { useLinkProps } from "@react-navigation/native";
 
 function Back(props: any) {
   return (
@@ -39,19 +40,27 @@ function BackHandler(props: any) {
 
 function getPeople() {
   let fruits = [
-    { label: "brian", value: "🍎" }, // uh users go hereloloplol
-    { label: "net", value: "🍌" },
-    { label: "jef", value: "🍊" },
+    { label: "brian", value: "brian" }, // uh users go hereloloplol
+    { label: "net", value: "net" },
+    { label: "jef", value: "jef" },
+    { label: "jenny", value: "jenny" },
+    { label: "daniel", value: "daniel" },
+    { label: "brad", value: "brad" },
+    { label: "chad", value: "chad" },
+    { label: "paul", value: "paul" },
   ];
   return fruits;
 }
 
 function PeoplePicker() {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState([]);
   const [items, setItems] = useState(getPeople());
   return (
     <DropDownPicker
+      multiple={true}
+      min={0}
+      max={10}
       dropDownDirection="BOTTOM"
       placeholder="select your members"
       badgeColors={"#689689"}
@@ -86,7 +95,9 @@ function PeoplePicker() {
   );
 }
 
-export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
+export default function AddGroupScreen({
+  navigation,
+}: RootTabScreenProps<"AddGroup">) {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={styles.container}>
@@ -117,17 +128,10 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
         <View style={styles.GroupContainer}>
           <View style={{ height: "5%" }}></View>
           <PeoplePicker />
-          <View style={{ height: "5%" }}></View>
-          <Image
-            style={styles.pfp}
-            source={{
-              uri: "https://i.scdn.co/image/ab67616d00001e021cf64730713292322465d339",
-            }}
-          />
-          <View style={{ height: "5%" }}></View>
+          <View style={{ height: "40%" }}></View>
           <View style={styles.box2}>
             <TouchableOpacity>
-              <Text style={styles.textStyle}>upload group picture</Text>
+              <Text style={styles.textStyle}>create group</Text>
             </TouchableOpacity>
           </View>
         </View>

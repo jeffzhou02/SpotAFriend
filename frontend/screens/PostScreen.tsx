@@ -25,20 +25,23 @@ export default function PostScreen({
   const [image, setImage] = useState("");
   const { user } = useContext(UserContext);
   const username = user.username;
+  const groups = user.groups;
+
+  console.log(groups);
   let imageURL = "";
   const userRef = dbref(db, "users/" + username);
-  onValue(userRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data.profilePhotoRef) {
-      imageURL = data.profilePhotoRef;
-    }
-  });
+  // onValue(userRef, (snapshot) => {
+  //   const data = snapshot.val();
+  //   if (data.profilePhotoRef) {
+  //     imageURL = data.profilePhotoRef;
+  //   }
+  // });
 
-  function Picture() {
-    return (
-      <Image style={{ height: 200, width: 200 }} source={{ uri: imageUrl }} />
-    );
-  }
+  // function Picture() {
+  //   return (
+  //     <Image style={{ height: 200, width: 200 }} source={{ uri: imageUrl }} />
+  //   );
+  // }
   function PostButton() {
     return (
       <TouchableOpacity
@@ -72,9 +75,7 @@ export default function PostScreen({
   }
   return (
     <View>
-      <View style={styles.PictureContainer}>
-        <Picture />
-      </View>
+      <View style={styles.PictureContainer}>{/* <Picture /> */}</View>
       <View style={styles.GroupContainer}>
         <GroupSelection />
       </View>
@@ -92,39 +93,68 @@ export default function PostScreen({
 }
 
 function getGroups() {
-  let fruits = [
-    { label: "Apple", value: "🍎" }, // make a legit way to get groups
-    { label: "Banana", value: "🍌" },
-    { label: "Orange", value: "🍊" },
-  ];
-  return fruits;
+  const { user } = useContext(UserContext);
+  const groups = user.groups;
+  console.log(groups);
+
+  let groupslist = [{ label: groups[0], value: "0" }];
+  for (let i = 1; i < groups.length; i++) {
+    var obj = { label: groups[i], value: i.toString() };
+    groupslist.push(obj);
+  }
+  console.log(groupslist);
+  return groupslist;
 }
 
 function GroupSelection() {
   // hopefully this works
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState(getGroups());
 
   return (
     <DropDownPicker
+      multiple={false}
       dropDownDirection="TOP"
-      placeholder="choose a group"
+      placeholder="select your group"
+      badgeColors={"#689689"}
+      listItemLabelStyle={{
+        color: "#689689",
+      }}
+      selectedItemLabelStyle={{
+        color: "#689689",
+      }}
+      dropDownContainerStyle={{
+        borderColor: "#689689",
+        borderWidth: 2,
+        borderRadius: 15,
+        backgroundColor: theme["color-button-fill-white"],
+      }}
+      placeholderStyle={{
+        color: "#689689",
+      }}
       open={open}
       value={value}
       items={items}
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
+      style={{
+        borderRadius: 15,
+        borderColor: "#689689",
+        borderWidth: 2,
+        backgroundColor: theme["color-button-fill-white"],
+      }}
     />
   );
 }
 
 function getTags() {
   let tags = [
-    { label: "friend", value: "🍎" }, // make a legit way to get groups
-    { label: "enemy", value: "🍌" },
-    { label: "acquaintance", value: "🍊" },
+    { label: "friend", value: "1" },
+    { label: "enemy", value: "2" },
+    { label: "acquaintance", value: "3" },
   ];
   return tags;
 }
@@ -132,20 +162,44 @@ function getTags() {
 function TagSelection() {
   // hopefully this works
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState([]);
   const [items, setItems] = useState(getTags());
 
   return (
     <DropDownPicker
-      dropDownDirection="TOP"
       multiple={true}
-      placeholder="choose your tags"
+      min={0}
+      max={10}
+      dropDownDirection="TOP"
+      placeholder="select your tags"
+      badgeColors={"#689689"}
+      listItemLabelStyle={{
+        color: "#689689",
+      }}
+      selectedItemLabelStyle={{
+        color: "#689689",
+      }}
+      dropDownContainerStyle={{
+        borderColor: "#689689",
+        borderWidth: 2,
+        borderRadius: 15,
+        backgroundColor: theme["color-button-fill-white"],
+      }}
+      placeholderStyle={{
+        color: "#689689",
+      }}
       open={open}
       value={value}
       items={items}
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
+      style={{
+        borderRadius: 15,
+        borderColor: "#689689",
+        borderWidth: 2,
+        backgroundColor: theme["color-button-fill-white"],
+      }}
     />
   );
 }
@@ -154,19 +208,21 @@ const styles = StyleSheet.create({
   PictureContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
-    height: "70%",
+    height: "65%",
     alignItems: "center",
     justifyContent: "center",
   },
   GroupContainer: {
     backgroundColor: theme["color-background"],
-    width: "100%",
+    width: "90%",
     height: "10%",
+    alignSelf: "center",
   },
   TagContainer: {
     backgroundColor: theme["color-background"],
-    width: "100%",
+    width: "90%",
     height: "10%",
+    alignSelf: "center",
   },
   ButtonContainer: {
     backgroundColor: theme["color-background"],
