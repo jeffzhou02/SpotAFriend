@@ -6,8 +6,6 @@ import { UserContext } from "../components/UserContext";
 import { storage } from "../firebase/index";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
-<<<<<<< HEAD
-=======
 import { db } from "../firebase/index";
 import {
   getDatabase,
@@ -16,7 +14,6 @@ import {
   set,
   update,
 } from "firebase/database";
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
 
 //remeber to add profile photo later
 export default function ProfileScreen({
@@ -50,23 +47,12 @@ export default function ProfileScreen({
     }
     setImage(imageURL);
   };
-<<<<<<< HEAD
-  const name = "asdfasdf";
-  const { user } = useContext(UserContext);
-  const cancelFunction = () => navigation.navigate("Profile");
-  return (
-    <View style={styles.container}>
-      {image === "" ? null : (
-        <View>
-          <Image style={styles.targetImage} source={{ uri: image }} />
-=======
 
   return (
     <View style={styles.container}>
       {imageURL === "" ? null : (
         <View>
           <Image style={styles.targetImage} source={{ uri: imageURL }} />
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
         </View>
       )}
       <TouchableOpacity style={styles.row} onPress={pickImage}>
@@ -111,32 +97,8 @@ export default function ProfileScreen({
   );
 }
 
-<<<<<<< HEAD
-async function uploadImageAsync(uri: any) {
-  console.log("uploading...");
-  // uri = uri.replace("file:///", "file:/");
-  console.log(uri);
-
-  // const blob = await new Promise((resolve, reject) => {
-  //   const xhr = new XMLHttpRequest();
-  //   xhr.onload = function () {
-  //     resolve(xhr.response);
-  //   };
-  //   xhr.onerror = function (e) {
-  //     console.log(e);
-  //     reject(new TypeError("Network request failed"));
-  //   };
-  //   xhr.responseType = "blob";
-  //   xhr.open("GET", uri, true);
-  //   xhr.send();
-  // });
-  console.log("done making blob");
-  const fileRef = ref(storage, "profilephotos/user.jpg");
-  console.log("done making fileRef");
-=======
 async function uploadImageAsync(uri: any, username: any) {
   const fileRef = ref(storage, "profilephotos/" + username);
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
   const img = await fetch(uri);
   const bytes = await img.blob();
   const result = await uploadBytes(fileRef, bytes);
@@ -154,21 +116,13 @@ function InfoView(props: any) {
     >
       <Divider />
       <RowButton
-<<<<<<< HEAD
-        label="username"
-=======
         label="username:"
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
         data={props.username}
         onPress={props.usernameHandler}
       />
       <Divider />
       <RowButton
-<<<<<<< HEAD
-        label="email"
-=======
         label="email:"
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
         data={props.email}
         onPress={props.emailHandler}
       />
@@ -231,22 +185,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-<<<<<<< HEAD
-    backgroundColor: "#E3DAC9",
-=======
     backgroundColor: "#F4D58D",
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
   },
   data: {
     width: "70%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-<<<<<<< HEAD
-    backgroundColor: "#E3DAC9",
-=======
     backgroundColor: "#F4D58D",
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
   },
   row: {
     width: "90%",

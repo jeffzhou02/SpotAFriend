@@ -1616,6 +1616,23 @@
     slugify "^1.3.4"
     sucrase "^3.20.0"
 
+"@expo/config@6.0.24":
+  version "6.0.24"
+  resolved "https://registry.yarnpkg.com/@expo/config/-/config-6.0.24.tgz#3602da8fdfa817e290a52fb328fc8ed9d6bc61e7"
+  integrity sha512-OcACI1md1Yo5TQmUxxueJ/RaTlR2Mgl6KswTFOYCL1XJERF/jjAx95zhWXH+JQGdlM0yB0vqM6vB6GbUFRvLxA==
+  dependencies:
+    "@babel/code-frame" "~7.10.4"
+    "@expo/config-plugins" "4.1.5"
+    "@expo/config-types" "^45.0.0"
+    "@expo/json-file" "8.2.36"
+    getenv "^1.0.0"
+    glob "7.1.6"
+    require-from-string "^2.0.2"
+    resolve-from "^5.0.0"
+    semver "7.3.2"
+    slugify "^1.3.4"
+    sucrase "^3.20.0"
+
 "@expo/config@6.0.6":
   version "6.0.6"
   resolved "https://registry.npmjs.org/@expo/config/-/config-6.0.6.tgz"
@@ -6596,6 +6613,9 @@ expo-modules-autolinking@~0.7.0:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.7.1.tgz#edd6da36cc28112d054e82dbb176fe4dccd7d476"
   integrity sha512-HKPcwXuRztEjhQRHxwhLXyAblkOsSi3n7aaBV6qgrOOi0WL/E3di8E2fowlHiiQW/i9vJDemMcvq0ZTCYW+bFg==
+<<<<<<< HEAD
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
+=======
 >>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
   dependencies:
     chalk "^4.1.0"

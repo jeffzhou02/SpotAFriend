@@ -22,29 +22,6 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
 
-<<<<<<< HEAD
-import { set, update, ref, get, child, remove, push, onValue } from 'firebase/database';
-import { db } from "../firebase/index.js";
-
-interface Group {
-  members: string[],
-  person1: string,
-  person2: string,
-  person3: string,
-  pfp1: string,
-  pfp2: string,
-  pfp3: string,
-  pic: string,
-  group: string,
-}
-
-function PopulateArray(user, groupData: Group[]) {
-
-  // Get groups
-  var groupArray = user.groups;
-  for (const groupname of groupArray) {
-
-=======
 import {
   set,
   update,
@@ -73,7 +50,6 @@ function PopulateArray(user, groupData: Group[]) {
   // Get groups
   var groupArray = user.groups;
   for (const groupname of groupArray) {
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
     var members: string[] = [];
 
     // Get members
@@ -83,11 +59,7 @@ function PopulateArray(user, groupData: Group[]) {
         console.log(childSnapshot.val());
         members.push(childSnapshot.val());
       });
-<<<<<<< HEAD
-    })
-=======
     });
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
 
     const tempGroup: Group = {
       members: members,
@@ -99,19 +71,10 @@ function PopulateArray(user, groupData: Group[]) {
       pfp3: faker.image.avatar(),
       pic: faker.image.imageUrl(),
       group: groupname,
-<<<<<<< HEAD
-    }
-    groupData.push(tempGroup);
-  }
-}
-
-
-=======
     };
     groupData.push(tempGroup);
   }
 }
->>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
 
 const GroupCard = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
