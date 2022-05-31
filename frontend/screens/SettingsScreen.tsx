@@ -98,7 +98,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
             </View>
           </View>
         </Modal>
-        <View style={{ flexDirection: "row", justifyContents: "center" }}>
+        <View style={{ flexDirection: "row" }}>
           <View style={styles.box2}>
             <Pressable onPress={() => setModalVisible(true)}>
               <Text style={styles.textStyle}>turn off notifications</Text>
