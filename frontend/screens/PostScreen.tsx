@@ -1,26 +1,80 @@
-import React, { useState, } from "react";
-import DropDownPicker from 'react-native-dropdown-picker';
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React, { useState, useContext } from "react";
+import DropDownPicker from "react-native-dropdown-picker";
+import { StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
 import { Text, View } from "../components/Themed";
-import Navigation from "../navigation";
+import { UserContext } from "../components/UserContext";
 
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { db } from "../firebase/index";
+import {
+  getDatabase,
+  onValue,
+  ref as dbref,
+  set,
+  update,
+} from "firebase/database";
 
 export default function PostScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
-  
+  const storage = getStorage();
+
+  const gsReference = ref(storage, "/dailyphotos/Jeff.jpg");
+  const [image, setImage] = useState("");
+  const { user } = useContext(UserContext);
+  const username = user.username;
+  let imageURL = "";
+  const userRef = dbref(db, "users/" + username);
+  onValue(userRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data.profilePhotoRef) {
+      imageURL = data.profilePhotoRef;
+    }
+  });
+
+  function Picture() {
+    return (
+      <Image style={{ height: 200, width: 200 }} source={{ uri: imageUrl }} />
+    );
+  }
+  function PostButton() {
+    return (
+      <TouchableOpacity
+        style={styles.PostButtonStyling}
+        onPress={() => PostHandler()}
+      >
+        <Text style={styles.PostButtonTextStyling}>post</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  function CancelButton() {
+    return (
+      <TouchableOpacity
+        style={styles.CancelButtonStyling}
+        onPress={() => CancelHandler()}
+      >
+        <Text style={styles.CancelButtonTextStyling}>cancel</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  function CancelHandler() {
+    navigation.navigate("Root", { screen: "Home" });
+    return;
+  }
+
+  function PostHandler() {
+    navigation.navigate("Root", { screen: "Home" });
+    return;
+  }
   return (
     <View>
       <View style={styles.PictureContainer}>
         <Picture />
-      </View> 
+      </View>
       <View style={styles.GroupContainer}>
         <GroupSelection />
       </View>
@@ -34,41 +88,6 @@ export default function PostScreen({
         </View>
       </View>
     </View>
-    
-    
-  );
-  
-}
-
-/*
-      <View style={styles.GroupAndTagContainer}>
-        <View style={styles.row}>
-          <GroupSelection />
-          <TagSelection />
-        </View>
-      </View>
-      <View style={styles.ButtonContainer}>
-        <View style={styles.row}>
-          <PostButton />
-          <CancelButton />
-        </View>
-      </View>
-*/
-
-function getPicture() {
-  return "../assets/images/icon.png";
-}
-
-function Picture() {
-  return (
-    <Image
-      style={{
-        resizeMode: "contain",
-        height: "100%",
-        width: "100%",
-      }}
-      source={require("../assets/images/icon.png")}
-    />
   );
 }
 
@@ -76,12 +95,13 @@ function getGroups() {
   let fruits = [
     { label: "Apple", value: "🍎" }, // make a legit way to get groups
     { label: "Banana", value: "🍌" },
-    { label: "Orange", value: "🍊" }
-  ]
+    { label: "Orange", value: "🍊" },
+  ];
   return fruits;
 }
 
-function GroupSelection() { // hopefully this works
+function GroupSelection() {
+  // hopefully this works
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState(getGroups());
@@ -89,7 +109,7 @@ function GroupSelection() { // hopefully this works
   return (
     <DropDownPicker
       dropDownDirection="TOP"
-      placeholder = "choose a group"
+      placeholder="choose a group"
       open={open}
       value={value}
       items={items}
@@ -101,15 +121,16 @@ function GroupSelection() { // hopefully this works
 }
 
 function getTags() {
-  let fruits = [
-    { label: "Apple", value: "🍎" }, // make a legit way to get groups
-    { label: "Banana", value: "🍌" },
-    { label: "Orange", value: "🍊" }
-  ]
-  return fruits;
+  let tags = [
+    { label: "friend", value: "🍎" }, // make a legit way to get groups
+    { label: "enemy", value: "🍌" },
+    { label: "acquaintance", value: "🍊" },
+  ];
+  return tags;
 }
 
-function TagSelection() { // hopefully this works
+function TagSelection() {
+  // hopefully this works
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState(getTags());
@@ -118,7 +139,7 @@ function TagSelection() { // hopefully this works
     <DropDownPicker
       dropDownDirection="TOP"
       multiple={true}
-      placeholder = "choose your tags"
+      placeholder="choose your tags"
       open={open}
       value={value}
       items={items}
@@ -127,38 +148,6 @@ function TagSelection() { // hopefully this works
       setItems={setItems}
     />
   );
-}
-
-function PostButton(props: any) {
-  return (
-    <TouchableOpacity
-      style={styles.PostButtonStyling}
-      onPress={() => PostHandler(props)}
-    >
-      <Text style={styles.PostButtonTextStyling}>post</Text>
-    </TouchableOpacity>
-  );
-}
-
-function CancelButton(props: any) {
-  return (
-    <TouchableOpacity
-      style={styles.CancelButtonStyling}
-      onPress={() => CancelHandler(props)}
-    >
-      <Text style={styles.CancelButtonTextStyling}>cancel</Text>
-    </TouchableOpacity>
-  );
-}
-
-function PostHandler(props: any) {
-  props.navigate("Root", { screen: "Home" });
-  return;
-}
-
-function CancelHandler(props: any) {
-  props.navigate("Landing");
-  return;
 }
 
 const styles = StyleSheet.create({
@@ -174,7 +163,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "10%",
   },
-  TagContainer:{
+  TagContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
     height: "10%",
