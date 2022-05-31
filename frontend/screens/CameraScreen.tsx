@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../components/UserContext";
 import {
   StyleSheet,
   Text,
@@ -6,10 +7,11 @@ import {
   TouchableOpacity,
   _Text,
   ImageBackground,
-  Button,
 } from "react-native";
 import { Camera } from "expo-camera";
 import { RootStackScreenProps } from "../types";
+import { storage } from "../firebase/index.js";
+import { uploadBytes, ref } from "firebase/storage";
 
 export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   let camera: Camera;
@@ -19,6 +21,8 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState<any>(null);
+
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     (async () => {
@@ -35,12 +39,8 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   }
 
   const __takePicture = async () => {
-    console.log("fuck");
-
     if (!camera) return;
     const photo = await camera.takePictureAsync();
-    console.log("whore");
-    console.log(photo);
     setPreviewVisible(true);
     setCapturedImage(photo);
   };
@@ -51,8 +51,21 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   };
 
   const __uploadPicture = () => {
+    uploadImageAsync();
     navigation.navigate("Post");
   };
+  async function uploadImageAsync() {
+    console.log("done making blob");
+    console.log(user.username);
+    const fileRef = ref(storage, "dailyphotos/" + user.username + ".jpg");
+    console.log("done making fileRef");
+    const img = await fetch(capturedImage.uri);
+    console.log("done fetching");
+    const bytes = await img.blob();
+    console.log("done bytes");
+    const result = await uploadBytes(fileRef, bytes);
+    console.log("uploaded!");
+  }
 
   const CameraPreview = ({ photo }: any) => {
     return (
@@ -93,19 +106,6 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
               />
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.pictureContainer}>
-            <View style={styles.picborder}></View>
-            <View style={styles.lowersection}>
-              <View>
-                <TouchableOpacity style={styles.ring}>
-                  <TouchableOpacity
-                    onPress={__takePicture}
-                    style={styles.takepic}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View> */}
         </Camera>
       )}
     </View>
