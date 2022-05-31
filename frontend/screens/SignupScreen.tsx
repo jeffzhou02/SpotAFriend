@@ -157,6 +157,7 @@ async function SignupHandler(props: any) {
           email: email,
           password: password,
           confirmpassword: confirmpassword,
+          profilePhotoRef: "",
         });
         set(ref(db, "users/" + username + "/groups"), {
           0: username + "sgroup",
