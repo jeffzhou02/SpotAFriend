@@ -50,8 +50,26 @@ export async function GetGroupMembers(group) {
             return snapshot.val();
         }
         return [];
-    });
+    }).catch((error) => {return [];});
     return promise;
+}
+
+export async function GetFriendsList(userobj) {
+    //const dbref = ref(db, 'users/' + userobj.username + '/friends');
+    const dbref = ref(db, 'users/natezhang/friends');
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            return snapshot.val();
+        }
+        return [];
+    }).catch((error) => {return [];});
+    return promise;
+}
+
+export function RemoveFriend(userobj, index) {
+    //const dbref = ref(db, 'users/' + userobj.username + '/friends');
+    const dbref = ref(db, 'users/natezhang/friends');
+    remove(child(dbref, index.toString()));
 }
 
 export function AddUserGroup(user, group) {

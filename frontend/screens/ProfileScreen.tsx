@@ -30,10 +30,15 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
           })
         }
       />
-      <View>
-        <Text>
-
-        </Text>
+      <View style={{width: '100%', flexDirection: 'row', justifyContent: 'flex-end', padding: 5}}>
+        <TouchableOpacity onPress={() => navigation.navigate(
+          'Friends',
+          {
+            cancel: cancelFunction,
+          })
+        } style={{flexDirection: 'row', justifyContent: 'flex-end', paddingRight: '10%'}}>
+          <Text style={{color: "#689689"}}>Friends</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -42,7 +47,6 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
 function InfoView(props: any) {
   return(
     <View style={{alignItems: 'center', justifyContent: 'center', backgroundColor: "#E3DAC9",  }}>
-
       <Divider/>
       <RowButton label='username' data={props.username} onPress={props.usernameHandler}/>
       <Divider/>
@@ -120,6 +124,5 @@ const styles = StyleSheet.create({
     height: 1,
     width: '85%',
     backgroundColor: "rgba(0,0,0,0.2)",
-
   },
 });
