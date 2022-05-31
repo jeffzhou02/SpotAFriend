@@ -6,11 +6,14 @@ import {
   Pressable,
   Modal,
   Alert,
+  TextInput,
 } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 
 import React, { ReactNode, useEffect, useState } from "react";
+import { default as theme } from "../theme.json";
 
-import { Text, View } from "../components/Themed";
+import { Text, useThemeColor, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
 
@@ -30,8 +33,57 @@ function Back(props: any) {
 }
 
 function BackHandler(props: any) {
-  props.navigate("Home");
+  props.navigate("Group");
   return;
+}
+
+function getPeople() {
+  let fruits = [
+    { label: "brian", value: "🍎" }, // uh users go hereloloplol
+    { label: "net", value: "🍌" },
+    { label: "jef", value: "🍊" },
+  ];
+  return fruits;
+}
+
+function PeoplePicker() {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState(getPeople());
+  return (
+    <DropDownPicker
+      dropDownDirection="BOTTOM"
+      placeholder="select your members"
+      badgeColors={"#689689"}
+      listItemLabelStyle={{
+        color: "#689689",
+      }}
+      selectedItemLabelStyle={{
+        color: "#689689",
+      }}
+      dropDownContainerStyle={{
+        borderColor: "#689689",
+        borderWidth: 2,
+        borderRadius: 15,
+        backgroundColor: theme["color-button-fill-white"],
+      }}
+      placeholderStyle={{
+        color: "#689689",
+      }}
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+      style={{
+        borderRadius: 15,
+        borderColor: "#689689",
+        borderWidth: 2,
+        backgroundColor: theme["color-button-fill-white"],
+      }}
+    />
+  );
 }
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
@@ -53,61 +105,30 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
         <Back {...navigation} />
       </View>
       <View style={styles.container}>
-        <View style={styles.box}>
-          <Text style={styles.textStyle}>about</Text>
-          <Text style={styles.names}>
-            spot-a-friend is an app designed to emphasize our authentic nature
-            in social relationships. to use our app, make sure to be in close
-            proximity with your friends to be able to spot them in their natural
-            environments. we are currently in beta and will be updated as we go.
-            if you have any questions or feedback, please contact us at
-            555-555-5555. we are always looking to improve the app and make it
-            better.
-          </Text>
+        <View style={{ height: "30%" }}></View>
+        <Text style={styles.textStyle}>add group</Text>
+        <View style={styles.searchbar}>
+          <TextInput
+            placeholderTextColor={"#689689"}
+            placeholder="group name"
+            keyboardType="default"
+          />
         </View>
-        <View style={styles.box}>
-          <Text style={styles.textStyle}>help</Text>
-          <Text style={styles.names}>
-            our app is extremely user friendly and simple to use. if you need
-            help, then you probably have never touched social media in your
-            entire life. all you have to do is open the camera in the middle of
-            the navigation bar and snap a picture of your target for the day.
-            that's literally it. thanks for reading.
-          </Text>
-        </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("The selected group is closed");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.openCard}>
-            <View style={styles.modalContainer}>
-              <View style={{ backgroundColor: "transparent" }}>
-                <Text style={styles.names2}>notification settings updated</Text>
-              </View>
-              <Pressable
-                style={styles.buttonClose}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.dismiss}>dismiss</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-        <View style={{ flexDirection: "row" }}>
+        <View style={styles.GroupContainer}>
+          <View style={{ height: "5%" }}></View>
+          <PeoplePicker />
+          <View style={{ height: "5%" }}></View>
+          <Image
+            style={styles.pfp}
+            source={{
+              uri: "https://i.scdn.co/image/ab67616d00001e021cf64730713292322465d339",
+            }}
+          />
+          <View style={{ height: "5%" }}></View>
           <View style={styles.box2}>
-            <Pressable onPress={() => setModalVisible(true)}>
-              <Text style={styles.textStyle}>turn off notifications</Text>
-            </Pressable>
-          </View>
-          <View style={styles.box2}>
-            <Pressable onPress={() => setModalVisible(true)}>
-              <Text style={styles.textStyle}>turn off notifications</Text>
-            </Pressable>
+            <TouchableOpacity>
+              <Text style={styles.textStyle}>change profile picture</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -147,17 +168,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: "2%",
     paddingVertical: "2%",
     marginHorizontal: "2%",
-    width: "43%",
     alignItems: "center",
-  },
-  openCard: {
-    height: "12%",
-
-    width: "90%",
-    marginTop: "10%",
+    width: 330,
     alignSelf: "center",
-    backgroundColor: "#00AFB5",
-    borderRadius: 30,
+  },
+  GroupContainer: {
+    backgroundColor: theme["color-background"],
+    width: 330,
+    height: "100%",
   },
   buttonClose: {
     backgroundColor: "transparent",
@@ -219,32 +237,26 @@ const styles = StyleSheet.create({
     borderColor: "#BF0603",
     margin: "5%",
   },
-  tags: {
-    borderWidth: 1,
-    borderColor: "#BF0603",
-    alignItems: "center",
-    paddingHorizontal: 10,
-    marginTop: "5%",
-    paddingVertical: 1,
-    backgroundColor: "rgba(0,0,0,0)",
-    borderRadius: 20,
-    marginBottom: 5,
-    width: 140,
-  },
-  tags2: {
+  searchbar: {
+    backgroundColor: theme["color-button-fill-white"],
     borderWidth: 2,
-    borderColor: "#BF0603",
-    alignItems: "center",
-    paddingHorizontal: 10,
-    marginTop: "2%",
-    paddingVertical: 1,
-    backgroundColor: "white",
-    borderRadius: 20,
-    marginBottom: 5,
-    width: 150,
+    borderColor: "#689689",
+    borderRadius: 15,
+    width: 330,
+    height: 45,
+    alignContent: "center",
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: "5%",
   },
-  tagsText: {
-    fontStyle: "italic",
-    color: "#BF0603",
+  pfp: {
+    alignSelf: "center",
+    height: 180,
+    width: 180,
+    borderRadius: 90,
+    borderWidth: 3,
+    borderColor: "#689689",
+    marginBottom: "5%",
   },
 });

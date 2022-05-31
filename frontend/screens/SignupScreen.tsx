@@ -17,7 +17,6 @@ import { db } from "../firebase/index.js";
 
 import { UserContext } from "../components/UserContext";
 
-
 export default function SignupScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
@@ -30,10 +29,10 @@ export default function SignupScreen({
 
   const update = (data: any) => {
     setErrorMessage(data);
-  }
+  };
   const updateUser = (data: any) => {
     setUser(data);
-  }
+  };
   return (
     <View>
       <View style={styles.ImageContainer}>
@@ -131,12 +130,11 @@ function BackButton(props: { navigate: (arg0: string) => void }) {
 }
 
 function ErrorMessage(props: any) {
-  return (
-    props.message === undefined ? null :
-      <View style={styles.ErrorMessageContainer}>
-        <Text style={styles.ErrorMessage}>{props.message}</Text>
-      </View>
-  )
+  return props.message === undefined ? null : (
+    <View style={styles.ErrorMessageContainer}>
+      <Text style={styles.ErrorMessage}>{props.message}</Text>
+    </View>
+  );
 }
 
 async function SignupHandler(props: any) {
@@ -149,33 +147,43 @@ async function SignupHandler(props: any) {
     return;
   }
   try {
-    const userRef = ref(db, 'users/' + username);
+    const userRef = ref(db, "users/" + username);
     onValue(userRef, (snapshot) => {
       const data = snapshot.val();
-      if (!data) {     // no user exists 
-        set(ref(db, 'users/' + username), {
+      if (!data) {
+        // no user exists
+        set(ref(db, "users/" + username), {
           username: username,
           email: email,
           password: password,
-          confirmpassword: confirmpassword
+          confirmpassword: confirmpassword,
+          profilePhotoRef: "",
         });
-        const newUser = ref(db, 'users/' + username);
+        set(ref(db, "users/" + username + "/groups"), {
+          0: username + "sgroup",
+        });
+        set(ref(db, "users/" + username + "/friends"), {
+          0: "null",
+        });
+        set(ref(db, "groups/" + username + "sgroup"), {
+          0: username,
+        });
+        const newUser = ref(db, "users/" + username);
         onValue(newUser, (snapshot) => {
           const data = snapshot.val();
           props.updateUser(data);
         });
         props.navigate("Root", { screen: "Home" });
-      } else {        // user already exists
+      } else {
+        // user already exists
         props.func("user already exists with that username");
       }
     });
-
   } catch (e) {
     console.error("Error adding to database: ", e);
   }
   return;
 }
-
 
 function BackHandler(props: { navigate: (arg0: string) => void }) {
   props.navigate("Landing");
@@ -250,9 +258,14 @@ const styles = StyleSheet.create({
   },
   SignupButtonTextStyling: {
     textAlign: "center",
+    fontStyle: "italic",
+    color: "white",
+    fontWeight: "bold",
   },
   BackButtonTextStyling: {
     textAlign: "center",
     color: theme["color-button-fill-blue"],
+    fontStyle: "italic",
+    fontWeight: "bold",
   },
 });

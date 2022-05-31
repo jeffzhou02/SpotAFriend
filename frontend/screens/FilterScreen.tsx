@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import React, { ReactNode, useEffect, useState } from "react";
+import { default as theme } from "../theme.json";
 
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
@@ -45,7 +46,6 @@ const Card = (props: any) => {
           </View>
           <View style={styles.tags}>
             <Text style={styles.tagsText}>{props.tag2}</Text>
-
           </View>
         </View>
         <View style={styles.likesContainer}>
@@ -97,7 +97,11 @@ function Logo() {
 function SearchBar() {
   return (
     <View style={styles.searchbar}>
-      <TextInput placeholder="search tags" keyboardType="default" />
+      <TextInput
+        placeholderTextColor={"slategray"}
+        placeholder="search tags"
+        keyboardType="default"
+      />
       <TouchableOpacity style={{ alignSelf: "center" }}>
         <Image
           style={{
@@ -264,9 +268,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   searchbar: {
-    backgroundColor: "white",
+    backgroundColor: theme["color-button-fill-white"],
     borderWidth: 2,
     borderColor: "#00AFB5",
+    color: "black",
     borderRadius: 15,
     width: 330,
     height: 40,

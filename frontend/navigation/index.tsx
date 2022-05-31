@@ -38,6 +38,14 @@ import SettingsScreen from "../screens/SettingsScreen";
 import PostScreen from "../screens/PostScreen";
 import FriendsScreen from "../screens/FriendsScreen"
 
+const MyTheme = {
+  dark: false,
+  colors: {
+    background: "#E3DAC9",
+    border: "#083D77",
+  },
+};
+
 export default function Navigation({
   colorScheme,
 }: {
@@ -46,7 +54,7 @@ export default function Navigation({
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+      theme={colorScheme === "dark" ? DarkTheme : MyTheme}
     >
       <RootNavigator />
     </NavigationContainer>
@@ -129,7 +137,16 @@ function BottomTabNavigator() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
-        tabBarStyle: { borderTopLeftRadius: 30, borderTopRightRadius: 30, height: 90, borderWidth: 3, borderColor: "083D77", backgroundColor: "transparent",}
+        tabBarStyle: {
+          borderTopLeftRadius: 23,
+          borderTopRightRadius: 23,
+          height: 100,
+          borderWidth: 3,
+          borderTopWidth: 3,
+          borderColor: "#083D77",
+          borderTopColor: "#083D77",
+          backgroundColor: "transparent",
+        },
       }}
     >
       <BottomTab.Screen
