@@ -16,10 +16,14 @@ const firebaseConfig = {
   messagingSenderId: "978171594345",
   appId: "1:978171594345:web:cc07e2e3deb40e127484f8",
   measurementId: "G-YNSPGSNJDJ",
-  databaseURL: "https://spotafriend-bfbe0-default-rtdb.firebaseio.com/"
+  databaseURL: "https://spotafriend-bfbe0-default-rtdb.firebaseio.com/",
 };
 
+//Get a reference to the storage service, which is used to create references in your storage bucket
+
+// Create a storage reference from our storage service
 
 export const app = initializeApp(firebaseConfig);
+export const storage = getStorage(app);
+
 export const db = getDatabase();
-export const storage = getStorage();
