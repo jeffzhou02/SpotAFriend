@@ -127,7 +127,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
           <View style={{ height: "5%" }}></View>
           <View style={styles.box2}>
             <TouchableOpacity>
-              <Text style={styles.textStyle}>change profile picture</Text>
+              <Text style={styles.textStyle}>upload group picture</Text>
             </TouchableOpacity>
           </View>
         </View>
