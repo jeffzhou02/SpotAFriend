@@ -25,6 +25,11 @@ const linking: LinkingOptions<RootStackParamList> = {
               SettingsScreen: "Settings",
             },
           },
+          AddGroup: {
+            screens: {
+              AddGroupScreen: "AddGroup",
+            },
+          },
           Signup: {
             screens: {
               SignupScreen: "Signup",

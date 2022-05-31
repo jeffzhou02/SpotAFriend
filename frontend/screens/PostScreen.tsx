@@ -21,22 +21,37 @@ export default function PostScreen({
 }: RootStackScreenProps<"Root">) {
   const storage = getStorage();
 
+<<<<<<< HEAD
+=======
+  const gsReference = ref(storage, "/dailyphotos/Jeff.jpg");
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
   const [image, setImage] = useState("");
   const { user } = useContext(UserContext);
   const username = user.username;
   let imageURL = "";
   const userRef = dbref(db, "users/" + username);
+<<<<<<< HEAD
 
   onValue(userRef, (snapshot) => {
     const data = snapshot.val();
     if (data.dailyPhotoRef) {
       imageURL = data.dailyPhotoRef;
+=======
+  onValue(userRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data.profilePhotoRef) {
+      imageURL = data.profilePhotoRef;
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
     }
   });
 
   function Picture() {
     return (
+<<<<<<< HEAD
       <Image style={{ height: 200, width: 200 }} source={{ uri: imageURL }} />
+=======
+      <Image style={{ height: 200, width: 200 }} source={{ uri: imageUrl }} />
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
     );
   }
   function PostButton() {
@@ -62,6 +77,10 @@ export default function PostScreen({
   }
 
   function CancelHandler() {
+<<<<<<< HEAD
+=======
+    navigation.navigate("Root", { screen: "Home" });
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
     return;
   }
 

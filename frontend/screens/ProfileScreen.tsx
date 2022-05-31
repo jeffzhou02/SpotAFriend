@@ -6,6 +6,17 @@ import { UserContext } from "../components/UserContext";
 import { storage } from "../firebase/index";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
+<<<<<<< HEAD
+=======
+import { db } from "../firebase/index";
+import {
+  getDatabase,
+  onValue,
+  ref as dbref,
+  set,
+  update,
+} from "firebase/database";
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
 
 //remeber to add profile photo later
 export default function ProfileScreen({
@@ -13,6 +24,18 @@ export default function ProfileScreen({
 }: RootStackParamList<"Root">) {
   const storageRef = ref(storage, "profilephotos");
   const [image, setImage] = useState("");
+  const name = "asdfasdf";
+  const { user } = useContext(UserContext);
+  const username = user.username;
+  let imageURL = "";
+  const cancelFunction = () => navigation.navigate("Profile");
+  const userRef = dbref(db, "users/" + username);
+  onValue(userRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data.profilePhotoRef) {
+      imageURL = data.profilePhotoRef;
+    }
+  });
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -21,10 +44,13 @@ export default function ProfileScreen({
       quality: 1,
     });
     if (!result.cancelled) {
-      setImage(result.uri);
-      uploadImageAsync(result.uri);
+      // update photo as needed
+      imageURL = (await uploadImageAsync(result.uri, username)).toString();
+      update(dbref(db, "users/" + username), { profilePhotoRef: imageURL });
     }
+    setImage(imageURL);
   };
+<<<<<<< HEAD
   const name = "asdfasdf";
   const { user } = useContext(UserContext);
   const cancelFunction = () => navigation.navigate("Profile");
@@ -33,11 +59,28 @@ export default function ProfileScreen({
       {image === "" ? null : (
         <View>
           <Image style={styles.targetImage} source={{ uri: image }} />
+=======
+
+  return (
+    <View style={styles.container}>
+      {imageURL === "" ? null : (
+        <View>
+          <Image style={styles.targetImage} source={{ uri: imageURL }} />
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
         </View>
       )}
       <TouchableOpacity style={styles.row} onPress={pickImage}>
         <View style={styles.label}>
-          <Text>edit photo</Text>
+          <Text
+            style={{
+              color: "#689689",
+              fontSize: 17,
+              fontStyle: "italic",
+              textAlign: "center",
+            }}
+          >
+            edit photo
+          </Text>
         </View>
       </TouchableOpacity>
       <InfoView
@@ -68,6 +111,7 @@ export default function ProfileScreen({
   );
 }
 
+<<<<<<< HEAD
 async function uploadImageAsync(uri: any) {
   console.log("uploading...");
   // uri = uri.replace("file:///", "file:/");
@@ -89,16 +133,13 @@ async function uploadImageAsync(uri: any) {
   console.log("done making blob");
   const fileRef = ref(storage, "profilephotos/user.jpg");
   console.log("done making fileRef");
+=======
+async function uploadImageAsync(uri: any, username: any) {
+  const fileRef = ref(storage, "profilephotos/" + username);
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
   const img = await fetch(uri);
-  console.log("done fetching");
   const bytes = await img.blob();
-  console.log("done bytes");
   const result = await uploadBytes(fileRef, bytes);
-  console.log("uploaded!");
-
-  // We're done with the blob, close and release it
-  // blob.close();
-
   return await getDownloadURL(fileRef);
 }
 
@@ -113,13 +154,21 @@ function InfoView(props: any) {
     >
       <Divider />
       <RowButton
+<<<<<<< HEAD
         label="username"
+=======
+        label="username:"
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
         data={props.username}
         onPress={props.usernameHandler}
       />
       <Divider />
       <RowButton
+<<<<<<< HEAD
         label="email"
+=======
+        label="email:"
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
         data={props.email}
         onPress={props.emailHandler}
       />
@@ -182,14 +231,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
+<<<<<<< HEAD
     backgroundColor: "#E3DAC9",
+=======
+    backgroundColor: "#F4D58D",
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
   },
   data: {
     width: "70%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
+<<<<<<< HEAD
     backgroundColor: "#E3DAC9",
+=======
+    backgroundColor: "#F4D58D",
+>>>>>>> b2abfe74b4c5764ab4f40a22406a090f625c0f59
   },
   row: {
     width: "90%",
@@ -197,7 +254,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 15,
-    backgroundColor: "#E3DAC9",
+    backgroundColor: "#F4D58D",
+    borderWidth: 2,
+    borderRadius: 20,
+    borderColor: "#689689",
+    marginBottom: "5%",
+    alignContent: "center",
   },
   divider: {
     flexDirection: "row",
@@ -217,11 +279,11 @@ const styles = StyleSheet.create({
   },
   targetImage: {
     alignSelf: "center",
-    height: 140,
-    width: 140,
-    borderRadius: 70,
-    borderWidth: 2,
-    borderColor: "#FFF",
+    height: 180,
+    width: 180,
+    borderRadius: 90,
+    borderWidth: 3,
+    borderColor: "#689689",
     margin: "5%",
   },
 });
