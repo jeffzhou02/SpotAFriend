@@ -11,9 +11,7 @@ import {
 import { Camera } from "expo-camera";
 import { RootStackScreenProps } from "../types";
 
-export default function App({
-  navigation,
-}: RootStackScreenProps<"Modal">) {
+export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   let camera: Camera;
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -46,7 +44,7 @@ export default function App({
     setPreviewVisible(true);
     setCapturedImage(photo);
   };
-  
+
   const __retakePicture = () => {
     setCapturedImage(null);
     setPreviewVisible(false);
@@ -60,14 +58,15 @@ export default function App({
     return (
       <View style={styles.preview}>
         <ImageBackground
-        source={{ uri: photo && photo.uri }}
-        style={styles.container}>
-          <View style={styles.row}>
+          source={{ uri: photo && photo.uri }}
+          style={{ flex: 1, width: "100%", height: "100%" }}
+        >
+          <View style={styles.row2}>
             <TouchableOpacity onPress={__retakePicture} style={styles.retake}>
-              <Text>Cancel</Text>
+              <Text style={styles.text}>cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={__uploadPicture} style={styles.retake}>
-              <Text>Upload</Text>
+              <Text style={styles.text}>upload</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -116,6 +115,10 @@ export default function App({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    borderLeftWidth: 20,
+    borderRightWidth: 20,
+    borderTopWidth: 40,
+    borderColor: "#E3DAC9",
   },
   preview: {
     backgroundColor: "transparent",
@@ -133,7 +136,12 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     alignItems: "center",
   },
-
+  text: {
+    color: "#083D77",
+    fontStyle: "italic",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
   row: {
     width: "100%",
     flexDirection: "row",
@@ -144,11 +152,22 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "transparent",
   },
+  row2: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    position: "absolute",
+    bottom: 0,
+    padding: 20,
+    backgroundColor: "transparent",
+  },
   retake: {
     padding: 15,
+    width: 130,
     alignItems: "center",
     borderRadius: 50,
-    borderColor: "black",
+    borderColor: "#083D77",
     borderWidth: 2,
     backgroundColor: "#00AFB5",
   },
@@ -157,7 +176,6 @@ const styles = StyleSheet.create({
     height: 48,
     bottom: 0,
     borderRadius: 48,
-    borderColor: "black",
     borderWidth: 2,
     backgroundColor: "#00AFB5",
   },

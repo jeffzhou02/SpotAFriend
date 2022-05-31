@@ -1,8 +1,11 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { useContext } from 'react';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { useContext, useState } from 'react';
 import { Text, View } from '../components/Themed';
 import { RootStackParamList } from '../types';
 import { UserContext } from '../components/UserContext';
+import { storage } from '../firebase/index';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import * as ImagePicker from 'expo-image-picker';
 
 //remeber to add profile photo later
 export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>) {
@@ -16,16 +19,15 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
           {
             name: 'username',
             cancel: cancelFunction,
-            attrib: 'username',
+            attrib: "username",
             initial: user.username,
           })
         }
-        emailHandler={() => navigation.navigate(
-          'EditInfo',
-          {
-            name: 'email',
+        emailHandler={() =>
+          navigation.navigate("EditInfo", {
+            name: "email",
             cancel: cancelFunction,
-            attrib: 'email',
+            attrib: "email",
             initial: user.email,
           })
         }
@@ -44,6 +46,40 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
   );
 }
 
+async function uploadImageAsync(uri: any) {
+  console.log("uploading...");
+  // uri = uri.replace("file:///", "file:/");
+  console.log(uri);
+
+  // const blob = await new Promise((resolve, reject) => {
+  //   const xhr = new XMLHttpRequest();
+  //   xhr.onload = function () {
+  //     resolve(xhr.response);
+  //   };
+  //   xhr.onerror = function (e) {
+  //     console.log(e);
+  //     reject(new TypeError("Network request failed"));
+  //   };
+  //   xhr.responseType = "blob";
+  //   xhr.open("GET", uri, true);
+  //   xhr.send();
+  // });
+  console.log("done making blob");
+  const fileRef = ref(storage, 'profilephotos/user.jpg');
+  console.log("done making fileRef");
+  const img = await fetch(uri);
+  console.log("done fetching");
+  const bytes = await img.blob();
+  console.log("done bytes");
+  const result = await uploadBytes(fileRef, bytes);
+  console.log("uploaded!");
+
+  // We're done with the blob, close and release it
+  // blob.close();
+
+  return await getDownloadURL(fileRef);
+}
+
 function InfoView(props: any) {
   return(
     <View style={{alignItems: 'center', justifyContent: 'center', backgroundColor: "#E3DAC9",  }}>
@@ -60,10 +96,27 @@ function RowButton(props: any) {
   return (
     <TouchableOpacity style={styles.row} onPress={props.onPress}>
       <View style={styles.label}>
-        <Text>{props.label}</Text>
+        <Text
+          style={{
+            color: "#689689",
+            fontSize: 17,
+            fontStyle: "italic",
+            fontWeight: "bold",
+          }}
+        >
+          {props.label}
+        </Text>
       </View>
       <View style={styles.data}>
-        <Text>{props.data}</Text>
+        <Text
+          style={{
+            color: "#689689",
+            fontSize: 17,
+            fontStyle: "italic",
+          }}
+        >
+          {props.data}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -72,7 +125,11 @@ function RowButton(props: any) {
 function Divider() {
   return (
     <View style={styles.divider}>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
     </View>
   );
 }
@@ -101,10 +158,10 @@ const styles = StyleSheet.create({
 
   },
   row: {
-    width: '90%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "90%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 15,
     backgroundColor: "#E3DAC9",
   },
@@ -117,7 +174,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    
+
   },
   separator: {
     marginVertical: 1,
@@ -125,4 +182,13 @@ const styles = StyleSheet.create({
     width: '85%',
     backgroundColor: "rgba(0,0,0,0.2)",
   },
+  targetImage: {
+    alignSelf: "center",
+    height: 140,
+    width: 140,
+    borderRadius: 70,
+    borderWidth: 2,
+    borderColor: "#FFF",
+    margin: "5%",
+  }
 });

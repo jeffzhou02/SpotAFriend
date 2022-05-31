@@ -10,7 +10,7 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 
-import { AddUserGroup, GetGroupMembers } from "../firebase/library";
+import { AddUserGroup, GetGroupMembers, AddNewGroup } from "../firebase/library";
 import { useContext } from 'react';
 import { UserContext } from "../components/UserContext.js";
 
@@ -18,23 +18,64 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
 
-const groupData = new Array(10).fill(0).map((i) => {
-  return {
-    person1: faker.name.firstName(),
-    person2: faker.name.firstName(),
-    person3: faker.name.firstName(),
-    pfp1: faker.image.avatar(),
-    pfp2: faker.image.avatar(),
-    pfp3: faker.image.avatar(),
-    pic: faker.image.imageUrl(),
-    group: faker.animal.type(),
-    adj: faker.word.adjective(),
-  };
-});
+import { set, update, ref, get, child, remove, push, onValue } from 'firebase/database';
+import { db } from "../firebase/index.js";
+
+/*
+*/
+
+interface Group {
+  members: string[],
+  person1: string,
+  person2: string,
+  person3: string,
+  pfp1: string,
+  pfp2: string,
+  pfp3: string,
+  pic: string,
+  group: string,
+}
+
+function PopulateArray(user, groupData: Group[]) {
+
+  // Get groups
+  var groupArray = user.groups;
+  for (const groupname of groupArray) {
+
+    const members: string[] = [];
+
+    // Get members
+    /*
+    onValue(ref(db, 'groups/' + groupname), (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const childData = childSnapshot.val();
+        members.push(childData);
+      });
+    }, {
+      onlyOnce: true
+    });
+    */
+
+    const tempGroup: Group = {
+      members: members,
+      person1: members[0],
+      person2: members[1],
+      person3: members[2],
+      pfp1: faker.image.avatar(),
+      pfp2: faker.image.avatar(),
+      pfp3: faker.image.avatar(),
+      pic: faker.image.imageUrl(),
+      group: groupname,
+    }
+    groupData.push(tempGroup);
+  }
+}
+
+
 
 const GroupCard = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const GROUPNAME = "the " + props.adj + " " + props.group + "s";
+  const GROUPNAME = props.group;
   return (
     <View style={{ backgroundColor: "transparent" }}>
       <Modal
@@ -146,6 +187,10 @@ export default function GroupScreen({
   navigation,
 }: RootTabScreenProps<"Group">) {
   const { user } = useContext(UserContext);
+
+  const groupData: Group[] = [];
+  PopulateArray(user, groupData);
+
   return (
     <View style={styles.container}>
       <View
@@ -161,7 +206,7 @@ export default function GroupScreen({
         }}
       >
         <Logo></Logo>
-        <AddGroup handler={() => AddUserGroup(user, 'asdf')} />
+        <AddGroup handler={() => AddNewGroup(user, 'fdsa')} />
       </View>
 
       <ScrollView
@@ -171,16 +216,15 @@ export default function GroupScreen({
           marginTop: "10%",
         }}
       >
-        {groupData.map((note: any) => {
+        {groupData.map((arrayItem) => {
           return (
             <GroupCard
-              person1={note.person1}
-              person2={note.person2}
-              person3={note.person3}
-              pfp1={note.pfp1}
-              pic={note.pic}
-              group={note.group}
-              adj={note.adj}
+              person1={arrayItem.person1}
+              person2={arrayItem.person2}
+              person3={arrayItem.person3}
+              pfp1={arrayItem.pfp1}
+              pic={arrayItem.pic}
+              group={arrayItem.group}
             />
           );
         })}

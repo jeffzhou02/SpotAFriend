@@ -14,7 +14,7 @@ export function EditUserAttrib(userobj, attrib, value, func, setUser) {
     } else {
         userExists = get(ref(db, 'users/' + value)).then(async (snapshot) => {
             if (snapshot.exists()) {
-                await func("User " + value + " already exists"); return false;
+                await func("user " + value + " already exists"); return false;
             }
             get(dbref).then((snap) => {
                 if (snap.exists()) {
@@ -73,25 +73,6 @@ export function RemoveFriend(userobj, index) {
 }
 
 export function AddUserGroup(user, group) {
-    /*
-    // Check if group exists
-    get(ref(db, 'groups/' + group)).then((snapshot) => {
-        if (snapshot.exists()) {
-            snapshot.forEach((childSnapshot) => {
-                const childData = childSnapshot.val();
-                // Check if user is in group or not
-                if (childData == user.username) {
-                    console.log("User already in group");
-                    return;
-                }
-            });
-        } else {
-            console.log("No data available");
-        }
-    }).catch((error) => {
-        console.error(error);
-    });
-*/
 
     // Add group to user
     var groupArray = user.groups;
@@ -109,4 +90,23 @@ export function AddUserGroup(user, group) {
     //userArray.push(user.username);
     push(ref(db, 'groups/' + group), user.username);
     //update(ref(db, 'groups/' + group), userArray);
+} 
+
+export function AddNewGroup(user, group) {
+    // Add group to user
+    var groupArray = user.groups;
+    for (const element of groupArray){
+        if (element == group){
+            return;
+        }
+    }
+    groupArray.push(group);
+    update(ref(db, 'users/' + user.username), {
+        groups: groupArray,
+    });
+
+    set(ref(db, 'groups/' + group), {
+        0: user.username,
+    });
+
 } 

@@ -82,7 +82,11 @@ function Splash() {
 function SignUpButton(props: any) {
   return (
     <TouchableOpacity style={styles.signUpButtonStyle} onPress={props.handler}>
-      <Text style={{ color: "#FFFFFF" }}>sign up</Text>
+      <Text
+        style={{ color: "#FFFFFF", fontWeight: "bold", fontStyle: "italic" }}
+      >
+        sign up
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -90,7 +94,11 @@ function SignUpButton(props: any) {
 function LogInButton(props: any) {
   return (
     <TouchableOpacity style={styles.loginButtonStyle} onPress={props.handler}>
-      <Text style={{ color: "#689689" }}>log in</Text>
+      <Text
+        style={{ color: "#689689", fontWeight: "bold", fontStyle: "italic" }}
+      >
+        log in
+      </Text>
     </TouchableOpacity>
   );
 }
