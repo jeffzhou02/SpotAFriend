@@ -11,7 +11,15 @@ import {
 import { Camera } from "expo-camera";
 import { RootStackScreenProps } from "../types";
 import { storage } from "../firebase/index.js";
-import { uploadBytes, ref } from "firebase/storage";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { db } from "../firebase/index";
+import {
+  getDatabase,
+  onValue,
+  ref as dbref,
+  set,
+  update,
+} from "firebase/database";
 
 export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   let camera: Camera;
@@ -65,6 +73,9 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
     console.log("done bytes");
     const result = await uploadBytes(fileRef, bytes);
     console.log("uploaded!");
+    let imageURL = (await getDownloadURL(fileRef)).toString();
+    console.log(imageURL);
+    update(dbref(db, "users/" + user.username), { dailyPhotoRef: imageURL });
   }
 
   const CameraPreview = ({ photo }: any) => {

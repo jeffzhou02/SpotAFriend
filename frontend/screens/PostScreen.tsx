@@ -21,22 +21,22 @@ export default function PostScreen({
 }: RootStackScreenProps<"Root">) {
   const storage = getStorage();
 
-  const gsReference = ref(storage, "/dailyphotos/Jeff.jpg");
   const [image, setImage] = useState("");
   const { user } = useContext(UserContext);
   const username = user.username;
   let imageURL = "";
   const userRef = dbref(db, "users/" + username);
+
   onValue(userRef, (snapshot) => {
     const data = snapshot.val();
-    if (data.profilePhotoRef) {
-      imageURL = data.profilePhotoRef;
+    if (data.dailyPhotoRef) {
+      imageURL = data.dailyPhotoRef;
     }
   });
 
   function Picture() {
     return (
-      <Image style={{ height: 200, width: 200 }} source={{ uri: imageUrl }} />
+      <Image style={{ height: 200, width: 200 }} source={{ uri: imageURL }} />
     );
   }
   function PostButton() {
@@ -62,7 +62,6 @@ export default function PostScreen({
   }
 
   function CancelHandler() {
-    navigation.navigate("Root", { screen: "Home" });
     return;
   }
 
