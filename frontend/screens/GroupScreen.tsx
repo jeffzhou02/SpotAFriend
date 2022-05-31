@@ -21,9 +21,6 @@ import { faker } from "@faker-js/faker";
 import { set, update, ref, get, child, remove, push, onValue } from 'firebase/database';
 import { db } from "../firebase/index.js";
 
-/*
-*/
-
 interface Group {
   members: string[],
   person1: string,
@@ -42,19 +39,16 @@ function PopulateArray(user, groupData: Group[]) {
   var groupArray = user.groups;
   for (const groupname of groupArray) {
 
-    const members: string[] = [];
+    var members: string[] = [];
 
     // Get members
-    /*
-    onValue(ref(db, 'groups/' + groupname), (snapshot) => {
+    const groupRef = ref(db, "groups/" + groupname);
+    get(groupRef).then((snapshot) => {
       snapshot.forEach((childSnapshot) => {
-        const childData = childSnapshot.val();
-        members.push(childData);
+        console.log(childSnapshot.val());
+        members.push(childSnapshot.val());
       });
-    }, {
-      onlyOnce: true
-    });
-    */
+    })
 
     const tempGroup: Group = {
       members: members,
