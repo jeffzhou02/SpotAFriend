@@ -4,7 +4,7 @@ import { Text, View } from '../components/Themed';
 import { RootStackParamList } from '../types';
 import { UserContext } from '../components/UserContext';
 import { storage } from '../firebase/index';
-import { ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 
 //remeber to add profile photo later
@@ -20,9 +20,7 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
     });
     if (!result.cancelled) {
       setImage(result.uri);
-      const response = await fetch(image);
-      const blob = await response.blob();
-      console.log(blob);
+      uploadImageAsync(result.uri);
     }
   };
   const name = 'asdfasdf';
@@ -68,6 +66,40 @@ export default function ProfileScreen({ navigation }: RootStackParamList<'Root'>
       </View>
     </View>
   );
+}
+
+async function uploadImageAsync(uri: any) {
+  console.log("uploading...");
+  // uri = uri.replace("file:///", "file:/");
+  console.log(uri);
+
+  // const blob = await new Promise((resolve, reject) => {
+  //   const xhr = new XMLHttpRequest();
+  //   xhr.onload = function () {
+  //     resolve(xhr.response);
+  //   };
+  //   xhr.onerror = function (e) {
+  //     console.log(e);
+  //     reject(new TypeError("Network request failed"));
+  //   };
+  //   xhr.responseType = "blob";
+  //   xhr.open("GET", uri, true);
+  //   xhr.send();
+  // });
+  console.log("done making blob");
+  const fileRef = ref(storage, 'profilephotos/user.jpg');
+  console.log("done making fileRef");
+  const img = await fetch(uri);
+  console.log("done fetching");
+  const bytes = await img.blob();
+  console.log("done bytes");
+  const result = await uploadBytes(fileRef, bytes);
+  console.log("uploaded!");
+
+  // We're done with the blob, close and release it
+  // blob.close();
+
+  return await getDownloadURL(fileRef);
 }
 
 function InfoView(props: any) {
