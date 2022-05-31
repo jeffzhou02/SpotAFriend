@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
   },
   openCard: {
     height: "12%",
+
     width: "90%",
     marginTop: "10%",
     alignSelf: "center",

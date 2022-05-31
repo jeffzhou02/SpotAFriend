@@ -1,5 +1,5 @@
 import React, { useState, } from "react";
-import Select from 'react-select'
+import DropDownPicker from 'react-native-dropdown-picker';
 import {
   StyleSheet,
   TextInput,
@@ -15,24 +15,47 @@ import { RootStackScreenProps } from "../types";
 export default function PostScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
+  
   return (
     <View>
-      <View style={styles.ImageContainer}>
+      <View style={styles.PictureContainer}>
         <Picture />
+      </View> 
+      <View style={styles.GroupContainer}>
+        <GroupSelection />
       </View>
-      <View>
-      </View>
-      <View>
+      <View style={styles.TagContainer}>
+        <TagSelection />
       </View>
       <View style={styles.ButtonContainer}>
-        <PostButton {...navigation} />
-        <CancelButton {...navigation} />
+        <View style={styles.row}>
+          <PostButton />
+          <CancelButton />
+        </View>
       </View>
     </View>
+    
+    
   );
+  
 }
 
-function getPicture(){
+/*
+      <View style={styles.GroupAndTagContainer}>
+        <View style={styles.row}>
+          <GroupSelection />
+          <TagSelection />
+        </View>
+      </View>
+      <View style={styles.ButtonContainer}>
+        <View style={styles.row}>
+          <PostButton />
+          <CancelButton />
+        </View>
+      </View>
+*/
+
+function getPicture() {
   return "../assets/images/icon.png";
 }
 
@@ -40,17 +63,16 @@ function Picture() {
   return (
     <Image
       style={{
-        resizeMode: "contain", // change size later
-        height: 100,
-        width: 200,
-        marginTop: 50,
+        resizeMode: "contain",
+        height: "100%",
+        width: "100%",
       }}
       source={require("../assets/images/icon.png")}
     />
   );
 }
 
-function getGroups(){
+function getGroups() {
   let fruits = [
     { label: "Apple", value: "🍎" }, // make a legit way to get groups
     { label: "Banana", value: "🍌" },
@@ -59,14 +81,52 @@ function getGroups(){
   return fruits;
 }
 
-function GroupSelection(){ // hopefully this works
-  let groups = getGroups();
-  <Select
-    name="Group"
-    options={getGroups()}
-    className="basic-single"
-    classNamePrefix="select"
-  />
+function GroupSelection() { // hopefully this works
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState(getGroups());
+
+  return (
+    <DropDownPicker
+      dropDownDirection="TOP"
+      placeholder = "choose a group"
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+    />
+  );
+}
+
+function getTags() {
+  let fruits = [
+    { label: "Apple", value: "🍎" }, // make a legit way to get groups
+    { label: "Banana", value: "🍌" },
+    { label: "Orange", value: "🍊" }
+  ]
+  return fruits;
+}
+
+function TagSelection() { // hopefully this works
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState(getTags());
+
+  return (
+    <DropDownPicker
+      dropDownDirection="TOP"
+      multiple={true}
+      placeholder = "choose your tags"
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+    />
+  );
 }
 
 function PostButton(props: any) {
@@ -75,7 +135,7 @@ function PostButton(props: any) {
       style={styles.PostButtonStyling}
       onPress={() => PostHandler(props)}
     >
-      <Text style={styles.PostButtonTextStyling}>log in</Text>
+      <Text style={styles.PostButtonTextStyling}>post</Text>
     </TouchableOpacity>
   );
 }
@@ -102,32 +162,27 @@ function CancelHandler(props: any) {
 }
 
 const styles = StyleSheet.create({
-  ImageContainer: {
+  PictureContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
-    height: "20%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  TagContainer: {
-    backgroundColor: theme["color-background"],
-    width: "100%",
-    height: "50%",
+    height: "70%",
     alignItems: "center",
     justifyContent: "center",
   },
   GroupContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
-    height: "50%",
-    alignItems: "center",
-    justifyContent: "center",
+    height: "10%",
+  },
+  TagContainer:{
+    backgroundColor: theme["color-background"],
+    width: "100%",
+    height: "10%",
   },
   ButtonContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
-    alignItems: "center",
-    height: "30%",
+    height: "10%",
   },
   PostButtonStyling: {
     marginBottom: 20,
@@ -150,5 +205,15 @@ const styles = StyleSheet.create({
   CancelButtonTextStyling: {
     textAlign: "center",
     color: theme["color-button-fill-blue"],
+  },
+  row: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    position: "absolute",
+    bottom: 0,
+    padding: 0,
+    backgroundColor: "transparent",
   },
 });
