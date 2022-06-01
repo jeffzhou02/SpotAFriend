@@ -3,7 +3,7 @@ import { db } from "../firebase/index.js";
 import { useState } from 'react';
 
 
-export function EditUserAttrib(userobj, attrib, value, func) {
+export function EditUserAttrib(userobj, attrib, value, func, setUser) {
     var userExists = true;
     const dbref = ref(db, 'users/' + userobj.username);
     if (attrib != "username") {
@@ -28,6 +28,7 @@ export function EditUserAttrib(userobj, attrib, value, func) {
                 console.error(error);
             });
             remove(ref(db, 'users/' + userobj.username));
+            userobj.username = value;
             return true;
         });
         return userExists;
@@ -49,8 +50,49 @@ export async function GetGroupMembers(group) {
             return snapshot.val();
         }
         return [];
-    });
+    }).catch((error) => {return [];});
     return promise;
+}
+
+export async function GetFriendsList(userobj) {
+    //const dbref = ref(db, 'users/' + userobj.username + '/friends');
+    const dbref = ref(db, 'users/natezhang/friends');
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            return snapshot.val();
+        }
+        return [];
+    }).catch((error) => {return [];});
+    return promise;
+}
+
+export function RemoveFriend(userobj, index) {
+    //const dbref = ref(db, 'users/' + userobj.username + '/friends');
+    const dbref = ref(db, 'users/natezhang/friends');
+    remove(child(dbref, index.toString()));
+}
+
+export async function SearchFriend(userobj, friend) {
+    const dbref = ref(db, 'users/' + friend);
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists() && snapshot.val() != userobj.username) {
+            return true;
+        }
+        return false;
+    }).catch((error) => {return false;});
+    return promise;
+}
+
+export function AddFriend(userobj, friendName, setState) {
+    const dbref = child(ref(db, 'users/' + userobj.username),'friends');
+    get(dbref).then(async (snapshot) => {
+        if (snapshot.exists()) {
+            var data = snapshot.val();
+            var updated = {};
+            updated['friends'] = { 0: 'asd'};
+            set(dbref, data.length());
+        }
+    });
 }
 
 export function AddUserGroup(user, group) {
