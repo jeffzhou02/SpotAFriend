@@ -1,6 +1,7 @@
 import { set, update, ref, get, child, remove, push } from 'firebase/database';
 import { db } from "../firebase/index.js";
 import { useState } from 'react';
+import { arrayBuffer } from 'stream/consumers';
 
 
 export function EditUserAttrib(userobj, attrib, value, func, setUser) {
@@ -54,10 +55,9 @@ export async function GetGroupMembers(group) {
     return promise;
 }
 
-export async function GetFriendsList(userobj) {
-    //const dbref = ref(db, 'users/' + userobj.username + '/friends');
-    const dbref = ref(db, 'users/natezhang/friends');
-    const promise = await get(dbref).then((snapshot) => {
+export function GetFriendsList(userobj) {
+    const dbref = ref(db, 'users/' + userobj.username + '/friends');
+    const promise = get(dbref).then((snapshot) => {
         if (snapshot.exists()) {
             return snapshot.val();
         }
@@ -67,8 +67,7 @@ export async function GetFriendsList(userobj) {
 }
 
 export function RemoveFriend(userobj, index) {
-    //const dbref = ref(db, 'users/' + userobj.username + '/friends');
-    const dbref = ref(db, 'users/natezhang/friends');
+    const dbref = ref(db, 'users/' + userobj.username + '/friends');
     remove(child(dbref, index.toString()));
 }
 
@@ -91,8 +90,10 @@ export function AddFriend(userobj, friendName) {
             snapshot.forEach((childSnap) => {
                 data.push(childSnap.val());
             });
-            data.push(friendName);
-            set(dbref, data);
+            if (!data.includes(friendName)) {
+                data.push(friendName);
+                set(dbref, data);
+            }
         }
     }).catch((error) => {console.log(error)});
 }
