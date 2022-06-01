@@ -86,11 +86,7 @@ export default function PostScreen({
   }
 
   function CancelHandler() {
-    //navigation.navigate("Root", { screen: "Home" });
-    console.log(pickedGroup);
-    console.log(pickedTag);
-    //console.log(getTags()[pickedTag]);
-
+    navigation.navigate("Root", { screen: "Home" });
     return;
   }
 
