@@ -27,6 +27,7 @@ export default function PostScreen({
   const { user } = useContext(UserContext);
   const username = user.username;
   const groups = user.groups;
+
   let pickedGroup = "";
   let pickedTag = "";
 
@@ -219,9 +220,7 @@ export default function PostScreen({
   }
   return (
     <View>
-      <View style={styles.PictureContainer}>
-        <Picture />
-      </View>
+      <View style={styles.PictureContainer}>{/* <Picture /> */}</View>
       <View style={styles.GroupContainer}>
         <GroupSelection />
       </View>
@@ -237,6 +236,7 @@ export default function PostScreen({
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   PictureContainer: {
