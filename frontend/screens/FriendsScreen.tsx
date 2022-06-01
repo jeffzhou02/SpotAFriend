@@ -73,10 +73,8 @@ function FriendPrompt(props: any) {
 function Header(props: any) {
   const {user} = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
-  const [friendAdded, setFriendAdded] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [friendName, setFriendName] = useState('');
-  const [statusMessage, setStatusMessage] = useState('');
   const [friendFound, setFriendFound] = useState(false);
   var searchFriend = async () => {
     const promise = await SearchFriend(user, friendName);
@@ -103,13 +101,8 @@ function Header(props: any) {
             <FriendPrompt 
               visible={friendName == searchText && searchText != '' && friendFound} 
               friendName={friendName}
-              addHandler={() => {AddFriend(user, friendName, setFriendAdded)}}
+              addHandler={() => {AddFriend(user, friendName)}}
             />
-            <Text 
-              style={{width: '90%', textAlign: 'center', textDecorationLine: 'underline', paddingTop: 10}}
-            >
-              {statusMessage}
-            </Text>
           </View>
           <Pressable
             onPress={() => setShowModal(!showModal)}
