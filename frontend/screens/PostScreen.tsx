@@ -51,8 +51,6 @@ export default function PostScreen({
       alert("Please select a group and a tag");
       return;
     }
-    console.log("done making blob");
-    console.log(user.username);
     const fileRef = ref(
       storage,
       "dailyphotos/" +
@@ -63,16 +61,11 @@ export default function PostScreen({
         pickedTag +
         ".jpg"
     );
-    console.log("done making fileRef");
     const img = await fetch(URI); //to string necessary?
-    console.log("done fetching");
     const bytes = await img.blob();
-    console.log("done bytes");
     const result = await uploadBytes(fileRef, bytes);
-    console.log("uploaded!");
 
     let imageURL = (await getDownloadURL(fileRef)).toString();
-    console.log(imageURL);
     update(dbref(db, "users/" + user.username), { dailyPhotoRef: imageURL });
   }
 
@@ -99,11 +92,7 @@ export default function PostScreen({
   }
 
   function CancelHandler() {
-    //navigation.navigate("Root", { screen: "Home" });
-    console.log(pickedGroup);
-    console.log(pickedTag);
-    //console.log(getTags()[pickedTag]);
-
+    navigation.navigate("Root", { screen: "Home" });
     return;
   }
 
