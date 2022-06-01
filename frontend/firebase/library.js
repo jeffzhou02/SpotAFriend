@@ -83,16 +83,18 @@ export async function SearchFriend(userobj, friend) {
     return promise;
 }
 
-export function AddFriend(userobj, friendName, setState) {
+export function AddFriend(userobj, friendName) {
     const dbref = child(ref(db, 'users/' + userobj.username),'friends');
-    get(dbref).then(async (snapshot) => {
+    get(dbref).then((snapshot) => {
         if (snapshot.exists()) {
-            var data = snapshot.val();
-            var updated = {};
-            updated['friends'] = { 0: 'asd'};
-            set(dbref, data.length());
+            var data = [];
+            snapshot.forEach((childSnap) => {
+                data.push(childSnap.val());
+            });
+            data.push(friendName);
+            set(dbref, data);
         }
-    });
+    }).catch((error) => {console.log(error)});
 }
 
 export function AddUserGroup(user, group) {
