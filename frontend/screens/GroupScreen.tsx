@@ -91,7 +91,6 @@ const GroupCard = (props: any) => {
       imageURL = data.profilePhotoRef;
     }
   });
-  //const targetpfp = GetUserPFP("Brian");
   return (
     <View style={{ backgroundColor: "transparent" }}>
       <Modal
