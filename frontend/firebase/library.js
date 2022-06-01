@@ -150,3 +150,13 @@ export function AddNewGroup(user, group) {
     });
 
 } 
+
+export async function GetUserPFP(username){
+    const userRef = ref(db, "users/" + username + "/profilePhotoRef");
+    const promise = await get(userRef).then((snapshot) => {
+        if (snapshot.exists()){
+            return snapshot.val(); 
+        }
+    }).catch((error) => {console.log(error)});
+    return promise;
+}
