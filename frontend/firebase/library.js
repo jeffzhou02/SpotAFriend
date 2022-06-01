@@ -117,6 +117,20 @@ export function AddUserGroup(user, group) {
     //update(ref(db, 'groups/' + group), userArray);
 } 
 
+export async function GetGroupMembers1(groupName) {
+    const dbref = child(ref(db, 'groups'),groupName);
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            var data = [];
+            snapshot.forEach((childSnap) => {
+                data.push(childSnap.val());
+            });
+            return data;
+        }
+    }).catch((error) => {console.log(error)});
+    return promise;
+}
+
 export function AddNewGroup(user, group) {
     // Add group to user
     var groupArray = user.groups;
