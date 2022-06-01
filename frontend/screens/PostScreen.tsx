@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   PictureContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
-    height: "70%",
+    height: "65%",
     alignItems: "center",
     justifyContent: "center",
     marginTop: "5%",

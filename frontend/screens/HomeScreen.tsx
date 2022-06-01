@@ -1,32 +1,23 @@
 import { StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState, useContext } from "react";
 
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
-import { faker } from "@faker-js/faker";
-
-const postText = new Array(5).fill(0).map((i) => {
-  return {
-    person1: faker.name.firstName(),
-    person2: faker.name.firstName(),
-    tag1: faker.lorem.word(),
-    tag2: faker.lorem.word(),
-    pfp: faker.image.avatar(),
-    pic: faker.image.imageUrl(),
-  };
-});
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { UserContext } from "../components/UserContext";
+import { GetGroupMembers1 } from "../firebase/library";
+import { loadAsync } from "expo-font";
 
 const Card = (props: any) => {
   return (
     <View style={styles.post}>
       <View style={styles.postHeader}>
-        <Image style={styles.pfp} source={{ uri: props.pfp }} />
+        {/* <Image style={styles.pfp} source={{ uri: props.pfp }} /> */}
         <View style={styles.captionBox}>
           <Text style={styles.postTitle}>
             <Text style={styles.postTitleName}>{props.person1} </Text>
             spotted
-            <Text style={styles.postTitleName}> {props.person2}</Text>
           </Text>
         </View>
       </View>
@@ -35,9 +26,6 @@ const Card = (props: any) => {
         <View style={styles.tagsContainer}>
           <View style={styles.tags}>
             <Text style={styles.tagsText}>{props.tag1}</Text>
-          </View>
-          <View style={styles.tags}>
-            <Text style={styles.tagsText}>{props.tag2}</Text>
           </View>
         </View>
         <View style={styles.likesContainer}>
@@ -72,21 +60,124 @@ function SettingsHandler(props: any) {
   return;
 }
 
-function Logo() {
+function Logo(props: any) {
   return (
-    <Image
-      style={{
-        resizeMode: "contain",
-        height: 40,
-        width: 40,
-        marginTop: 50,
+    <TouchableOpacity
+      onPress={() => {
+        props.function();
       }}
-      source={require("../assets/images/icon.png")}
-    />
+    >
+      <Image
+        style={{
+          resizeMode: "contain",
+          height: 40,
+          width: 40,
+          marginTop: 50,
+        }}
+        source={require("../assets/images/icon.png")}
+      />
+    </TouchableOpacity>
   );
+}
+interface Person {
+  person1: string;
+  tag1: string;
+  pfp: string;
+  pic: string;
+}
+
+function PopulateArray(user: any) {
+  let groupMembers: Person[] = [];
+  var groupArray = user.groups;
+  for (const groupname of groupArray) {
+    console.log(groupname);
+    //var members: string[] = [""];
+
+    // Get members
+    let array;
+    const func1 = async () => {
+      const promise = await GetGroupMembers1(groupname);
+      console.log("is it here???? " + promise);
+      return promise;
+    };
+
+    func1().then((members) => {
+      array = members;
+      console.log("array: " + array);
+
+      console.log("array here" + array);
+
+      for (const member of array) {
+        console.log("member: " + member);
+        let image;
+        getImage(member, groupname).then((URL) => {
+          image = URL;
+          console.log(image);
+          const tempPerson: Person = {
+            person1: member,
+            tag1: "",
+            pfp: "",
+            pic: image,
+          };
+          console.log("temp Person" + tempPerson);
+          groupMembers.push(tempPerson);
+        });
+        // if (image === null) {
+        //   continue;
+        // }
+      }
+    });
+  }
+
+  return groupMembers;
+}
+
+async function getImage(userName: string, groupName: string) {
+  let tagName = ["friend", "enemy", "acquaintance"];
+  const storage = getStorage();
+  let imageURL = "";
+  for (const tag of tagName) {
+    const fileRef = ref(
+      storage,
+      "dailyphotos/" + userName + "_" + groupName + "_" + tag + ".jpg"
+    );
+    if (fileRef != null) {
+      imageURL = (await getDownloadURL(fileRef)).toString();
+      return imageURL;
+    }
+  }
+  return null;
 }
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
+  // const [postData, setGroupData] = React.useState<Person[]>(PopulateArray());
+  //const postData = PopulateArray();
+  // useEffect(() => {
+  //   postData = PopulateArray();
+  // });
+  const { user } = useContext(UserContext);
+
+  var [loaded, setLoaded] = useState(0);
+  console.log("first: " + loaded);
+  var [postData, setPostData] = React.useState<Person[]>();
+  var func = async () => {
+    console.log("aslkgjasklgjkasjgksadgjaslkgjklsa;gjsaglsajlgkljasdlgasjk");
+    const data = PopulateArray(user);
+    console.log("run???");
+    const dataValue = data;
+    setPostData(dataValue);
+  };
+
+  const changeLoad = (data: number) => {
+    console.log("aslkgjasljkjgaskjlgasgl");
+    func();
+  };
+  console.log("second: " + loaded);
+  console.log("postData: " + postData);
+  // useEffect(() => {
+  //   func();
+  // }, [loaded]);
+
   return (
     <View style={styles.container}>
       <View
@@ -101,7 +192,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
           backgroundColor: "transparent",
         }}
       >
-        <Logo></Logo>
+        <Logo loaded={loaded} function={changeLoad}></Logo>
         <SettingsButton {...navigation} />
       </View>
 
@@ -112,15 +203,13 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
         }}
         style={styles.body}
       >
-        {postText.map((note: any) => {
+        {postData?.map((note: any) => {
           return (
             <Card
               person1={note.person1}
-              person2={note.person2}
               pic={note.pic}
-              pfp={note.pfp}
+              //pfp={note.pfp}
               tag1={note.tag1}
-              tag2={note.tag2}
             />
           );
         })}
