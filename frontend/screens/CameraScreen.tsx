@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../components/UserContext";
 import {
   StyleSheet,
   Text,
@@ -6,12 +7,23 @@ import {
   TouchableOpacity,
   _Text,
   ImageBackground,
-  Button,
 } from "react-native";
 import { Camera } from "expo-camera";
 import { RootStackScreenProps } from "../types";
+import { storage } from "../firebase/index.js";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { db } from "../firebase/index";
+import {
+  getDatabase,
+  onValue,
+  ref as dbref,
+  set,
+  update,
+} from "firebase/database";
+import { useNavigation } from "@react-navigation/native";
 
 export default function App({ navigation }: RootStackScreenProps<"Modal">) {
+  let nav = useNavigation();
   let camera: Camera;
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -19,6 +31,8 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState<any>(null);
+
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     (async () => {
@@ -35,12 +49,8 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   }
 
   const __takePicture = async () => {
-    console.log("fuck");
-
     if (!camera) return;
     const photo = await camera.takePictureAsync();
-    console.log("whore");
-    console.log(photo);
     setPreviewVisible(true);
     setCapturedImage(photo);
   };
@@ -51,7 +61,7 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   };
 
   const __uploadPicture = () => {
-    navigation.navigate("Post");
+    nav.navigate("Post", { URI: capturedImage.uri });
   };
 
   const CameraPreview = ({ photo }: any) => {
@@ -93,19 +103,6 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
               />
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.pictureContainer}>
-            <View style={styles.picborder}></View>
-            <View style={styles.lowersection}>
-              <View>
-                <TouchableOpacity style={styles.ring}>
-                  <TouchableOpacity
-                    onPress={__takePicture}
-                    style={styles.takepic}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View> */}
         </Camera>
       )}
     </View>

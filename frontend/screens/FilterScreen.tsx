@@ -8,19 +8,54 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 import { default as theme } from "../theme.json";
+import { Searchbar } from "react-native-paper";
 
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
+import { SearchBar } from "react-native-elements";
+import { useLinkProps } from "@react-navigation/native";
+
+const SearchySearch = () => {
+  const [searchQuery, setSearchQuery] = React.useState("");
+
+  const onChangeSearch = (query: React.SetStateAction<string>) =>
+    setSearchQuery(query);
+
+  return (
+    <Searchbar
+      placeholder="search tags"
+      onChangeText={onChangeSearch}
+      iconColor={"#689689"}
+      placeholderTextColor={"#689689"}
+      value={searchQuery}
+      selectionColor={"#689689"}
+      style={{
+        width: 340,
+        shadowRadius: 0,
+        shadowOpacity: 0,
+        borderRadius: 20,
+        height: 50,
+        borderColor: "#689689",
+        borderWidth: 2,
+        backgroundColor: theme["color-button-fill-white"],
+      }}
+    />
+  );
+};
 
 const postText = new Array(5).fill(0).map((i) => {
   return {
     person1: faker.name.firstName(),
     person2: faker.name.firstName(),
-    tag1: faker.lorem.word(),
-    tag2: faker.lorem.word(),
     pfp: faker.image.avatar(),
     pic: faker.image.imageUrl(),
+  };
+});
+
+const tag = new Array(2).fill(0).map((i) => {
+  return {
+    tag: faker.lorem.word(),
   };
 });
 
@@ -41,12 +76,9 @@ const Card = (props: any) => {
       <Image style={styles.postImage} source={{ uri: props.pic }} />
       <View style={styles.tagsLikes}>
         <View style={styles.tagsContainer}>
-          <View style={styles.tags}>
-            <Text style={styles.tagsText}>{props.tag1}</Text>
-          </View>
-          <View style={styles.tags}>
-            <Text style={styles.tagsText}>{props.tag2}</Text>
-          </View>
+          {tag.map((note: any) => {
+            return <Tag tag={note.tag} />;
+          })}
         </View>
         <View style={styles.likesContainer}>
           <Text style={styles.postTitle}>♡</Text>
@@ -55,6 +87,14 @@ const Card = (props: any) => {
     </View>
   );
 };
+
+function Tag(props: any) {
+  return (
+    <View style={styles.tags}>
+      <Text style={styles.tagsText}>{props.tag}</Text>
+    </View>
+  );
+}
 
 function SettingsButton(props: any) {
   return (
@@ -94,28 +134,6 @@ function Logo() {
   );
 }
 
-function SearchBar() {
-  return (
-    <View style={styles.searchbar}>
-      <TextInput
-        placeholderTextColor={"slategray"}
-        placeholder="search tags"
-        keyboardType="default"
-      />
-      <TouchableOpacity style={{ alignSelf: "center" }}>
-        <Image
-          style={{
-            resizeMode: "contain",
-            height: 30,
-            width: 30,
-          }}
-          source={require("../assets/images/search.png")}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-}
-
 export default function FilterScreen({
   navigation,
 }: RootTabScreenProps<"Filter">) {
@@ -143,7 +161,7 @@ export default function FilterScreen({
           marginTop: "5%",
         }}
       >
-        <SearchBar></SearchBar>
+        <SearchySearch />
       </View>
       <ScrollView
         contentContainerStyle={{
@@ -159,8 +177,6 @@ export default function FilterScreen({
               person2={note.person2}
               pic={note.pic}
               pfp={note.pfp}
-              tag1={note.tag1}
-              tag2={note.tag2}
             />
           );
         })}

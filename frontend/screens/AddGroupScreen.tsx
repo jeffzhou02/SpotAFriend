@@ -16,6 +16,10 @@ import { default as theme } from "../theme.json";
 import { Text, useThemeColor, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
+import { useLinkProps } from "@react-navigation/native";
+import { AddUserGroup } from "../firebase/library";
+import { useContext } from "react";
+import { UserContext } from "../components/UserContext.js";
 
 function Back(props: any) {
   return (
@@ -37,57 +41,30 @@ function BackHandler(props: any) {
   return;
 }
 
-function getPeople() {
-  let fruits = [
-    { label: "brian", value: "🍎" }, // uh users go hereloloplol
-    { label: "net", value: "🍌" },
-    { label: "jef", value: "🍊" },
-  ];
-  return fruits;
-}
-
-function PeoplePicker() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState(getPeople());
+function JoinButton(props: any) {
   return (
-    <DropDownPicker
-      dropDownDirection="BOTTOM"
-      placeholder="select your members"
-      badgeColors={"#689689"}
-      listItemLabelStyle={{
-        color: "#689689",
-      }}
-      selectedItemLabelStyle={{
-        color: "#689689",
-      }}
-      dropDownContainerStyle={{
-        borderColor: "#689689",
-        borderWidth: 2,
-        borderRadius: 15,
-        backgroundColor: theme["color-button-fill-white"],
-      }}
-      placeholderStyle={{
-        color: "#689689",
-      }}
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      style={{
-        borderRadius: 15,
-        borderColor: "#689689",
-        borderWidth: 2,
-        backgroundColor: theme["color-button-fill-white"],
-      }}
-    />
+    <TouchableOpacity onPress={() => JoinGroupHandler(props)}>
+      <Text style={styles.textStyle}>join group</Text>
+    </TouchableOpacity>
   );
 }
 
-export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
+function JoinGroupHandler(props: any) {
+  const groupname = props.groupname;
+  const user = props.user;
+  AddUserGroup(user, groupname)
+}
+
+export default function AddGroupScreen({
+  navigation,
+
+}: RootTabScreenProps<"Home">) {
+
   const [modalVisible, setModalVisible] = useState(false);
+  
+  const [group, setGroup] = useState("");
+  const { user } = useContext(UserContext);
+
   return (
     <View style={styles.container}>
       <View
@@ -106,29 +83,23 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
       </View>
       <View style={styles.container}>
         <View style={{ height: "30%" }}></View>
-        <Text style={styles.textStyle}>add group</Text>
+        <Text style={styles.textStyle}>join group</Text>
         <View style={styles.searchbar}>
           <TextInput
             placeholderTextColor={"#689689"}
             placeholder="group name"
             keyboardType="default"
+            onChangeText={(group) => setGroup(group)}
           />
         </View>
         <View style={styles.GroupContainer}>
           <View style={{ height: "5%" }}></View>
-          <PeoplePicker />
-          <View style={{ height: "5%" }}></View>
-          <Image
-            style={styles.pfp}
-            source={{
-              uri: "https://i.scdn.co/image/ab67616d00001e021cf64730713292322465d339",
-            }}
-          />
-          <View style={{ height: "5%" }}></View>
+          <View style={{ height: "40%" }}></View>
           <View style={styles.box2}>
-            <TouchableOpacity>
-              <Text style={styles.textStyle}>change profile picture</Text>
-            </TouchableOpacity>
+            <JoinButton
+              groupname={group}
+              user={user}
+            />
           </View>
         </View>
       </View>
