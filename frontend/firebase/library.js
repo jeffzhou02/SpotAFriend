@@ -82,7 +82,11 @@ export async function SearchFriend(userobj, friend) {
     return promise;
 }
 
-export function AddFriend(userobj, friendName) {
+export function AddFriend(userobj, friendName, setStatus) {
+    if (friendName == userobj.username) {
+        setStatus('Cannot add yourself as a friend');
+        return;
+    }
     const dbref = child(ref(db, 'users/' + userobj.username),'friends');
     get(dbref).then((snapshot) => {
         if (snapshot.exists()) {
@@ -93,6 +97,9 @@ export function AddFriend(userobj, friendName) {
             if (!data.includes(friendName)) {
                 data.push(friendName);
                 set(dbref, data);
+                setStatus(friendName + ' has been added')
+            } else {
+                setStatus(friendName + ' is already a friend')
             }
         }
     }).catch((error) => {console.log(error)});

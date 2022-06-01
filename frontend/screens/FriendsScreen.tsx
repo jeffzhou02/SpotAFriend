@@ -12,9 +12,7 @@ export default function FriendsScreen({ route, navigation } : any) {
   const {user} = useContext(UserContext);
   var [friendsList, setList] = useState([]);
   var getList = async () => {
-    const promise = await GetFriendsList(user);
-    const value = promise;
-    setList(value);
+    await GetFriendsList(user).then((value) => setList(value));
   };
 
   useEffect(() => {
@@ -58,7 +56,7 @@ function FriendPrompt(props: any) {
   var row;
   if (display) {
     row = (
-      <View style={{width: '80%', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', padding: 10, borderColor: 'red', borderWidth: 5}}>
+      <View style={{width: '80%', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', padding: 10}}>
         <Text style={{flex: 1, textAlign: 'left'}}>{props.friendName}</Text>
         <TouchableOpacity onPress={props.addHandler} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
           <Text style={{paddingRight: '5%', color: "black", textDecorationLine: 'underline'}}>add</Text>
@@ -79,11 +77,14 @@ function Header(props: any) {
   const [searchText, setSearchText] = useState('');
   const [friendName, setFriendName] = useState('');
   const [friendFound, setFriendFound] = useState(false);
-  var searchFriend = async () => {
-    const promise = await SearchFriend(user, friendName);
+  var searchFriend = async (input: string) => {
+    setFriendName(input);
+    const promise = await SearchFriend(user, input);
     const value = promise;
     setFriendFound(value);
   };
+
+  const [statusMessage, setStatus] = useState('');
 
   return (
     <View style={styles.header}>
@@ -99,13 +100,14 @@ function Header(props: any) {
         <View style={{alignItems: 'center', height: '100%', width: '100%'}}>
           <View style={{alignSelf: 'center', alignItems: 'center', width: '90%', height: '75%', marginTop: '10%', backgroundColor: '#00AFB5', borderRadius: 30, borderColor: 'black', borderWidth: 2}}>
             <View style={{paddingTop:'10%'}}>
-              <SearchBar inputHandle={(text: any) => {setSearchText(text); setFriendFound(false)}} searchHandler={() => {setFriendName(searchText); searchFriend()}}/>
+              <SearchBar inputHandle={(text: any) => {setSearchText(text); setFriendFound(false); setStatus('')}} searchHandler={() => {searchFriend(searchText);}}/>
             </View>
             <FriendPrompt 
               visible={friendName == searchText && searchText != '' && friendFound} 
               friendName={friendName}
-              addHandler={() => {AddFriend(user, friendName)}}
+              addHandler={() => {AddFriend(user, friendName, setStatus)}}
             />
+            <Text style={{color: 'red'}}>{statusMessage}</Text>
           </View>
           <Pressable
             onPress={() => setShowModal(!showModal)}
