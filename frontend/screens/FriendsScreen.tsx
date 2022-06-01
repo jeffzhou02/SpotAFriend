@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Modal, TextInput, TouchableOpacity, Button, Pressable, Image } from 'react-native';
 
 import { Text, View } from '../components/Themed';
@@ -16,8 +16,11 @@ export default function FriendsScreen({ route, navigation } : any) {
     const value = promise;
     setList(value);
   };
-  getList();
-  
+
+  useEffect(() => {
+    getList();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Header cancel={cancel}/>
