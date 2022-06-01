@@ -17,10 +17,14 @@ const postText = new Array(5).fill(0).map((i) => {
   return {
     person1: faker.name.firstName(),
     person2: faker.name.firstName(),
-    tag1: faker.lorem.word(),
-    tag2: faker.lorem.word(),
     pfp: faker.image.avatar(),
     pic: faker.image.imageUrl(),
+  };
+});
+
+const tag = new Array(2).fill(0).map((i) => {
+  return {
+    tag: faker.lorem.word(),
   };
 });
 
@@ -41,12 +45,9 @@ const Card = (props: any) => {
       <Image style={styles.postImage} source={{ uri: props.pic }} />
       <View style={styles.tagsLikes}>
         <View style={styles.tagsContainer}>
-          <View style={styles.tags}>
-            <Text style={styles.tagsText}>{props.tag1}</Text>
-          </View>
-          <View style={styles.tags}>
-            <Text style={styles.tagsText}>{props.tag2}</Text>
-          </View>
+          {tag.map((note: any) => {
+            return <Tag tag={note.tag} />;
+          })}
         </View>
         <View style={styles.likesContainer}>
           <Text style={styles.postTitle}>♡</Text>
@@ -55,6 +56,14 @@ const Card = (props: any) => {
     </View>
   );
 };
+
+function Tag(props: any) {
+  return (
+    <View style={styles.tags}>
+      <Text style={styles.tagsText}>{props.tag}</Text>
+    </View>
+  );
+}
 
 function SettingsButton(props: any) {
   return (
@@ -159,8 +168,6 @@ export default function FilterScreen({
               person2={note.person2}
               pic={note.pic}
               pfp={note.pfp}
-              tag1={note.tag1}
-              tag2={note.tag2}
             />
           );
         })}

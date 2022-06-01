@@ -20,8 +20,10 @@ import {
   set,
   update,
 } from "firebase/database";
+import { useNavigation } from "@react-navigation/native";
 
 export default function App({ navigation }: RootStackScreenProps<"Modal">) {
+  let nav = useNavigation();
   let camera: Camera;
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -59,25 +61,8 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   };
 
   const __uploadPicture = () => {
-    uploadImageAsync();
-    navigation.navigate("Post");
+    nav.navigate("Post", { URI: capturedImage.uri });
   };
-  async function uploadImageAsync() {
-    console.log("done making blob");
-    console.log(user.username);
-    const fileRef = ref(storage, "dailyphotos/" + user.username + ".jpg");
-    console.log("done making fileRef");
-    const img = await fetch(capturedImage.uri);
-    console.log("done fetching");
-    const bytes = await img.blob();
-    console.log("done bytes");
-    const result = await uploadBytes(fileRef, bytes);
-    console.log("uploaded!");
-
-    let imageURL = (await getDownloadURL(fileRef)).toString();
-    console.log(imageURL);
-    //update(dbref(db, "users/" + user.username), { dailyPhotoRef: imageURL });
-  }
 
   const CameraPreview = ({ photo }: any) => {
     return (
