@@ -17,6 +17,9 @@ import { Text, useThemeColor, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
 import { useLinkProps } from "@react-navigation/native";
+import { AddUserGroup } from "../firebase/library";
+import { useContext } from "react";
+import { UserContext } from "../components/UserContext.js";
 
 function Back(props: any) {
   return (
@@ -38,61 +41,18 @@ function BackHandler(props: any) {
   return;
 }
 
-function getPeople() {
-  let fruits = [
-    { label: "brian", value: "brian" }, // uh users go hereloloplol
-    { label: "net", value: "net" },
-    { label: "jef", value: "jef" },
-    { label: "jenny", value: "jenny" },
-    { label: "daniel", value: "daniel" },
-    { label: "brad", value: "brad" },
-    { label: "chad", value: "chad" },
-    { label: "paul", value: "paul" },
-  ];
-  return fruits;
+function JoinButton(props: any) {
+  return (
+    <TouchableOpacity onPress={() => JoinGroupHandler(props)}>
+      <Text style={styles.textStyle}>join group</Text>
+    </TouchableOpacity>
+  );
 }
 
-function PeoplePicker() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
-  const [items, setItems] = useState(getPeople());
-  return (
-    <DropDownPicker
-      multiple={true}
-      min={0}
-      max={10}
-      dropDownDirection="BOTTOM"
-      placeholder="select your members"
-      badgeColors={"#689689"}
-      listItemLabelStyle={{
-        color: "#689689",
-      }}
-      selectedItemLabelStyle={{
-        color: "#689689",
-      }}
-      dropDownContainerStyle={{
-        borderColor: "#689689",
-        borderWidth: 2,
-        borderRadius: 15,
-        backgroundColor: theme["color-button-fill-white"],
-      }}
-      placeholderStyle={{
-        color: "#689689",
-      }}
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      style={{
-        borderRadius: 15,
-        borderColor: "#689689",
-        borderWidth: 2,
-        backgroundColor: theme["color-button-fill-white"],
-      }}
-    />
-  );
+function JoinGroupHandler(props: any) {
+  const groupname = props.groupname;
+  const user = props.user;
+  AddUserGroup(user, groupname)
 }
 
 export default function AddGroupScreen({
@@ -101,6 +61,10 @@ export default function AddGroupScreen({
 }: RootTabScreenProps<"Home">) {
 
   const [modalVisible, setModalVisible] = useState(false);
+  
+  const [group, setGroup] = useState("");
+  const { user } = useContext(UserContext);
+
   return (
     <View style={styles.container}>
       <View
@@ -119,22 +83,23 @@ export default function AddGroupScreen({
       </View>
       <View style={styles.container}>
         <View style={{ height: "30%" }}></View>
-        <Text style={styles.textStyle}>add group</Text>
+        <Text style={styles.textStyle}>join group</Text>
         <View style={styles.searchbar}>
           <TextInput
             placeholderTextColor={"#689689"}
             placeholder="group name"
             keyboardType="default"
+            onChangeText={(group) => setGroup(group)}
           />
         </View>
         <View style={styles.GroupContainer}>
           <View style={{ height: "5%" }}></View>
-          <PeoplePicker />
           <View style={{ height: "40%" }}></View>
           <View style={styles.box2}>
-            <TouchableOpacity>
-              <Text style={styles.textStyle}>create group</Text>
-            </TouchableOpacity>
+            <JoinButton
+              groupname={group}
+              user={user}
+            />
           </View>
         </View>
       </View>
