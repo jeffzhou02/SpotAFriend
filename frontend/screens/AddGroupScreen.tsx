@@ -97,7 +97,9 @@ function PeoplePicker() {
 
 export default function AddGroupScreen({
   navigation,
+
 }: RootTabScreenProps<"Home">) {
+
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={styles.container}>

@@ -6,7 +6,7 @@ import { UserContext } from "../components/UserContext";
 
 import { default as theme } from "../theme.json";
 import { RootStackScreenProps } from "../types";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { db } from "../firebase/index";
 import {
   getDatabase,
@@ -18,30 +18,52 @@ import {
 
 export default function PostScreen({
   navigation,
+  route,
 }: RootStackScreenProps<"Root">) {
+  const { URI } = route.params;
   const storage = getStorage();
 
-  const gsReference = ref(storage, "/dailyphotos/Jeff.jpg");
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
   const { user } = useContext(UserContext);
   const username = user.username;
   const groups = user.groups;
 
-  console.log(groups);
-  let imageURL = "";
-  const userRef = dbref(db, "users/" + username);
-  // onValue(userRef, (snapshot) => {
-  //   const data = snapshot.val();
-  //   if (data.profilePhotoRef) {
-  //     imageURL = data.profilePhotoRef;
-  //   }
-  // });
+  let pickedGroup = "";
+  let pickedTag = "";
 
-  // function Picture() {
-  //   return (
-  //     <Image style={{ height: 200, width: 200 }} source={{ uri: imageUrl }} />
-  //   );
-  // }
+  function Picture() {
+    return <Image style={{ height: 200, width: 200 }} source={{ uri: URI }} />;
+  }
+  async function uploadImageAsync() {
+    if (pickedGroup === "" || pickedTag === "") {
+      alert("Please select a group and a tag");
+      return;
+    }
+    console.log("done making blob");
+    console.log(user.username);
+    const fileRef = ref(
+      storage,
+      "dailyphotos/" +
+        user.username +
+        "_" +
+        pickedGroup +
+        "_" +
+        pickedTag +
+        ".jpg"
+    );
+    console.log("done making fileRef");
+    const img = await fetch(URI); //to string necessary?
+    console.log("done fetching");
+    const bytes = await img.blob();
+    console.log("done bytes");
+    const result = await uploadBytes(fileRef, bytes);
+    console.log("uploaded!");
+
+    let imageURL = (await getDownloadURL(fileRef)).toString();
+    console.log(imageURL);
+    update(dbref(db, "users/" + user.username), { dailyPhotoRef: imageURL });
+  }
+
   function PostButton() {
     return (
       <TouchableOpacity
@@ -65,13 +87,136 @@ export default function PostScreen({
   }
 
   function CancelHandler() {
-    navigation.navigate("Root", { screen: "Home" });
+    //navigation.navigate("Root", { screen: "Home" });
+    console.log(pickedGroup);
+    console.log(pickedTag);
+    //console.log(getTags()[pickedTag]);
+
     return;
   }
 
   function PostHandler() {
+    uploadImageAsync();
     navigation.navigate("Root", { screen: "Home" });
     return;
+  }
+
+  function getGroups() {
+    const { user } = useContext(UserContext);
+    const groups = user.groups;
+
+    let groupslist = [{ label: groups[0], value: groups[0] }];
+    for (let i = 1; i < groups.length; i++) {
+      var obj = { label: groups[i], value: i.toString() };
+      groupslist.push(obj);
+    }
+    return groupslist;
+  }
+
+  function GroupSelection() {
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState(getGroups());
+
+    return (
+      <DropDownPicker
+        multiple={false}
+        dropDownDirection="TOP"
+        placeholder="select your group"
+        badgeColors={"#689689"}
+        listItemLabelStyle={{
+          color: "#689689",
+        }}
+        selectedItemLabelStyle={{
+          color: "#689689",
+        }}
+        dropDownContainerStyle={{
+          borderColor: "#689689",
+          borderWidth: 2,
+          borderRadius: 15,
+          backgroundColor: theme["color-button-fill-white"],
+        }}
+        placeholderStyle={{
+          color: "#689689",
+        }}
+        onChangeValue={(value) => {
+          if (value != null) {
+            pickedGroup = value.toString();
+          }
+        }}
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        style={{
+          borderRadius: 15,
+          borderColor: "#689689",
+          borderWidth: 2,
+          backgroundColor: theme["color-button-fill-white"],
+        }}
+      />
+    );
+  }
+
+  function getTags() {
+    let tags = [
+      { label: "friend", value: "friend" },
+      { label: "enemy", value: "enemy" },
+      { label: "acquaintance", value: "acquaintance" },
+    ];
+    return tags;
+  }
+
+  function TagSelection() {
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState(getTags());
+
+    return (
+      <DropDownPicker
+        multiple={false}
+        min={0}
+        max={10}
+        dropDownDirection="TOP"
+        placeholder="select your tag"
+        badgeColors={"#689689"}
+        listItemLabelStyle={{
+          color: "#689689",
+        }}
+        selectedItemLabelStyle={{
+          color: "#689689",
+        }}
+        dropDownContainerStyle={{
+          borderColor: "#689689",
+          borderWidth: 2,
+          borderRadius: 15,
+          backgroundColor: theme["color-button-fill-white"],
+        }}
+        placeholderStyle={{
+          color: "#689689",
+        }}
+        onChangeValue={(value) => {
+          if (value != null) {
+            pickedTag = value.toString();
+          }
+          console.log(pickedTag);
+        }}
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        style={{
+          borderRadius: 15,
+          borderColor: "#689689",
+          borderWidth: 2,
+          backgroundColor: theme["color-button-fill-white"],
+        }}
+      />
+    );
   }
   return (
     <View>
@@ -92,117 +237,6 @@ export default function PostScreen({
   );
 }
 
-function getGroups() {
-  const { user } = useContext(UserContext);
-  const groups = user.groups;
-  console.log(groups);
-
-  let groupslist = [{ label: groups[0], value: "0" }];
-  for (let i = 1; i < groups.length; i++) {
-    var obj = { label: groups[i], value: i.toString() };
-    groupslist.push(obj);
-  }
-  console.log(groupslist);
-  return groupslist;
-}
-
-function GroupSelection() {
-  // hopefully this works
-
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState(getGroups());
-
-  return (
-    <DropDownPicker
-      multiple={false}
-      dropDownDirection="TOP"
-      placeholder="select your group"
-      badgeColors={"#689689"}
-      listItemLabelStyle={{
-        color: "#689689",
-      }}
-      selectedItemLabelStyle={{
-        color: "#689689",
-      }}
-      dropDownContainerStyle={{
-        borderColor: "#689689",
-        borderWidth: 2,
-        borderRadius: 15,
-        backgroundColor: theme["color-button-fill-white"],
-      }}
-      placeholderStyle={{
-        color: "#689689",
-      }}
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      style={{
-        borderRadius: 15,
-        borderColor: "#689689",
-        borderWidth: 2,
-        backgroundColor: theme["color-button-fill-white"],
-      }}
-    />
-  );
-}
-
-function getTags() {
-  let tags = [
-    { label: "friend", value: "1" },
-    { label: "enemy", value: "2" },
-    { label: "acquaintance", value: "3" },
-  ];
-  return tags;
-}
-
-function TagSelection() {
-  // hopefully this works
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
-  const [items, setItems] = useState(getTags());
-
-  return (
-    <DropDownPicker
-      multiple={true}
-      min={0}
-      max={10}
-      dropDownDirection="TOP"
-      placeholder="select your tags"
-      badgeColors={"#689689"}
-      listItemLabelStyle={{
-        color: "#689689",
-      }}
-      selectedItemLabelStyle={{
-        color: "#689689",
-      }}
-      dropDownContainerStyle={{
-        borderColor: "#689689",
-        borderWidth: 2,
-        borderRadius: 15,
-        backgroundColor: theme["color-button-fill-white"],
-      }}
-      placeholderStyle={{
-        color: "#689689",
-      }}
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      style={{
-        borderRadius: 15,
-        borderColor: "#689689",
-        borderWidth: 2,
-        backgroundColor: theme["color-button-fill-white"],
-      }}
-    />
-  );
-}
 
 const styles = StyleSheet.create({
   PictureContainer: {

@@ -11,9 +11,19 @@ import {
 import { Camera } from "expo-camera";
 import { RootStackScreenProps } from "../types";
 import { storage } from "../firebase/index.js";
-import { uploadBytes, ref } from "firebase/storage";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { db } from "../firebase/index";
+import {
+  getDatabase,
+  onValue,
+  ref as dbref,
+  set,
+  update,
+} from "firebase/database";
+import { useNavigation } from "@react-navigation/native";
 
 export default function App({ navigation }: RootStackScreenProps<"Modal">) {
+  let nav = useNavigation();
   let camera: Camera;
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -51,21 +61,8 @@ export default function App({ navigation }: RootStackScreenProps<"Modal">) {
   };
 
   const __uploadPicture = () => {
-    uploadImageAsync();
-    navigation.navigate("Post");
+    nav.navigate("Post", { URI: capturedImage.uri });
   };
-  async function uploadImageAsync() {
-    console.log("done making blob");
-    console.log(user.username);
-    const fileRef = ref(storage, "dailyphotos/" + user.username + ".jpg");
-    console.log("done making fileRef");
-    const img = await fetch(capturedImage.uri);
-    console.log("done fetching");
-    const bytes = await img.blob();
-    console.log("done bytes");
-    const result = await uploadBytes(fileRef, bytes);
-    console.log("uploaded!");
-  }
 
   const CameraPreview = ({ photo }: any) => {
     return (
