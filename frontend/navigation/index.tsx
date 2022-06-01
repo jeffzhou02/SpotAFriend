@@ -36,6 +36,7 @@ import SignupScreen from "../screens/SignupScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 
 import PostScreen from "../screens/PostScreen";
+import FriendsScreen from "../screens/FriendsScreen";
 import AddGroupScreen from "../screens/AddGroupScreen";
 
 const MyTheme = {
@@ -113,6 +114,11 @@ function RootNavigator() {
       <Stack.Screen
         name="Settings"
         component={SettingsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Friends"
+        component={FriendsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>

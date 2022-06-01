@@ -20,6 +20,7 @@ export type RootStackParamList = {
   Landing: undefined;
   Login: undefined;
   Settings: undefined;
+  Friends: undefined;
   Signup: undefined;
   EditInfo: undefined;
   Post: undefined;

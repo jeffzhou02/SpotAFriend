@@ -8,10 +8,41 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 import { default as theme } from "../theme.json";
+import { Searchbar } from "react-native-paper";
 
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { faker } from "@faker-js/faker";
+import { SearchBar } from "react-native-elements";
+import { useLinkProps } from "@react-navigation/native";
+
+const SearchySearch = () => {
+  const [searchQuery, setSearchQuery] = React.useState("");
+
+  const onChangeSearch = (query: React.SetStateAction<string>) =>
+    setSearchQuery(query);
+
+  return (
+    <Searchbar
+      placeholder="search tags"
+      onChangeText={onChangeSearch}
+      iconColor={"#689689"}
+      placeholderTextColor={"#689689"}
+      value={searchQuery}
+      selectionColor={"#689689"}
+      style={{
+        width: 340,
+        shadowRadius: 0,
+        shadowOpacity: 0,
+        borderRadius: 20,
+        height: 50,
+        borderColor: "#689689",
+        borderWidth: 2,
+        backgroundColor: theme["color-button-fill-white"],
+      }}
+    />
+  );
+};
 
 const postText = new Array(5).fill(0).map((i) => {
   return {
@@ -103,28 +134,6 @@ function Logo() {
   );
 }
 
-function SearchBar() {
-  return (
-    <View style={styles.searchbar}>
-      <TextInput
-        placeholderTextColor={"slategray"}
-        placeholder="search tags"
-        keyboardType="default"
-      />
-      <TouchableOpacity style={{ alignSelf: "center" }}>
-        <Image
-          style={{
-            resizeMode: "contain",
-            height: 30,
-            width: 30,
-          }}
-          source={require("../assets/images/search.png")}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-}
-
 export default function FilterScreen({
   navigation,
 }: RootTabScreenProps<"Filter">) {
@@ -152,7 +161,7 @@ export default function FilterScreen({
           marginTop: "5%",
         }}
       >
-        <SearchBar></SearchBar>
+        <SearchySearch />
       </View>
       <ScrollView
         contentContainerStyle={{

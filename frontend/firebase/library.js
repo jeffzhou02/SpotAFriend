@@ -1,33 +1,36 @@
 import { set, update, ref, get, child, remove, push } from "firebase/database";
 import { db } from "../firebase/index.js";
-import { useState } from "react";
+import { useState } from 'react';
+import { arrayBuffer } from 'stream/consumers';
 
-export function EditUserAttrib(userobj, attrib, value, func) {
-  var userExists = true;
-  const dbref = ref(db, "users/" + userobj.username);
-  if (attrib != "username") {
-    update(dbref, {
-      [attrib]: value,
-    });
-    return true;
-  } else {
-    userExists = get(ref(db, "users/" + value)).then(async (snapshot) => {
-      if (snapshot.exists()) {
-        await func("user " + value + " already exists");
-        return false;
-      }
-      get(dbref)
-        .then((snap) => {
-          if (snap.exists()) {
-            var data = snap.val();
-            data.username = value;
-            var updated = {};
-            updated[value] = data;
-            set(child(ref(db, "users/"), value), updated[value]);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
+
+export function EditUserAttrib(userobj, attrib, value, func, setUser) {
+    var userExists = true;
+    const dbref = ref(db, 'users/' + userobj.username);
+    if (attrib != "username") {
+        update(dbref, {
+            [attrib]: value,
+        });
+        return true;
+    } else {
+        userExists = get(ref(db, 'users/' + value)).then(async (snapshot) => {
+            if (snapshot.exists()) {
+                await func("user " + value + " already exists"); return false;
+            }
+            get(dbref).then((snap) => {
+                if (snap.exists()) {
+                    var data = snap.val();
+                    data.username = value;
+                    var updated = {};
+                    updated[value] = data;
+                    set(child(ref(db, 'users/'), value), updated[value]);
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+            remove(ref(db, 'users/' + userobj.username));
+            userobj.username = value;
+            return true;
         });
       remove(ref(db, "users/" + userobj.username));
       return true;
@@ -37,40 +40,65 @@ export function EditUserAttrib(userobj, attrib, value, func) {
 }
 
 export async function GetGroupMembers(group) {
-  // requires the following code in the calling function to work:
-  // var [array, setArray] = useState('asdf');
-  // var func = async () => {
-  //     const promise = await GetGroupMembers("asdf");
-  //     const value = promise;
-  //     setArray(value);
-  // };
-  // func();
-  const dbref = ref(db, "groups/" + group);
-  const promise = await get(dbref).then((snapshot) => {
-    if (snapshot.exists()) {
-      return snapshot.val();
-    }
-    return [];
-  });
-  return promise;
+    // requires the following code in the calling function to work:
+    // var [array, setArray] = useState('asdf');
+    // var func = async () => {
+    //     const promise = await GetGroupMembers("asdf");
+    //     const value = promise;
+    //     setArray(value);
+    // };
+    // func();
+    const dbref = ref(db, 'groups/' + group);
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            return snapshot.val();
+        }
+        return [];
+    }).catch((error) => {return [];});
+    return promise;
 }
 
-export async function GetGroupMembers1(groupName) {
-  const dbref = child(ref(db, "groups"), groupName);
-  const promise = await get(dbref)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        var data = [];
-        snapshot.forEach((childSnap) => {
-          data.push(childSnap.val());
-        });
-        return data;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  return promise;
+export function GetFriendsList(userobj) {
+    const dbref = ref(db, 'users/' + userobj.username + '/friends');
+    const promise = get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            return snapshot.val();
+        }
+        return [];
+    }).catch((error) => {return [];});
+    return promise;
+}
+
+export function RemoveFriend(userobj, index) {
+    const dbref = ref(db, 'users/' + userobj.username + '/friends');
+    remove(child(dbref, index.toString()));
+}
+
+export async function SearchFriend(userobj, friend) {
+    const dbref = ref(db, 'users/' + friend);
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists() && snapshot.val() != userobj.username) {
+            return true;
+        }
+        return false;
+    }).catch((error) => {return false;});
+    return promise;
+}
+
+export function AddFriend(userobj, friendName) {
+    const dbref = child(ref(db, 'users/' + userobj.username),'friends');
+    get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            var data = [];
+            snapshot.forEach((childSnap) => {
+                data.push(childSnap.val());
+            });
+            if (!data.includes(friendName)) {
+                data.push(friendName);
+                set(dbref, data);
+            }
+        }
+    }).catch((error) => {console.log(error)});
 }
 
 export function AddUserGroup(user, group) {
@@ -91,6 +119,20 @@ export function AddUserGroup(user, group) {
   //update(ref(db, 'groups/' + group), userArray);
 }
 
+export async function GetGroupMembers1(groupName) {
+    const dbref = child(ref(db, 'groups'),groupName);
+    const promise = await get(dbref).then((snapshot) => {
+        if (snapshot.exists()) {
+            var data = [];
+            snapshot.forEach((childSnap) => {
+                data.push(childSnap.val());
+            });
+            return data;
+        }
+    }).catch((error) => {console.log(error)});
+    return promise;
+}
+
 export function AddNewGroup(user, group) {
   // Add group to user
   var groupArray = user.groups;
@@ -103,8 +145,14 @@ export function AddNewGroup(user, group) {
   update(ref(db, "users/" + user.username), {
     groups: groupArray,
   });
+} 
 
-  set(ref(db, "groups/" + group), {
-    0: user.username,
-  });
+export async function GetUserPFP(username){
+    const userRef = ref(db, "users/" + username + "/profilePhotoRef");
+    const promise = await get(userRef).then((snapshot) => {
+        if (snapshot.exists()){
+            return snapshot.val(); 
+        }
+    }).catch((error) => {console.log(error)});
+    return promise;
 }
