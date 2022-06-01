@@ -59,7 +59,11 @@ export function GetFriendsList(userobj) {
     const dbref = ref(db, 'users/' + userobj.username + '/friends');
     const promise = get(dbref).then((snapshot) => {
         if (snapshot.exists()) {
-            return snapshot.val();
+            var data = [];
+            snapshot.forEach((childSnap) => {
+                data.push(childSnap.val());
+            });
+            return data;
         }
         return [];
     }).catch((error) => {return [];});
@@ -88,7 +92,7 @@ export function AddFriend(userobj, friendName, setStatus) {
         return;
     }
     const dbref = child(ref(db, 'users/' + userobj.username),'friends');
-    get(dbref).then((snapshot) => {
+    var success = get(dbref).then((snapshot) => {
         if (snapshot.exists()) {
             var data = [];
             snapshot.forEach((childSnap) => {
@@ -98,11 +102,18 @@ export function AddFriend(userobj, friendName, setStatus) {
                 data.push(friendName);
                 set(dbref, data);
                 setStatus(friendName + ' has been added')
+                return true;
             } else {
                 setStatus(friendName + ' is already a friend')
             }
+        } else {
+            var data = [friendName];
+            set(dbref, data);
+            return true;
         }
-    }).catch((error) => {console.log(error)});
+        return false;
+    }).catch((error) => {console.log(error); return false;});
+    return success;
 }
 
 export function AddUserGroup(user, group) {

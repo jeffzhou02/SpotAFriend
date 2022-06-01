@@ -21,16 +21,26 @@ export default function FriendsScreen({ route, navigation } : any) {
 
   return (
     <View style={styles.container}>
-      <Header cancel={cancel}/>
+      <Header cancel={cancel} navigation={navigation}/>
       <Divider/>
-      <FriendList friends={friendsList} user={user}/>
+      <FriendList cancel={cancel} navigation={navigation} friends={friendsList} user={user}/>
     </View>
   );
 }
 
 function FriendList(props: any) {
-  var friendlist = props.friends.map((friend: any, index) =>
-    <Friend name={friend} removeHandler={() => {RemoveFriend(props.user, index)}}/>
+  var friendlist = props.friends.map((friend: any, index: any) =>
+    <Friend name={friend} 
+      removeHandler={async () => {
+        await RemoveFriend(props.user, index);
+        props.navigation.navigate(
+          'Friends',
+          {
+            cancel: props.cancel,
+          }
+        );
+      }}
+    />
   );
   return (
     <View>
@@ -105,7 +115,16 @@ function Header(props: any) {
             <FriendPrompt 
               visible={friendName == searchText && searchText != '' && friendFound} 
               friendName={friendName}
-              addHandler={() => {AddFriend(user, friendName, setStatus)}}
+              addHandler={async () => {
+                var val = await AddFriend(user, friendName, setStatus);
+                if (val)
+                  props.navigation.navigate(
+                    'Friends',
+                    {
+                      cancel: props.cancel,
+                    }
+                  );
+              }}
             />
             <Text style={{color: 'red'}}>{statusMessage}</Text>
           </View>
