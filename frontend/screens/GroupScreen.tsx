@@ -51,16 +51,16 @@ function PopulateArray(user, groupData: Group[]) {
   // Get groups
   var groupArray = user.groups;
   for (const groupname of groupArray) {
-    var members: string[] = ["brian"];
-
     // Get members
-    var [array, setArray] = useState('');
+    var [array, setArray] = useState([""]);
     var func = async () => {
-      const promise = await GetGroupMembers1(groupname);
+      const promise = await GetGroupMembers(groupname);
       const value = promise;
       setArray(value);
     };
-    func();
+    useEffect(() => {
+      func();
+    }, []);
 
     const tempGroup: Group = {
       members: array,
