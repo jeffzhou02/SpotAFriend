@@ -3,7 +3,7 @@ import { StyleSheet, Modal, TextInput, TouchableOpacity, Button, Pressable, Imag
 
 import { Text, View } from '../components/Themed';
 import { default as theme } from '../theme.json';
-import { GetFriendsList, RemoveFriend, SearchFriend } from '../firebase/library';
+import { AddFriend, GetFriendsList, RemoveFriend, SearchFriend } from '../firebase/library';
 import { useContext } from 'react';
 import { UserContext } from '../components/UserContext';
 
@@ -50,7 +50,8 @@ function Friend(props: any) {
 }
 
 function FriendPrompt(props: any) {
-  const display = props.friendFound;
+  // visible, friendName, addHandler
+  const display = props.visible;
   var row;
   if (display) {
     row = (
@@ -73,16 +74,15 @@ function Header(props: any) {
   const {user} = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
   const [friendAdded, setFriendAdded] = useState(false);
-
-  const [friendFound, setFriendFound] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  const [friendName, setFriendName] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [friendFound, setFriendFound] = useState(false);
   var searchFriend = async () => {
-    const promise = await SearchFriend(user);
+    const promise = await SearchFriend(user, friendName);
     const value = promise;
     setFriendFound(value);
   };
-
-  const [friendName, setFriendName] = useState('asdf');
-  const [statusMessage, setStatusMessage] = useState('');
 
   return (
     <View style={styles.header}>
@@ -98,9 +98,13 @@ function Header(props: any) {
         <View style={{alignItems: 'center', height: '100%', width: '100%'}}>
           <View style={{alignSelf: 'center', alignItems: 'center', width: '90%', height: '75%', marginTop: '10%', backgroundColor: '#00AFB5', borderRadius: 30, borderColor: 'black', borderWidth: 2}}>
             <View style={{paddingTop:'10%'}}>
-              <SearchBar searchHandler={() => searchFriend()}/>
+              <SearchBar inputHandle={(text: any) => {setSearchText(text); setFriendFound(false)}} searchHandler={() => {setFriendName(searchText); searchFriend()}}/>
             </View>
-            <FriendPrompt friendFound={friendFound} friendName={friendName} />
+            <FriendPrompt 
+              visible={friendName == searchText && searchText != '' && friendFound} 
+              friendName={friendName}
+              addHandler={() => {AddFriend(user, friendName, setFriendAdded)}}
+            />
             <Text 
               style={{width: '90%', textAlign: 'center', textDecorationLine: 'underline', paddingTop: 10}}
             >
@@ -132,7 +136,7 @@ function Divider() {
 function SearchBar(props: any) {
   return (
     <View style={styles.searchbar}>
-      <TextInput placeholder="add friends" keyboardType="default" style={{width: '80%'}}/>
+      <TextInput placeholder="add friends" keyboardType="default" style={{width: '80%'}} onChangeText={(text) => props.inputHandle(text)}/>
       <TouchableOpacity style={{ alignSelf: "center" }} onPress={props.searchHandler}>
         <Image
           style={{
