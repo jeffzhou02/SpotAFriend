@@ -32,7 +32,19 @@ export default function PostScreen({
   let pickedTag = "";
 
   function Picture() {
-    return <Image style={{ height: 200, width: 200 }} source={{ uri: URI }} />;
+    return (
+      <Image
+        style={{
+          height: "85%",
+          width: "90%",
+          marginBottom: 0,
+          borderRadius: 30,
+          borderWidth: 3,
+          borderColor: "#00AFB5",
+        }}
+        source={{ uri: URI }}
+      />
+    );
   }
   async function uploadImageAsync() {
     if (pickedGroup === "" || pickedTag === "") {
@@ -220,7 +232,9 @@ export default function PostScreen({
   }
   return (
     <View>
-      <View style={styles.PictureContainer}>{/* <Picture /> */}</View>
+      <View style={styles.PictureContainer}>
+        <Picture />
+      </View>
       <View style={styles.GroupContainer}>
         <GroupSelection />
       </View>
@@ -229,33 +243,33 @@ export default function PostScreen({
       </View>
       <View style={styles.ButtonContainer}>
         <View style={styles.row}>
-          <PostButton />
           <CancelButton />
+          <PostButton />
         </View>
       </View>
     </View>
   );
 }
 
-
 const styles = StyleSheet.create({
   PictureContainer: {
     backgroundColor: theme["color-background"],
     width: "100%",
-    height: "65%",
+    height: "70%",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: "5%",
   },
   GroupContainer: {
     backgroundColor: theme["color-background"],
     width: "90%",
-    height: "10%",
+    height: "8%",
     alignSelf: "center",
   },
   TagContainer: {
     backgroundColor: theme["color-background"],
     width: "90%",
-    height: "10%",
+    height: "8%",
     alignSelf: "center",
   },
   ButtonContainer: {
@@ -264,15 +278,16 @@ const styles = StyleSheet.create({
     height: "10%",
   },
   PostButtonStyling: {
-    marginBottom: 20,
-    padding: 20,
-    width: "30%",
+    padding: 15,
+    width: "40%",
     backgroundColor: theme["color-button-fill-blue"],
     borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#689689",
   },
   CancelButtonStyling: {
-    padding: 20,
-    width: "30%",
+    padding: 15,
+    width: "40%",
     backgroundColor: theme["color-button-fill-white"],
     borderColor: theme["color-button-fill-blue"],
     borderWidth: 2,
@@ -280,10 +295,17 @@ const styles = StyleSheet.create({
   },
   PostButtonTextStyling: {
     textAlign: "center",
+    fontStyle: "italic",
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "white",
   },
   CancelButtonTextStyling: {
     textAlign: "center",
-    color: theme["color-button-fill-blue"],
+    fontStyle: "italic",
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#689689",
   },
   row: {
     width: "100%",
@@ -291,7 +313,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     position: "absolute",
-    bottom: 0,
     padding: 0,
     backgroundColor: "transparent",
   },
