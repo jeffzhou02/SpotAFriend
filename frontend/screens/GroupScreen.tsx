@@ -14,6 +14,7 @@ import {
   AddUserGroup,
   GetGroupMembers,
   AddNewGroup,
+  GetGroupMembers1,
 } from "../firebase/library";
 import { useContext } from "react";
 import { UserContext } from "../components/UserContext.js";
@@ -50,22 +51,22 @@ function PopulateArray(user, groupData: Group[]) {
   // Get groups
   var groupArray = user.groups;
   for (const groupname of groupArray) {
-    var members: string[] = [];
+    var members: string[] = ["brian"];
 
     // Get members
-    const groupRef = ref(db, "groups/" + groupname);
-    get(groupRef).then((snapshot) => {
-      snapshot.forEach((childSnapshot) => {
-        console.log(childSnapshot.val());
-        members.push(childSnapshot.val());
-      });
-    });
+    var [array, setArray] = useState('');
+    var func = async () => {
+      const promise = await GetGroupMembers1(groupname);
+      const value = promise;
+      setArray(value);
+    };
+    func();
 
     const tempGroup: Group = {
-      members: members,
-      person1: members[0],
-      person2: members[1],
-      person3: members[2],
+      members: array,
+      person1: array[0],
+      person2: array[1],
+      person3: array[2],
       pfp1: faker.image.avatar(),
       pfp2: faker.image.avatar(),
       pfp3: faker.image.avatar(),
