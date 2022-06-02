@@ -60,7 +60,7 @@ export default function PostScreen({
 
     let imageURL = (await getDownloadURL(fileRef)).toString();
     console.log(imageURL);
-    update(dbref(db, "users/" + user.username), { dailyPhotoRef: imageURL });
+    // update(dbref(db, "users/" + user.username), { dailyPhotoRef: imageURL });
   }
 
   function PostButton() {

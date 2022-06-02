@@ -11,9 +11,7 @@ import {
 import React, { ReactNode, useEffect, useState } from "react";
 
 import {
-  AddUserGroup,
   GetGroupMembers,
-  AddNewGroup,
 } from "../firebase/library";
 import { useContext } from "react";
 import { UserContext } from "../components/UserContext.js";
@@ -36,13 +34,6 @@ import { db } from "../firebase/index.js";
 
 interface Group {
   members: string[];
-  person1: string;
-  person2: string;
-  person3: string;
-  pfp1: string;
-  pfp2: string;
-  pfp3: string;
-  pic: string;
   group: string;
 }
 
@@ -50,26 +41,19 @@ function PopulateArray(user, groupData: Group[]) {
   // Get groups
   var groupArray = user.groups;
   for (const groupname of groupArray) {
-    var members: string[] = [];
-
     // Get members
-    const groupRef = ref(db, "groups/" + groupname);
-    get(groupRef).then((snapshot) => {
-      snapshot.forEach((childSnapshot) => {
-        console.log(childSnapshot.val());
-        members.push(childSnapshot.val());
-      });
-    });
+    var [array, setArray] = useState([""]);
+    var func = async () => {
+      const promise = await GetGroupMembers(groupname);
+      const value = promise;
+      setArray(value);
+    };
+    useEffect(() => {
+      func();
+    }, []);
 
     const tempGroup: Group = {
-      members: members,
-      person1: members[0],
-      person2: members[1],
-      person3: members[2],
-      pfp1: faker.image.avatar(),
-      pfp2: faker.image.avatar(),
-      pfp3: faker.image.avatar(),
-      pic: faker.image.imageUrl(),
+      members: array,
       group: groupname,
     };
     groupData.push(tempGroup);
@@ -79,6 +63,17 @@ function PopulateArray(user, groupData: Group[]) {
 const GroupCard = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const GROUPNAME = props.group;
+  const members = props.members;
+  const target = members[Math.floor(Math.random()*members.length)];
+  let imageURL = "";
+  const userRef = ref(db, "users/" + target);
+  onValue(userRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data.profilePhotoRef) {
+      imageURL = data.profilePhotoRef;
+    }
+  });
+  const memberString = members.join(", ");
   return (
     <View style={{ backgroundColor: "transparent" }}>
       <Modal
@@ -96,13 +91,13 @@ const GroupCard = (props: any) => {
             <View style={styles.tags2}>
               <Text style={styles.tagsText}>target not spotted</Text>
             </View>
-            <Image style={styles.targetImage} source={{ uri: props.pfp1 }} />
+            <Image style={styles.targetImage} source={{ uri: imageURL }} />
             <View style={{ backgroundColor: "transparent" }}>
               <Text style={styles.modalText}>
-                today's target: {props.person1}
+                today's target: {target}
               </Text>
               <Text style={styles.names}>
-                all members: {props.person1}, {props.person2}, {props.person3}
+                all members: {memberString}
               </Text>
             </View>
 
@@ -121,7 +116,7 @@ const GroupCard = (props: any) => {
           style={styles.groupOpen}
           onPress={() => setModalVisible(true)}
         >
-          <Image style={styles.groupImage} source={{ uri: props.pic }} />
+          <Image style={styles.groupImage} source={{ uri: imageURL }} />
           <View
             style={{
               margin: "5%",
@@ -129,16 +124,6 @@ const GroupCard = (props: any) => {
             }}
           >
             <Text style={styles.textStyle}>{GROUPNAME}</Text>
-            <Text
-              style={{
-                color: "#fff",
-                fontStyle: "italic",
-                marginTop: "5%",
-                fontSize: 15,
-              }}
-            >
-              {props.person1}, {props.person2}, {props.person3}
-            </Text>
             <View style={styles.tags}>
               <Text style={styles.tagsText}>target not spotted</Text>
             </View>
@@ -223,11 +208,7 @@ export default function GroupScreen({
         {groupData.map((arrayItem) => {
           return (
             <GroupCard
-              person1={arrayItem.person1}
-              person2={arrayItem.person2}
-              person3={arrayItem.person3}
-              pfp1={arrayItem.pfp1}
-              pic={arrayItem.pic}
+              members={arrayItem.members}
               group={arrayItem.group}
             />
           );
