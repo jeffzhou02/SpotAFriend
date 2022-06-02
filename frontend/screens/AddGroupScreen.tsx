@@ -44,7 +44,7 @@ function BackHandler(props: any) {
 
 function JoinButton(props: any) {
   return (
-    <TouchableOpacity onPress={async () => await JoinGroupHandler(props)}>
+    <TouchableOpacity onPress={async () => {await AddUserGroup(props.user, props.groupname); props.navigation.navigate("Group");}}>
       <Text style={styles.textStyle}>join group</Text>
     </TouchableOpacity>
   );
@@ -95,7 +95,11 @@ export default function AddGroupScreen({
         <View style={styles.GroupContainer}>
           <View style={{ height: "5%" }}></View>
           <View style={styles.box2}>
-            <JoinButton groupname={group} user={user} />
+            <JoinButton
+              groupname={group}
+              user={user}
+              navigation={navigation}
+            />
           </View>
         </View>
       </View>
