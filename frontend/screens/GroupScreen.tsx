@@ -51,16 +51,10 @@ function PopulateArray(user, groupData: Group[]) {
   var groupArray = user.groups; //list of groups for each user
 
   var getGroupMembers = async (group: string, setState: Function) => {
-<<<<<<< HEAD
-    await GetGroupMembers(group).then((members) => {setState(members);});
-    return;
-  }
-=======
     await GetGroupMembers(group).then((members) => {
       setState(members);
     });
   };
->>>>>>> main
 
   var pushMembers = async (groupname: string) => {
     var [array, setArray] = useState([]);
@@ -81,9 +75,6 @@ const GroupCard = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const GROUPNAME = props.group;
   const members = props.members;
-<<<<<<< HEAD
-  const target = members[Math.floor(Math.random()*members.length)];
-=======
   const targetRef = ref(db, "groups/" + GROUPNAME + "/target");
   let target = "";
   onValue(targetRef, (snapshot) => {
@@ -107,7 +98,6 @@ const GroupCard = (props: any) => {
       }
     }
   })
->>>>>>> main
   let imageURL = "";
   const userRef = ref(db, "users/" + target);
   onValue(userRef, (snapshot) => {

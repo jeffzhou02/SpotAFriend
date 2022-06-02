@@ -190,4 +190,4 @@ export function AddNewGroup(user, group) {
   set(ref(db, "groups/" + group), {
     0: user.username,
   });
-}
+}}
