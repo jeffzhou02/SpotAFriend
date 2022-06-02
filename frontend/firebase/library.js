@@ -46,7 +46,7 @@ export function GetGroupMembers(group) {
     // };
     // func();
     //const dbref = ref(db, 'groups/' + group);
-    const dbref = ref(db, 'groups/' + group);
+    const dbref = ref(db, 'groups/' + group + '/users');
     const promise = get(dbref).then((snapshot) => {
         if (snapshot.exists()) {
             var data = [];
