@@ -123,14 +123,25 @@ export function AddFriend(userobj, friendName, setStatus) {
 
 export function AddUserGroup(user, group) {
 
+    let newGroup = 0;
+
     // Add group to user
-    var groupArray = user.groups;
-    for (const element of groupArray){
-        if (element == group){
-            return;
-        }
+    var groupArray = [""];
+    if (user.groups == null){
+        groupArray = [group];
+        newGroup = 1;
     }
-    groupArray.push(group);
+    else{
+        groupArray = user.groups;
+    }
+    if (!newGroup){
+        for (const element of groupArray){
+            if (element == group){
+                return;
+            }
+        }
+        groupArray.push(group);
+    }
     update(ref(db, 'users/' + user.username), {
         groups: groupArray,
     });
