@@ -38,25 +38,35 @@ interface Group {
 }
 
 function PopulateArray(user, groupData: Group[]) {
-  // Get groups
-  var groupArray = user.groups;
-  for (const groupname of groupArray) {
-    // Get members
-    var [array, setArray] = useState([""]);
-    var func = async () => {
-      const promise = await GetGroupMembers(groupname);
-      const value = promise;
-      setArray(value);
-    };
-    useEffect(() => {
-      func();
-    }, []);
+  // const [testArray, setTest] = useState([]);
+  // var getGroupMembers = async () => {
+  //   await GetGroupMembers('danielsgroup').then((value) => setTest(value));
+  // };
 
-    const tempGroup: Group = {
-      members: array,
+  // useEffect(() => {
+  //   getGroupMembers();
+  // },[]);
+  // Get groups
+  var groupArray = user.groups; //list of groups for each user
+
+  var getGroupMembers = async (group: string, setState: Function) => {
+    await GetGroupMembers(group).then((members) => {setState(members);});
+  }
+
+  var pushMembers = async (groupname: string) => {
+    var [array, setArray] = useState([]);
+    useEffect(() => {
+      getGroupMembers(groupname, setArray);
+    }, []);
+    const temp: Group = {
       group: groupname,
+      members: array,
     };
-    groupData.push(tempGroup);
+    groupData.push(temp);
+  };
+
+  for (var groupname of groupArray) {
+    pushMembers(groupname);
   }
 }
 
@@ -64,13 +74,37 @@ const GroupCard = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const GROUPNAME = props.group;
   const members = props.members;
-  const target = members[Math.floor(Math.random()*members.length)];
+  const targetRef = ref(db, "groups/" + GROUPNAME + "/target");
+  let target = "";
+  onValue(targetRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      if (data.user) {
+        target = data.user;
+      }
+      if (data.timestamp + 1) {
+        const d = new Date();
+        let time = d.getTime();
+        if ((time - data.timestamp) > 24 * 60 * 60 * 1000) {
+          var newtarget = members[Math.floor(Math.random() * members.length)];
+          if (newtarget != undefined){
+            set(targetRef, {
+              user: newtarget,
+              timestamp: time,
+            });
+          }
+        }
+      }
+    }
+  })
   let imageURL = "";
   const userRef = ref(db, "users/" + target);
   onValue(userRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data.profilePhotoRef) {
-      imageURL = data.profilePhotoRef;
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      if (data.profilePhotoRef) {
+        imageURL = data.profilePhotoRef;
+      }
     }
   });
   const memberString = members.join(", ");
@@ -176,6 +210,7 @@ export default function GroupScreen({
   navigation,
 }: RootTabScreenProps<"Group">) {
   const { user } = useContext(UserContext);
+  console.log(user.groups);
 
   const groupData: Group[] = [];
   PopulateArray(user, groupData);
