@@ -10,6 +10,7 @@ import { GetGroupMembers1, GetUserPFP } from "../firebase/library";
 import { loadAsync } from "expo-font";
 import { db } from "../firebase/index";
 import { onValue, ref as dbref } from "firebase/database";
+import { useLinkProps } from "@react-navigation/native";
 
 const Card = (props: any) => {
   return (
@@ -88,7 +89,7 @@ interface Person {
   pic: string;
 }
 
-async function PopulateArray(user: any) {
+async function PopulateArray(user: any, loaded : boolean) {
   let groupMembers: Person[] = [];
   var groupArray = user.groups;
   for (const groupname of groupArray) {
@@ -133,6 +134,7 @@ async function PopulateArray(user: any) {
     });
   }
   console.log("group members array: " + groupMembers);
+  console.log("changed boolean");
   return groupMembers;
 }
 
@@ -161,11 +163,11 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
   // });
   const { user } = useContext(UserContext);
 
-  var [loaded, setLoaded] = useState(true);
+  var [loaded, setLoaded] = useState(false);
   var [postData, setPostData] = React.useState<Person[]>();
   var reloadFunction = async () => {
     console.log("before populating array");
-    const data = await PopulateArray(user);
+    const data = await PopulateArray(user, loaded);
     console.log("after populating array");
     const dataValue = data;
     console.log("the data: " + dataValue);
@@ -176,7 +178,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
     setPostData(await reloadFunction());
     console.log("finished reloading");
     console.log("data: " + postData);
-    setLoaded(!loaded);
+    setLoaded(true);
   };
 
   useEffect(() => {
@@ -201,7 +203,6 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
         <Logo loaded={loaded} function={reload}></Logo>
         <SettingsButton {...navigation} />
       </View>
-
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
