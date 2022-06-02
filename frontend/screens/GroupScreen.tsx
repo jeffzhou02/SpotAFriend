@@ -51,13 +51,12 @@ function PopulateArray(user, groupData: Group[]) {
 
   var getGroupMembers = async (group: string, setState: Function) => {
     await GetGroupMembers(group).then((members) => {setState(members);});
+    return;
   }
 
   var pushMembers = async (groupname: string) => {
     var [array, setArray] = useState([]);
-    useEffect(() => {
-      getGroupMembers(groupname, setArray);
-    }, []);
+    useEffect(() => {getGroupMembers(groupname, setArray);}, []);
     const temp: Group = {
       group: groupname,
       members: array,
@@ -188,7 +187,6 @@ export default function GroupScreen({
   navigation,
 }: RootTabScreenProps<"Group">) {
   const { user } = useContext(UserContext);
-  console.log(user.groups);
 
   const groupData: Group[] = [];
   PopulateArray(user, groupData);
