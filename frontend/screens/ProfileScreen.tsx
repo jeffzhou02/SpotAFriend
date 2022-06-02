@@ -7,6 +7,7 @@ import { storage } from "../firebase/index";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 import { db } from "../firebase/index";
+import { Image as CacheImage} from "react-native-expo-image-cache";
 import {
   getDatabase,
   onValue,
@@ -88,16 +89,6 @@ export default function ProfileScreen({
           })
         }
       />
-      <View style={{width: '100%', flexDirection: 'row', justifyContent: 'flex-end', padding: 5}}>
-        <TouchableOpacity onPress={() => navigation.navigate(
-          'Friends',
-          {
-            cancel: cancelFunction,
-          })
-        } style={{flexDirection: 'row', justifyContent: 'flex-end', paddingRight: '10%'}}>
-          <Text style={{color: "#689689"}}>Friends</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
