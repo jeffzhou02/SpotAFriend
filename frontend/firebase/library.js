@@ -34,9 +34,8 @@ export function EditUserAttrib(userobj, attrib, value, func, setUser) {
         });
       remove(ref(db, "users/" + userobj.username));
       return true;
-    });
+    }
     return userExists;
-  }
 }
 
 export async function GetGroupMembers(group) {
