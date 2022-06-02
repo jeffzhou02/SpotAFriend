@@ -10,9 +10,7 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 
-import {
-  GetGroupMembers,
-} from "../firebase/library";
+import { GetGroupMembers } from "../firebase/library";
 import { useContext } from "react";
 import { UserContext } from "../components/UserContext.js";
 
@@ -50,8 +48,10 @@ function PopulateArray(user, groupData: Group[]) {
   var groupArray = user.groups; //list of groups for each user
 
   var getGroupMembers = async (group: string, setState: Function) => {
-    await GetGroupMembers(group).then((members) => {setState(members);});
-  }
+    await GetGroupMembers(group).then((members) => {
+      setState(members);
+    });
+  };
 
   var pushMembers = async (groupname: string) => {
     var [array, setArray] = useState([]);
@@ -123,17 +123,18 @@ const GroupCard = (props: any) => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalText}>{GROUPNAME}</Text>
             <View style={styles.tags2}>
-              <Text style={styles.tagsText}>target not spotted</Text>
+              <Text style={styles.tagsText}>
+                {GROUPNAME}'s target of the day
+              </Text>
             </View>
             <Image style={styles.targetImage} source={{ uri: imageURL }} />
             <View style={{ backgroundColor: "transparent" }}>
-              <Text style={styles.modalText}>
-                today's target: {target}
-              </Text>
-              <Text style={styles.names}>
-                all members: {memberString}
-              </Text>
+              <Text style={styles.modalText}>today's target: {target}</Text>
+              <Text style={styles.names}>all members: {memberString}</Text>
             </View>
+            <Pressable style={styles.addButtonSlayIngrid}>
+              <Text style={styles.title}>leave this group</Text>
+            </Pressable>
 
             <Pressable
               style={styles.buttonClose}
@@ -242,10 +243,7 @@ export default function GroupScreen({
       >
         {groupData.map((arrayItem) => {
           return (
-            <GroupCard
-              members={arrayItem.members}
-              group={arrayItem.group}
-            />
+            <GroupCard members={arrayItem.members} group={arrayItem.group} />
           );
         })}
       </ScrollView>
@@ -315,7 +313,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textDecorationLine: "underline",
     color: "#fff",
-    marginTop: "40%",
+    marginTop: "10%",
   },
   modalContainer: {
     backgroundColor: "transparent",
@@ -359,6 +357,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     width: 140,
   },
+  addButtonSlayIngrid: {
+    width: "70%",
+    borderColor: "#689689",
+    alignItems: "center",
+    alignContent: "center",
+    borderWidth: 2,
+    padding: 5,
+    borderRadius: 17,
+    backgroundColor: "#F4D58D",
+    marginTop: "20%",
+  },
   tags2: {
     borderWidth: 2,
     borderColor: "#BF0603",
@@ -369,10 +378,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     marginBottom: 5,
-    width: 150,
+    width: 240,
   },
   tagsText: {
     fontStyle: "italic",
     color: "#BF0603",
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    fontStyle: "italic",
+    color: "#689689",
   },
 });
