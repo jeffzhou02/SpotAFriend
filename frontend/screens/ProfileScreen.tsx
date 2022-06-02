@@ -88,16 +88,6 @@ export default function ProfileScreen({
           })
         }
       />
-      <View style={{width: '100%', flexDirection: 'row', justifyContent: 'flex-end', padding: 5}}>
-        <TouchableOpacity onPress={() => navigation.navigate(
-          'Friends',
-          {
-            cancel: cancelFunction,
-          })
-        } style={{flexDirection: 'row', justifyContent: 'flex-end', paddingRight: '10%'}}>
-          <Text style={{color: "#689689"}}>Friends</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
