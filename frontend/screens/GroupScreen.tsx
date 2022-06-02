@@ -11,11 +11,7 @@ import {
 import React, { ReactNode, useEffect, useState } from "react";
 
 import {
-  AddUserGroup,
   GetGroupMembers,
-  AddNewGroup,
-  GetGroupMembers1,
-  GetUserPFP,
 } from "../firebase/library";
 import { useContext } from "react";
 import { UserContext } from "../components/UserContext.js";
@@ -38,13 +34,6 @@ import { db } from "../firebase/index.js";
 
 interface Group {
   members: string[];
-  person1: string;
-  person2: string;
-  person3: string;
-  targetpfp: string;
-  pfp2: string;
-  pfp3: string;
-  pic: string;
   group: string;
 }
 
@@ -65,13 +54,6 @@ function PopulateArray(user, groupData: Group[]) {
 
     const tempGroup: Group = {
       members: array,
-      person1: array[0],
-      person2: array[1],
-      person3: array[2],
-      targetpfp: faker.image.avatar(),
-      pfp2: faker.image.avatar(),
-      pfp3: faker.image.avatar(),
-      pic: faker.image.imageUrl(),
       group: groupname,
     };
     groupData.push(tempGroup);
@@ -91,6 +73,7 @@ const GroupCard = (props: any) => {
       imageURL = data.profilePhotoRef;
     }
   });
+  const memberString = members.join(", ");
   return (
     <View style={{ backgroundColor: "transparent" }}>
       <Modal
@@ -114,7 +97,7 @@ const GroupCard = (props: any) => {
                 today's target: {target}
               </Text>
               <Text style={styles.names}>
-                all members: {props.person1}, {props.person2}, {props.person3}
+                all members: {memberString}
               </Text>
             </View>
 
@@ -133,7 +116,7 @@ const GroupCard = (props: any) => {
           style={styles.groupOpen}
           onPress={() => setModalVisible(true)}
         >
-          <Image style={styles.groupImage} source={{ uri: props.pic }} />
+          <Image style={styles.groupImage} source={{ uri: imageURL }} />
           <View
             style={{
               margin: "5%",
@@ -141,16 +124,6 @@ const GroupCard = (props: any) => {
             }}
           >
             <Text style={styles.textStyle}>{GROUPNAME}</Text>
-            <Text
-              style={{
-                color: "#fff",
-                fontStyle: "italic",
-                marginTop: "5%",
-                fontSize: 15,
-              }}
-            >
-              {props.person1}, {props.person2}, {props.person3}
-            </Text>
             <View style={styles.tags}>
               <Text style={styles.tagsText}>target not spotted</Text>
             </View>
@@ -236,11 +209,6 @@ export default function GroupScreen({
           return (
             <GroupCard
               members={arrayItem.members}
-              person1={arrayItem.person1}
-              person2={arrayItem.person2}
-              person3={arrayItem.person3}
-              targetpfp={arrayItem.targetpfp}
-              pic={arrayItem.pic}
               group={arrayItem.group}
             />
           );
