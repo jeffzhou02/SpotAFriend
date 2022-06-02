@@ -25,11 +25,6 @@ const linking: LinkingOptions<RootStackParamList> = {
               SettingsScreen: "Settings",
             },
           },
-          Friends: {
-            screens: {
-              FriendsScreen: "Friends",
-            },
-          },
           AddGroup: {
             screens: {
               AddGroupScreen: "AddGroup",
@@ -48,6 +43,11 @@ const linking: LinkingOptions<RootStackParamList> = {
           Filter: {
             screens: {
               FilterScreen: "Filter",
+            },
+          },
+          Friends: {
+            screens: {
+              FriendsScreen: "Friends",
             },
           },
           Camera: {

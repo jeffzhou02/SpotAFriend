@@ -53,16 +53,14 @@ function JoinButton(props: any) {
 function JoinGroupHandler(props: any) {
   const groupname = props.groupname;
   const user = props.user;
-  AddUserGroup(user, groupname)
+  AddUserGroup(user, groupname);
 }
 
 export default function AddGroupScreen({
   navigation,
-
 }: RootTabScreenProps<"Home">) {
-
   const [modalVisible, setModalVisible] = useState(false);
-  
+
   const [group, setGroup] = useState("");
   const { user } = useContext(UserContext);
 
@@ -84,24 +82,20 @@ export default function AddGroupScreen({
       </View>
       <View style={styles.container}>
         <View style={{ height: "30%" }}></View>
-        <Text style={styles.textStyle}>join group</Text>
+        <Text style={styles.textStyleslay}>create or join a group</Text>
         <View style={styles.searchbar}>
           <TextInput
             placeholderTextColor={"#689689"}
             placeholder="group name"
             keyboardType="default"
             onChangeText={(group) => setGroup(group)}
-            style={{width: 310, height: 25,}}
+            style={{ fontSize: 17, width: 310, height: 25, }}
           />
         </View>
         <View style={styles.GroupContainer}>
           <View style={{ height: "5%" }}></View>
-          <View style={{ height: "40%" }}></View>
           <View style={styles.box2}>
-            <JoinButton
-              groupname={group}
-              user={user}
-            />
+            <JoinButton groupname={group} user={user} />
           </View>
         </View>
       </View>
@@ -156,6 +150,13 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 18,
+    fontStyle: "italic",
+    fontWeight: "bold",
+    color: "#689689",
+    backgroundColor: "transparent",
+  },
+  textStyleslay: {
+    fontSize: 22,
     fontStyle: "italic",
     fontWeight: "bold",
     color: "#689689",
