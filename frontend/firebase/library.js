@@ -36,7 +36,7 @@ export function EditUserAttrib(userobj, attrib, value, func, setUser) {
     }
 }
 
-export async function GetGroupMembers(group) {
+export function GetGroupMembers(group) {
     // requires the following code in the calling function to work:
     // var [array, setArray] = useState('asdf');
     // var func = async () => {
@@ -45,10 +45,15 @@ export async function GetGroupMembers(group) {
     //     setArray(value);
     // };
     // func();
-    const dbref = ref(db, 'groups/' + group);
-    const promise = await get(dbref).then((snapshot) => {
+    //const dbref = ref(db, 'groups/' + group);
+    const dbref = ref(db, 'groups/' + group + '/users');
+    const promise = get(dbref).then((snapshot) => {
         if (snapshot.exists()) {
-            return snapshot.val();
+            var data = [];
+            snapshot.forEach((childSnap) => {
+                data.push(childSnap.val());
+            });
+            return data;
         }
         return [];
     }).catch((error) => {return [];});
@@ -132,7 +137,7 @@ export function AddUserGroup(user, group) {
 
     // Add user to group
     //userArray.push(user.username);
-    push(ref(db, 'groups/' + group), user.username);
+    push(ref(db, 'groups/' + group + '/users'), user.username);
     //update(ref(db, 'groups/' + group), userArray);
 } 
 
@@ -146,7 +151,8 @@ export async function GetGroupMembers1(groupName) {
             });
             return data;
         }
-    }).catch((error) => {console.log(error)});
+        return [];
+    }).catch((error) => {console.log(error); return [];});
     return promise;
 }
 
@@ -163,7 +169,7 @@ export function AddNewGroup(user, group) {
         groups: groupArray,
     });
 
-    set(ref(db, 'groups/' + group), {
+    set(ref(db, 'groups/' + group + '/users'), {
         0: user.username,
     });
 
