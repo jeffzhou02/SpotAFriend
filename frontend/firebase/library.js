@@ -46,7 +46,7 @@ export function GetGroupMembers(group) {
     // };
     // func();
     //const dbref = ref(db, 'groups/' + group);
-    const dbref = ref(db, 'groups/' + group);
+    const dbref = ref(db, 'groups/' + group + '/users');
     const promise = get(dbref).then((snapshot) => {
         if (snapshot.exists()) {
             var data = [];
@@ -137,7 +137,7 @@ export function AddUserGroup(user, group) {
 
     // Add user to group
     //userArray.push(user.username);
-    push(ref(db, 'groups/' + group), user.username);
+    push(ref(db, 'groups/' + group + '/users'), user.username);
     //update(ref(db, 'groups/' + group), userArray);
 } 
 
@@ -169,7 +169,7 @@ export function AddNewGroup(user, group) {
         groups: groupArray,
     });
 
-    set(ref(db, 'groups/' + group), {
+    set(ref(db, 'groups/' + group + '/users'), {
         0: user.username,
     });
 

@@ -44,7 +44,7 @@ function BackHandler(props: any) {
 
 function JoinButton(props: any) {
   return (
-    <TouchableOpacity onPress={async () => await JoinGroupHandler(props)}>
+    <TouchableOpacity onPress={() => JoinGroupHandler(props)}>
       <Text style={styles.textStyle}>join group</Text>
     </TouchableOpacity>
   );

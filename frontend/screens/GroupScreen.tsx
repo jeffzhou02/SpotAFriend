@@ -37,7 +37,7 @@ interface Group {
   group: string;
 }
 
-function PopulateArray(user, groupData: Group[]) {
+function PopulateArray(user) {
   // const [testArray, setTest] = useState([]);
   // var getGroupMembers = async () => {
   //   await GetGroupMembers('danielsgroup').then((value) => setTest(value));
@@ -47,28 +47,28 @@ function PopulateArray(user, groupData: Group[]) {
   //   getGroupMembers();
   // },[]);
   // Get groups
+  console.log('populating');
   var groupArray = user.groups; //list of groups for each user
-
+  const groupData: Group[] = [];
   var getGroupMembers = async (group: string, setState: Function) => {
-    await GetGroupMembers(group).then((members) => {setState(members); console.log(group + ': ' + members);});
+    await GetGroupMembers(group).then((members) => {setState(members);});
   }
 
   var pushMembers = async (groupname: string) => {
     var [array, setArray] = useState([]);
-    useEffect(() => {
-      getGroupMembers(groupname, setArray);
-    }, []);
+    getGroupMembers(groupname, setArray);
     const temp: Group = {
       group: groupname,
       members: array,
     };
-    console.log(temp);
     groupData.push(temp);
   };
 
   for (var groupname of groupArray) {
     pushMembers(groupname);
   }
+
+  return Promise.resolve(groupData);
 }
 
 const GroupCard = (props: any) => {
@@ -189,18 +189,12 @@ export default function GroupScreen({
   navigation,
 }: RootTabScreenProps<"Group">) {
   const { user } = useContext(UserContext);
-
-  const groupData: Group[] = [];
-  PopulateArray(user, groupData);
-
-  const [testArray, setTest] = useState([]);
-  var getGroupMembers = async () => {
-    await GetGroupMembers('Jeffsgroup').then((value) => setTest(value));
+  
+  var [groupData, setGroupData] = useState<Group[]>([]);
+  var getData = async () => {
+    await PopulateArray(user).then((value) => setGroupData(value));
   };
-
-  useEffect(() => {
-    getGroupMembers();
-  },[]);
+  
 
   return (
     <View style={styles.container}>
