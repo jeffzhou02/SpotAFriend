@@ -161,15 +161,6 @@ async function SignupHandler(props: any) {
 
           profilePhotoRef: "",
         });
-        set(ref(db, "users/" + username + "/groups"), {
-          0: username + "sgroup",
-        });
-        set(ref(db, "users/" + username + "/friends"), {
-          0: "null",
-        });
-        set(ref(db, "groups/" + username + "sgroup"), {
-          0: username,
-        });
         const newUser = ref(db, "users/" + username);
         onValue(newUser, (snapshot) => {
           const data = snapshot.val();

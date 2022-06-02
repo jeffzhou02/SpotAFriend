@@ -138,6 +138,10 @@ export function AddUserGroup(user, group) {
     // Add user to group
     //userArray.push(user.username);
     push(ref(db, 'groups/' + group + '/users'), user.username);
+    set(ref(db, 'groups/' + group + '/target'), {
+        timestamp: 0,
+        user: user.username,
+    });
     //update(ref(db, 'groups/' + group), userArray);
 } 
 
