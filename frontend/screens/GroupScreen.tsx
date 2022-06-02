@@ -45,6 +45,9 @@ function PopulateArray(user, groupData: Group[]) {
   //   getGroupMembers();
   // },[]);
   // Get groups
+  if (user.groups == null){
+    return;
+  }
   var groupArray = user.groups; //list of groups for each user
 
   var getGroupMembers = async (group: string, setState: Function) => {
@@ -55,9 +58,7 @@ function PopulateArray(user, groupData: Group[]) {
 
   var pushMembers = async (groupname: string) => {
     var [array, setArray] = useState([]);
-    useEffect(() => {
-      getGroupMembers(groupname, setArray);
-    }, []);
+    useEffect(() => {getGroupMembers(groupname, setArray);}, []);
     const temp: Group = {
       group: groupname,
       members: array,

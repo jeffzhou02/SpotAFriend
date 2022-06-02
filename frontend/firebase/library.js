@@ -32,11 +32,8 @@ export function EditUserAttrib(userobj, attrib, value, func, setUser) {
             userobj.username = value;
             return true;
         });
-      remove(ref(db, "users/" + userobj.username));
-      return true;
-    );
+    }
     return userExists;
-  }
 }
 
 export function GetGroupMembers(group) {
@@ -125,18 +122,29 @@ export function AddFriend(userobj, friendName, setStatus) {
 }
 
 export function AddUserGroup(user, group) {
-  // Add group to user
-  var groupArray = user.groups;
-  for (const element of groupArray) {
-    if (element == group) {
-      return;
-    }
-  }
-  groupArray.push(group);
-  update(ref(db, "users/" + user.username), {
-    groups: groupArray,
-  });
 
+    let newGroup = 0;
+
+    // Add group to user
+    var groupArray = [""];
+    if (user.groups == null){
+        groupArray = [group];
+        newGroup = 1;
+    }
+    else{
+        groupArray = user.groups;
+    }
+    if (!newGroup){
+        for (const element of groupArray){
+            if (element == group){
+                return;
+            }
+        }
+        groupArray.push(group);
+    }
+    update(ref(db, 'users/' + user.username), {
+        groups: groupArray,
+    });
 
     // Add user to group
     //userArray.push(user.username);
@@ -182,4 +190,4 @@ export function AddNewGroup(user, group) {
   set(ref(db, "groups/" + group), {
     0: user.username,
   });
-}
+}}
