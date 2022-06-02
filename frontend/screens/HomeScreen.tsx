@@ -6,14 +6,16 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { UserContext } from "../components/UserContext";
-import { GetGroupMembers1 } from "../firebase/library";
+import { GetGroupMembers1, GetUserPFP } from "../firebase/library";
 import { loadAsync } from "expo-font";
+import { db } from "../firebase/index";
+import { onValue, ref as dbref } from "firebase/database";
 
 const Card = (props: any) => {
   return (
     <View style={styles.post}>
       <View style={styles.postHeader}>
-        {/* <Image style={styles.pfp} source={{ uri: props.pfp }} /> */}
+        <Image style={styles.pfp} source={{ uri: props.pfp }} />
         <View style={styles.captionBox}>
           <Text style={styles.postTitle}>
             <Text style={styles.postTitleName}>{props.person1} </Text>
@@ -86,49 +88,51 @@ interface Person {
   pic: string;
 }
 
-function PopulateArray(user: any) {
+async function PopulateArray(user: any) {
   let groupMembers: Person[] = [];
   var groupArray = user.groups;
   for (const groupname of groupArray) {
     console.log(groupname);
     //var members: string[] = [""];
-
     // Get members
-    let array;
+    let array = [];
     const func1 = async () => {
       const promise = await GetGroupMembers1(groupname);
-      console.log("is it here???? " + promise);
       return promise;
     };
 
     func1().then((members) => {
+      console.log("members: " + members + "\n////////");
       array = members;
-      console.log("array: " + array);
-
-      console.log("array here" + array);
-
       for (const member of array) {
         console.log("member: " + member);
         let image;
         getImage(member, groupname).then((URL) => {
           image = URL;
+          let pfpImage = ""
           console.log(image);
+          const userRef = dbref(db, "users/" + member);
+          onValue(userRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data.profilePhotoRef) {
+              pfpImage = data.profilePhotoRef;
+            }
+          });
           const tempPerson: Person = {
             person1: member,
             tag1: "",
-            pfp: "",
+            pfp: pfpImage,
             pic: image,
           };
-          console.log("temp Person" + tempPerson);
+          console.log(tempPerson.pfp);
+          console.log("pushing");
           groupMembers.push(tempPerson);
-        });
-        // if (image === null) {
-        //   continue;
-        // }
+          console.log("group members array: " + groupMembers);
+        }).catch((error) => {console.log(error);});
       }
     });
   }
-
+  console.log("group members array: " + groupMembers);
   return groupMembers;
 }
 
@@ -157,26 +161,28 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
   // });
   const { user } = useContext(UserContext);
 
-  var [loaded, setLoaded] = useState(0);
-  console.log("first: " + loaded);
+  var [loaded, setLoaded] = useState(true);
   var [postData, setPostData] = React.useState<Person[]>();
-  var func = async () => {
-    console.log("aslkgjasklgjkasjgksadgjaslkgjklsa;gjsaglsajlgkljasdlgasjk");
-    const data = PopulateArray(user);
-    console.log("run???");
+  var reloadFunction = async () => {
+    console.log("before populating array");
+    const data = await PopulateArray(user);
+    console.log("after populating array");
     const dataValue = data;
-    setPostData(dataValue);
+    console.log("the data: " + dataValue);
+    return dataValue;
   };
 
-  const changeLoad = (data: number) => {
-    console.log("aslkgjasljkjgaskjlgasgl");
-    func();
+  const reload = async (data: number) => {
+    setPostData(await reloadFunction());
+    console.log("finished reloading");
+    console.log("data: " + postData);
+    setLoaded(!loaded);
   };
-  console.log("second: " + loaded);
-  console.log("postData: " + postData);
-  // useEffect(() => {
-  //   func();
-  // }, [loaded]);
+
+  useEffect(() => {
+    // reloadFunction();
+    console.log("loaded Value: " + loaded);
+  }, [loaded]);
 
   return (
     <View style={styles.container}>
@@ -192,7 +198,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
           backgroundColor: "transparent",
         }}
       >
-        <Logo loaded={loaded} function={changeLoad}></Logo>
+        <Logo loaded={loaded} function={reload}></Logo>
         <SettingsButton {...navigation} />
       </View>
 
@@ -208,7 +214,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
             <Card
               person1={note.person1}
               pic={note.pic}
-              //pfp={note.pfp}
+              pfp={note.pfp}
               tag1={note.tag1}
             />
           );
