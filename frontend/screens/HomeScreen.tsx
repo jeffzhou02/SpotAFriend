@@ -12,7 +12,7 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { UserContext } from "../components/UserContext";
-import { GetGroupMembers1, GetUserPFP } from "../firebase/library";
+import { GetGroupMembers, GetUserPFP } from "../firebase/library";
 import { loadAsync } from "expo-font";
 import { db } from "../firebase/index";
 import { onValue, ref as dbref } from "firebase/database";
@@ -132,7 +132,7 @@ async function PopulateArray(user: any) {
     // Get members
     let array = [];
     const func1 = async () => {
-      const promise = await GetGroupMembers1(groupname);
+      const promise = await GetGroupMembers(groupname);
       return promise;
     };
 
