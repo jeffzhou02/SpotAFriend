@@ -1,7 +1,13 @@
-import { StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 
 import React, { ReactNode, useEffect, useState, useContext } from "react";
-
+import { SearchFriend } from "../firebase/library";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
@@ -19,7 +25,7 @@ const Card = (props: any) => {
         <View style={styles.captionBox}>
           <Text style={styles.postTitle}>
             <Text style={styles.postTitleName}>{props.person1} </Text>
-            spotted
+            spotted their target
           </Text>
         </View>
       </View>
@@ -37,6 +43,33 @@ const Card = (props: any) => {
     </View>
   );
 };
+
+function SearchBar(props: any) {
+  return (
+    <View style={styles.searchbar}>
+      <TextInput
+        placeholder="search tags"
+        keyboardType="default"
+        style={{ width: "80%" }}
+        placeholderTextColor="grey"
+        onChangeText={(text) => props.inputHandle(text)}
+      />
+      <TouchableOpacity
+        style={{ alignSelf: "center" }}
+        onPress={props.searchHandler}
+      >
+        <Image
+          style={{
+            resizeMode: "contain",
+            height: 30,
+            width: 30,
+          }}
+          source={require("../assets/images/search.png")}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+}
 
 function SettingsButton(props: any) {
   return (
@@ -107,28 +140,32 @@ async function PopulateArray(user: any) {
       for (const member of array) {
         console.log("member: " + member);
         let image;
-        getImage(member, groupname).then((URL) => {
-          image = URL;
-          let pfpImage = ""
-          console.log(image);
-          const userRef = dbref(db, "users/" + member);
-          onValue(userRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data.profilePhotoRef) {
-              pfpImage = data.profilePhotoRef;
-            }
+        getImage(member, groupname)
+          .then((URL) => {
+            image = URL;
+            let pfpImage = "";
+            console.log(image);
+            const userRef = dbref(db, "users/" + member);
+            onValue(userRef, (snapshot) => {
+              const data = snapshot.val();
+              if (data.profilePhotoRef) {
+                pfpImage = data.profilePhotoRef;
+              }
+            });
+            const tempPerson: Person = {
+              person1: member,
+              tag1: "",
+              pfp: pfpImage,
+              pic: image,
+            };
+            console.log(tempPerson.pfp);
+            console.log("pushing");
+            groupMembers.push(tempPerson);
+            console.log("group members array: " + groupMembers);
+          })
+          .catch((error) => {
+            console.log(error);
           });
-          const tempPerson: Person = {
-            person1: member,
-            tag1: "",
-            pfp: pfpImage,
-            pic: image,
-          };
-          console.log(tempPerson.pfp);
-          console.log("pushing");
-          groupMembers.push(tempPerson);
-          console.log("group members array: " + groupMembers);
-        }).catch((error) => {console.log(error);});
       }
     });
   }
@@ -160,6 +197,10 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
   //   postData = PopulateArray();
   // });
   const { user } = useContext(UserContext);
+  const [searchText, setSearchText] = useState("");
+  const [friendFound, setFriendFound] = useState(false);
+  const [friendName, setFriendName] = useState("");
+  const [statusMessage, setStatus] = useState("");
 
   var [loaded, setLoaded] = useState(true);
   var [postData, setPostData] = React.useState<Person[]>();
@@ -184,6 +225,13 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
     console.log("loaded Value: " + loaded);
   }, [loaded]);
 
+  var searchFriend = async (input: string) => {
+    setFriendName(input);
+    const promise = await SearchFriend(user, input);
+    const value = promise;
+    setFriendFound(value);
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -200,6 +248,18 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
       >
         <Logo loaded={loaded} function={reload}></Logo>
         <SettingsButton {...navigation} />
+      </View>
+      <View style={{ paddingTop: "5%" }}>
+        <SearchBar
+          inputHandle={(text: any) => {
+            setSearchText(text);
+            setFriendFound(false);
+            setStatus("");
+          }}
+          searchHandler={() => {
+            searchFriend(searchText);
+          }}
+        />
       </View>
 
       <ScrollView
@@ -245,7 +305,7 @@ const styles = StyleSheet.create({
     width: "90%",
     borderTopStartRadius: 30,
     borderTopEndRadius: 30,
-    marginTop: "10%",
+    marginTop: "5%",
     padding: "4%",
     paddingBottom: "100%",
   },
@@ -321,5 +381,17 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 15,
     justifyContent: "center",
+  },
+  searchbar: {
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#00AFB5",
+    borderRadius: 15,
+    width: 330,
+    height: 40,
+    alignContent: "center",
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
