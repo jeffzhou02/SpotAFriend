@@ -45,6 +45,9 @@ function PopulateArray(user, groupData: Group[]) {
   //   getGroupMembers();
   // },[]);
   // Get groups
+  if (user.groups == null){
+    return;
+  }
   var groupArray = user.groups; //list of groups for each user
 
   var getGroupMembers = async (group: string, setState: Function) => {
