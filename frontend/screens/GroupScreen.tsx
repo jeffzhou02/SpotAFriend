@@ -192,6 +192,7 @@ export default function GroupScreen({
 
   const groupData: Group[] = [];
   PopulateArray(user, groupData);
+  console.log(typeof groupData)
 
   const [testArray, setTest] = useState([]);
   var getGroupMembers = async () => {
