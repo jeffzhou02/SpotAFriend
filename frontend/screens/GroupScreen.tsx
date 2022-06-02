@@ -50,7 +50,7 @@ function PopulateArray(user, groupData: Group[]) {
   var groupArray = user.groups; //list of groups for each user
 
   var getGroupMembers = async (group: string, setState: Function) => {
-    await GetGroupMembers(group).then((members) => { setState(members); console.log(group + ': ' + members); });
+    await GetGroupMembers(group).then((members) => {setState(members);});
   }
 
   var pushMembers = async (groupname: string) => {
@@ -62,7 +62,6 @@ function PopulateArray(user, groupData: Group[]) {
       group: groupname,
       members: array,
     };
-    console.log(temp);
     groupData.push(temp);
   };
 
@@ -75,32 +74,8 @@ const GroupCard = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const GROUPNAME = props.group;
   const members = props.members;
-  const targetRef = ref(db, "groups/" + GROUPNAME + "/target");
-  let target = "";
-  onValue(targetRef, (snapshot) => {
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      if (data.user) {
-        target = data.user;
-      }
-      if (data.timestamp + 1) {
-        const d = new Date();
-        let time = d.getTime();
-        if ((time - data.timestamp) > 24 * 60 * 60 * 1000) {
-          var newtarget = members[Math.floor(Math.random() * members.length)];
-          if (newtarget != undefined){
-            set(targetRef, {
-              user: newtarget,
-              timestamp: time,
-            });
-          }
-        }
-      }
-    }
-  })
-
+  const target = members[Math.floor(Math.random()*members.length)];
   let imageURL = "";
-  /*
   const userRef = ref(db, "users/" + target);
   onValue(userRef, (snapshot) => {
     if (snapshot.exists()) {
@@ -110,7 +85,6 @@ const GroupCard = (props: any) => {
       }
     }
   });
-  */
   const memberString = members.join(", ");
   return (
     <View style={{ backgroundColor: "transparent" }}>
@@ -214,19 +188,10 @@ export default function GroupScreen({
   navigation,
 }: RootTabScreenProps<"Group">) {
   const { user } = useContext(UserContext);
+  console.log(user.groups);
 
   const groupData: Group[] = [];
   PopulateArray(user, groupData);
-  console.log(typeof groupData)
-
-  const [testArray, setTest] = useState([]);
-  var getGroupMembers = async () => {
-    await GetGroupMembers('Jeffsgroup').then((value) => setTest(value));
-  };
-
-  useEffect(() => {
-    getGroupMembers();
-  }, []);
 
   return (
     <View style={styles.container}>
