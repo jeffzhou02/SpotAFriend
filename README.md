@@ -14,6 +14,9 @@ Spot a Friend is an application that allows users to play assassins in real life
 - Yarn
 - Expo Go App on mobile device
 
+## Tech Stack
+- We have implemented the app with a React Native frontend and a Firebase backend. 
+
 ## Installation:
 
 Run the following commands:\
