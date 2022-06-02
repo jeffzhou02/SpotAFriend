@@ -44,7 +44,7 @@ function BackHandler(props: any) {
 
 function JoinButton(props: any) {
   return (
-    <TouchableOpacity onPress={() => JoinGroupHandler(props)}>
+    <TouchableOpacity onPress={async () => await JoinGroupHandler(props)}>
       <Text style={styles.textStyle}>join group</Text>
     </TouchableOpacity>
   );
@@ -91,6 +91,7 @@ export default function AddGroupScreen({
             placeholder="group name"
             keyboardType="default"
             onChangeText={(group) => setGroup(group)}
+            style={{width: 310, height: 25,}}
           />
         </View>
         <View style={styles.GroupContainer}>
