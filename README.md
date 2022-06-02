@@ -5,7 +5,7 @@ Brian Ni
 Jenny Wang
 Nathan Zhang
 Jeffrey Zhou
-Daniel Yang\
+Daniel Yang
 
 Spot a Friend is an application that allows users to play assassins in real life, everyday.
 
