@@ -16,6 +16,8 @@ import { GetGroupMembers1, GetUserPFP } from "../firebase/library";
 import { loadAsync } from "expo-font";
 import { db } from "../firebase/index";
 import { onValue, ref as dbref } from "firebase/database";
+import { useLinkProps } from "@react-navigation/native";
+
 
 const Card = (props: any) => {
   return (
@@ -231,7 +233,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
     const value = promise;
     setFriendFound(value);
   };
-
+  
   return (
     <View style={styles.container}>
       <View

@@ -7,6 +7,7 @@ import { storage } from "../firebase/index";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 import { db } from "../firebase/index";
+import { Image as CacheImage} from "react-native-expo-image-cache";
 import {
   getDatabase,
   onValue,

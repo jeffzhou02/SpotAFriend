@@ -1,4 +1,4 @@
-import { set, update, ref, get, child, remove, push } from 'firebase/database';
+import { set, update, ref, get, child, remove, push } from "firebase/database";
 import { db } from "../firebase/index.js";
 import { useState } from 'react';
 import { arrayBuffer } from 'stream/consumers';
@@ -32,8 +32,11 @@ export function EditUserAttrib(userobj, attrib, value, func, setUser) {
             userobj.username = value;
             return true;
         });
-        return userExists;
-    }
+      remove(ref(db, "users/" + userobj.username));
+      return true;
+    );
+    return userExists;
+  }
 }
 
 export function GetGroupMembers(group) {
@@ -172,12 +175,11 @@ export async function GetGroupMembers1(groupName) {
 }
 
 export function AddNewGroup(user, group) {
-    // Add group to user
-    var groupArray = user.groups;
-    for (const element of groupArray){
-        if (element == group){
-            return;
-        }
+  // Add group to user
+  var groupArray = user.groups;
+  for (const element of groupArray) {
+    if (element == group) {
+      return;
     }
     groupArray.push(group);
     update(ref(db, 'users/' + user.username), {
@@ -188,4 +190,7 @@ export function AddNewGroup(user, group) {
         0: user.username,
     });
 
-} 
+  set(ref(db, "groups/" + group), {
+    0: user.username,
+  });
+}
