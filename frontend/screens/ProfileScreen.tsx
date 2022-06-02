@@ -22,7 +22,6 @@ export default function ProfileScreen({
 }: RootStackParamList<"Root">) {
   const storageRef = ref(storage, "profilephotos");
   const [image, setImage] = useState("");
-  const name = "asdfasdf";
   const { user } = useContext(UserContext);
   const username = user.username;
   let imageURL = "";
@@ -71,7 +70,6 @@ export default function ProfileScreen({
         </View>
       </TouchableOpacity>
       <InfoView
-        name={name}
         username={user.username}
         email={user.email}
         usernameHandler={() =>
