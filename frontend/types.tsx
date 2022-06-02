@@ -39,6 +39,7 @@ export type RootTabParamList = {
   Camera: undefined;
   Group: undefined;
   Profile: undefined;
+  Friends: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

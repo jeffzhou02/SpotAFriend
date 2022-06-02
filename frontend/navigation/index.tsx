@@ -166,13 +166,13 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="Filter"
-        component={FilterScreen}
+        name="Friends"
+        component={FriendsScreen}
         options={{
-          title: "Filter",
+          title: "Friends",
           headerShown: false,
           tabBarShowLabel: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="filter" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="group" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -192,7 +192,7 @@ function BottomTabNavigator() {
           title: "Groups",
           headerShown: false,
           tabBarShowLabel: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="group" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
       <BottomTab.Screen

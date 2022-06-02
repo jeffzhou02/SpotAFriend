@@ -10,9 +10,7 @@ import {
 
 import React, { ReactNode, useEffect, useState } from "react";
 
-import {
-  GetGroupMembers,
-} from "../firebase/library";
+import { GetGroupMembers } from "../firebase/library";
 import { useContext } from "react";
 import { UserContext } from "../components/UserContext.js";
 
@@ -38,25 +36,37 @@ interface Group {
 }
 
 function PopulateArray(user, groupData: Group[]) {
-  // Get groups
-  var groupArray = user.groups;
-  for (const groupname of groupArray) {
-    // Get members
-    var [array, setArray] = useState([""]);
-    var func = async () => {
-      const promise = await GetGroupMembers(groupname);
-      const value = promise;
-      setArray(value);
-    };
-    useEffect(() => {
-      func();
-    }, []);
+  // const [testArray, setTest] = useState([]);
+  // var getGroupMembers = async () => {
+  //   await GetGroupMembers('danielsgroup').then((value) => setTest(value));
+  // };
 
-    const tempGroup: Group = {
-      members: array,
+  // useEffect(() => {
+  //   getGroupMembers();
+  // },[]);
+  // Get groups
+  var groupArray = user.groups; //list of groups for each user
+
+  var getGroupMembers = async (group: string, setState: Function) => {
+    await GetGroupMembers(group).then((members) => {
+      setState(members);
+    });
+  };
+
+  var pushMembers = async (groupname: string) => {
+    var [array, setArray] = useState([]);
+    useEffect(() => {
+      getGroupMembers(groupname, setArray);
+    }, []);
+    const temp: Group = {
       group: groupname,
+      members: array,
     };
-    groupData.push(tempGroup);
+    groupData.push(temp);
+  };
+
+  for (var groupname of groupArray) {
+    pushMembers(groupname);
   }
 }
 
@@ -64,13 +74,37 @@ const GroupCard = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const GROUPNAME = props.group;
   const members = props.members;
-  const target = members[Math.floor(Math.random()*members.length)];
+  const targetRef = ref(db, "groups/" + GROUPNAME + "/target");
+  let target = "";
+  onValue(targetRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      if (data.user) {
+        target = data.user;
+      }
+      if (data.timestamp + 1) {
+        const d = new Date();
+        let time = d.getTime();
+        if ((time - data.timestamp) > 24 * 60 * 60 * 1000) {
+          var newtarget = members[Math.floor(Math.random() * members.length)];
+          if (newtarget != undefined){
+            set(targetRef, {
+              user: newtarget,
+              timestamp: time,
+            });
+          }
+        }
+      }
+    }
+  })
   let imageURL = "";
   const userRef = ref(db, "users/" + target);
   onValue(userRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data.profilePhotoRef) {
-      imageURL = data.profilePhotoRef;
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      if (data.profilePhotoRef) {
+        imageURL = data.profilePhotoRef;
+      }
     }
   });
   const memberString = members.join(", ");
@@ -89,17 +123,18 @@ const GroupCard = (props: any) => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalText}>{GROUPNAME}</Text>
             <View style={styles.tags2}>
-              <Text style={styles.tagsText}>target not spotted</Text>
+              <Text style={styles.tagsText}>
+                {GROUPNAME}'s target of the day
+              </Text>
             </View>
             <Image style={styles.targetImage} source={{ uri: imageURL }} />
             <View style={{ backgroundColor: "transparent" }}>
-              <Text style={styles.modalText}>
-                today's target: {target}
-              </Text>
-              <Text style={styles.names}>
-                all members: {memberString}
-              </Text>
+              <Text style={styles.modalText}>today's target: {target}</Text>
+              <Text style={styles.names}>all members: {memberString}</Text>
             </View>
+            <Pressable style={styles.addButtonSlayIngrid}>
+              <Text style={styles.title}>leave this group</Text>
+            </Pressable>
 
             <Pressable
               style={styles.buttonClose}
@@ -176,6 +211,7 @@ export default function GroupScreen({
   navigation,
 }: RootTabScreenProps<"Group">) {
   const { user } = useContext(UserContext);
+  console.log(user.groups);
 
   const groupData: Group[] = [];
   PopulateArray(user, groupData);
@@ -207,10 +243,7 @@ export default function GroupScreen({
       >
         {groupData.map((arrayItem) => {
           return (
-            <GroupCard
-              members={arrayItem.members}
-              group={arrayItem.group}
-            />
+            <GroupCard members={arrayItem.members} group={arrayItem.group} />
           );
         })}
       </ScrollView>
@@ -280,7 +313,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textDecorationLine: "underline",
     color: "#fff",
-    marginTop: "40%",
+    marginTop: "10%",
   },
   modalContainer: {
     backgroundColor: "transparent",
@@ -324,6 +357,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     width: 140,
   },
+  addButtonSlayIngrid: {
+    width: "70%",
+    borderColor: "#689689",
+    alignItems: "center",
+    alignContent: "center",
+    borderWidth: 2,
+    padding: 5,
+    borderRadius: 17,
+    backgroundColor: "#F4D58D",
+    marginTop: "20%",
+  },
   tags2: {
     borderWidth: 2,
     borderColor: "#BF0603",
@@ -334,10 +378,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     marginBottom: 5,
-    width: 150,
+    width: 240,
   },
   tagsText: {
     fontStyle: "italic",
     color: "#BF0603",
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    fontStyle: "italic",
+    color: "#689689",
   },
 });

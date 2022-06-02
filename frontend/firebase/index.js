@@ -18,6 +18,7 @@ import { getStorage } from "firebase/storage";
 //   measurementId: "G-YNSPGSNJDJ",
 //   databaseURL: "https://spotafriend-bfbe0-default-rtdb.firebaseio.com/",
 // };
+
 const firebaseConfig = {
   apiKey: "AIzaSyA8HNlMzAnDB-Ksmqv-vp8bDfyL1YcRdhQ",
   authDomain: "spotafriend2-9f278.firebaseapp.com",
