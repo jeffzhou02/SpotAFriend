@@ -12,16 +12,18 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { UserContext } from "../components/UserContext";
-import { GetGroupMembers1 } from "../firebase/library";
+import { GetGroupMembers1, GetUserPFP } from "../firebase/library";
 import { loadAsync } from "expo-font";
 import { db } from "../firebase/index";
 import { onValue, ref as dbref } from "firebase/database";
+import { useLinkProps } from "@react-navigation/native";
+
 
 const Card = (props: any) => {
   return (
     <View style={styles.post}>
       <View style={styles.postHeader}>
-        {/* <Image style={styles.pfp} source={{ uri: props.pfp }} /> */}
+        <Image style={styles.pfp} source={{ uri: props.pfp }} />
         <View style={styles.captionBox}>
           <Text style={styles.postTitle}>
             <Text style={styles.postTitleName}>{props.person1} </Text>
@@ -231,7 +233,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
     const value = promise;
     setFriendFound(value);
   };
-
+  
   return (
     <View style={styles.container}>
       <View
@@ -274,7 +276,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
             <Card
               person1={note.person1}
               pic={note.pic}
-              //pfp={note.pfp}
+              pfp={note.pfp}
               tag1={note.tag1}
             />
           );
