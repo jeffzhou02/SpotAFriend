@@ -74,7 +74,29 @@ const GroupCard = (props: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const GROUPNAME = props.group;
   const members = props.members;
-  const target = members[Math.floor(Math.random()*members.length)];
+  const targetRef = ref(db, "groups/" + GROUPNAME + "/target");
+  let target = "";
+  onValue(targetRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      if (data.user) {
+        target = data.user;
+      }
+      if (data.timestamp + 1) {
+        const d = new Date();
+        let time = d.getTime();
+        if ((time - data.timestamp) > 24 * 60 * 60 * 1000) {
+          var newtarget = members[Math.floor(Math.random() * members.length)];
+          if (newtarget != undefined){
+            set(targetRef, {
+              user: newtarget,
+              timestamp: time,
+            });
+          }
+        }
+      }
+    }
+  })
   let imageURL = "";
   const userRef = ref(db, "users/" + target);
   onValue(userRef, (snapshot) => {
