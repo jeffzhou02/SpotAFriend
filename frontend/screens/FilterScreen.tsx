@@ -19,8 +19,14 @@ import { useLinkProps } from "@react-navigation/native";
 const SearchySearch = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
 
-  const onChangeSearch = (query: React.SetStateAction<string>) =>
+  const onChangeSearch = (query: React.SetStateAction<string>) => {
+    // console.log(query);
+    if (query == "friend" || query == "enemy" || query == "acquaintance") {
+      setSearchQuery(query);
+      console.log(searchQuery);
+    }
     setSearchQuery(query);
+  };
 
   return (
     <Searchbar
