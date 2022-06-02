@@ -1,20 +1,26 @@
-# SpotAFriend README
+# Spot A Friend
 
+Spring 2022 CS 35L group project by
 Brian Ni
 Jenny Wang
 Nathan Zhang
 Jeffrey Zhou
-Daniel Yang
+Daniel Yang\
 
-## To run the code:
-
-- yarn install
-- yarn start
+Spot a Friend is an application that allows users to play assassins in real life, everyday.
 
 ## Downloads:
 
 - Yarn
 - Expo Go App on mobile device
+
+## Installation:
+
+Run the following commands:\
+
+- '''yarn install'''
+- '''yarn start'''
+  in the frontend directory. Open the Metro Bundler to retrieve the QR code. Scan the QR code in order to open the app on Expo Go.
 
 ## Required Versions:
 
