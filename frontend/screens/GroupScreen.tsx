@@ -179,6 +179,7 @@ export default function GroupScreen({
 
   const groupData: Group[] = [];
   PopulateArray(user, groupData);
+  console.log(typeof groupData)
 
   return (
     <View style={styles.container}>

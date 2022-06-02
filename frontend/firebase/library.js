@@ -47,8 +47,12 @@ export async function GetGroupMembers(group) {
     // func();
     const dbref = ref(db, 'groups/' + group);
     const promise = await get(dbref).then((snapshot) => {
+        var data = [];
         if (snapshot.exists()) {
-            return snapshot.val();
+            snapshot.forEach((childSnap) => {
+                data.push(childSnap.val());
+            });
+            return data;
         }
         return [];
     }).catch((error) => {return [];});
@@ -146,7 +150,8 @@ export async function GetGroupMembers1(groupName) {
             });
             return data;
         }
-    }).catch((error) => {console.log(error)});
+        return [];
+    }).catch((error) => {console.log(error); return [];});
     return promise;
 }
 
