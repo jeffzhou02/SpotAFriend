@@ -54,6 +54,7 @@ export default function PostScreen({
 
     let imageURL = (await getDownloadURL(fileRef)).toString();
     console.log(imageURL);
+    set(dbref(db, "groups/" + pickedGroup + "/users/" + username + "/"), { tag: pickedTag });
     // update(dbref(db, "users/" + user.username), { dailyPhotoRef: imageURL });
   }
 
@@ -96,7 +97,7 @@ export default function PostScreen({
 
     let groupslist = [{ label: groups[0], value: groups[0] }];
     for (let i = 1; i < groups.length; i++) {
-      var obj = { label: groups[i], value: i.toString() };
+      var obj = { label: groups[i], value: groups[i].toString() };
       groupslist.push(obj);
     }
     return groupslist;
